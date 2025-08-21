@@ -96,12 +96,14 @@ class MaeImageDataset(FairseqDataset):
         spcv1_finetune: bool =False,
         weights_file: str="",
         flexible_mask: bool = False,
+        load_clap_emb: bool = True,
     ):
         FairseqDataset.__init__(self)
 
         self.shuffle = shuffle
         self.key = key
         self.audio_mae = audio_mae
+        self.load_clap_emb = load_clap_emb
         if self.audio_mae:
             self.h5_format = h5_format
             self.downsr_16hz = downsr_16hz
@@ -128,7 +130,10 @@ class MaeImageDataset(FairseqDataset):
             min_sample_size = 10000 
             
             input_size = (self.target_length,128)
-            manifest_path = os.path.join(root, "{}.tsv".format(split))     
+            if not self.load_clap_emb:
+                manifest_path = os.path.join(root, "{}.tsv".format(split))     
+            else:
+                manifest_path = os.path.join(root, "{}.json".format(split))     
             self.dataset = FileAudioDataset(
                     manifest_path=manifest_path,
                     sample_rate=32000,
@@ -147,6 +152,7 @@ class MaeImageDataset(FairseqDataset):
                     roll_mag_aug=self.roll_aug,
                     train_mode=split,
                     noise=self.noise,
+                    load_clap_emb=self.load_clap_emb,
                     **mask_args,
                 )
             self.skipped_indices = self.dataset.skipped_indices
@@ -187,6 +193,8 @@ class MaeImageDataset(FairseqDataset):
         v = {"id": index, self.key: source if source is not None else img}
         if target is not None:
             v["target"] = target
+        if self.load_clap_emb:
+            v["clap_emb"] = self.dataset[index]['clap_emb']
 
         # inverse block mask on audio patches
         if self.is_compute_mask:
@@ -245,6 +253,10 @@ class MaeImageDataset(FairseqDataset):
         if "precomputed_mask" in samples[0]:
             collated_mask = torch.cat([s["precomputed_mask"] for s in samples], dim=0)
             res["net_input"]["precomputed_mask"] = collated_mask
+        
+        if "clap_emb" in samples[0]:
+            collated_emb = torch.cat([s["clap_emb"] for s in samples], dim=0)
+            res["net_input"]["clap_emb"] = collated_emb
 
         return res
 
@@ -259,6 +271,7 @@ class MaeImageDataset(FairseqDataset):
         return np.full((len(self),), 1)
 
     # shuffle data (for pre-training and fine-tuning)
+    # TODO: (chushu) [2025.08.19]: 添加对audioset不同权重的处理
     def ordered_indices(self):
         """Return an ordered list of indices. Batches will be constructed based
         on this order."""

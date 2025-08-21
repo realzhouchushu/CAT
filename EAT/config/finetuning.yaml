@@ -26,6 +26,7 @@ task:
   h5_format: false
   weights_file: /hpc_stor03/sjtu_home/wenxi.chen/mydata/audio/unbalanced_finetune/weight_train_all.csv
   num_samples: 200000
+  load_clap_emb: false
   
   AS2M_finetune: false
   spcv1_finetune: false

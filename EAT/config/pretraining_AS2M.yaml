@@ -27,6 +27,7 @@ task:
   h5_format: false
   target_length: 1024
   flexible_mask: false
+  load_clap_emb: false
 
 dataset:
   num_workers: 10
@@ -83,6 +84,7 @@ model:
   end_of_block_targets: false
 
   depth: 12
+  proj_type: None
   average_top_k_layers: 12
   clone_batch: 16
 

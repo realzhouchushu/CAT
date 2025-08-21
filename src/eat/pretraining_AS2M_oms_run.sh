@@ -5,9 +5,9 @@ echo "##### delete job ${name} #####\n"
 oms job delete ${name}
 echo "##### delete job ${name} done #####\n"
 
-gpus=2
+gpus=4
 cpus=64
-memgb=256
+memgb=240
 shmgb=32
 replicas=1
 echo "##### run parameters #####\n"
@@ -28,7 +28,7 @@ oms job submit --image lunalabs-acr-registry.cn-guangzhou.cr.aliyuncs.com/luna/z
 --memgb ${memgb} \
 --shmgb ${shmgb} \
 --replicas ${replicas} \
---launch-command "bash /opt/gpfs/home/chushu/codes/2506/fairseq/src/eat/pretraining_AS2M_oms.sh ${gpus}"
+--launch-command "bash /opt/gpfs/home/chushu/codes/2506/EAT/src/eat/pretraining_AS2M_oms.sh ${gpus}"
 
 oms job pods ${name}
 echo "##### submit job ${name} done #####\n"

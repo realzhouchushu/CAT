@@ -10,7 +10,7 @@ import sys
 import time
 import io
 import h5py
-
+import json
 import numpy as np
 import torch
 import torch.nn.functional as F
@@ -270,6 +270,7 @@ class FileAudioDataset(RawAudioDataset):
         roll_mag_aug=False,
         noise=False,
         train_mode='train',
+        load_clap_emb=False,
         **mask_compute_kwargs,
     ):
         super().__init__(
@@ -293,25 +294,41 @@ class FileAudioDataset(RawAudioDataset):
         self.roll_mag_aug = roll_mag_aug
         self.noise = noise
         self.train_mode = train_mode
-
+        self.load_clap_emb = load_clap_emb
         skipped = 0
         self.fnames = []
         sizes = []
+        self.clap_embs = []
         self.skipped_indices = set()
 
         # exclude data not in sample rate range     10.h5/****.wav  320000 
-        with open(manifest_path, "r") as f:
-            self.root_dir = f.readline().strip()
-            for i, line in enumerate(f):
-                items = line.strip().split()
-                assert len(items) == 2, line
-                sz = int(items[1])
-                if min_sample_size is not None and sz < min_sample_size:
-                    skipped += 1
-                    self.skipped_indices.add(i)
-                    continue
-                self.fnames.append(self.text_compressor.compress(items[0]))
-                sizes.append(sz)
+        if manifest_path.endswith(".tsv"):
+            with open(manifest_path, "r") as f:
+                self.root_dir = f.readline().strip()
+                for i, line in enumerate(f):
+                    items = line.strip().split()
+                    assert len(items) == 2, line
+                    sz = int(items[1])
+                    if min_sample_size is not None and sz < min_sample_size:
+                        skipped += 1
+                        self.skipped_indices.add(i)
+                        continue
+                    self.fnames.append(self.text_compressor.compress(items[0]))
+                    sizes.append(sz)
+        elif manifest_path.endswith(".json"):
+            with open(manifest_path, "r") as f:
+                self.root_dir = ""
+                data = json.load(f)
+                for i, item in enumerate(data):
+                    sz = item["num_frame"]
+                    if min_sample_size is not None and sz < min_sample_size:
+                        skipped += 1
+                        self.skipped_indices.add(i)
+                        continue
+                    self.fnames.append(self.text_compressor.compress(item["wav_path"]))
+                    sizes.append(sz)
+                    if self.load_clap_emb:
+                        self.clap_embs.append(item["clap_path"])
         logger.info(f"loaded {len(self.fnames)}, skipped {skipped} samples")
 
         if self.esc50_eval:
@@ -357,6 +374,10 @@ class FileAudioDataset(RawAudioDataset):
             assert is_sf_audio_data(byte_data)
             path_or_fp = io.BytesIO(byte_data)
 
+        # NOTE: (chushu) [2025.08.19]: 按理来说clap_embed_path也应该像上面一样解析，目前暂未实现，只支持从文件直接读
+        if self.load_clap_emb:
+            clap_emb_path = self.clap_embs[index]
+
         retry = 1
         wav = None
         for i in range(retry):
@@ -370,6 +391,8 @@ class FileAudioDataset(RawAudioDataset):
                     break                    
                 else:
                     wav, curr_sample_rate = sf.read(path_or_fp, dtype="float32")
+                    if self.load_clap_emb:
+                        clap_emb = np.load(clap_emb_path)
                     break
             except Exception as e:
                 logger.warning(
@@ -388,6 +411,10 @@ class FileAudioDataset(RawAudioDataset):
             feats = torch.tensor(wav).float()
         else:
             feats = torch.from_numpy(wav).float()
+        
+        if self.load_clap_emb:
+            # clap_emb_shape: (1, 512)
+            clap_emb = torch.from_numpy(np.expand_dims(clap_emb, 0)).float()
             
         if self.downsr_16hz:
             if curr_sample_rate != 16000:
@@ -436,7 +463,10 @@ class FileAudioDataset(RawAudioDataset):
                 feats = feats + torch.rand(feats.shape[1], feats.shape[2]) * np.random.rand() / 10
                 feats = torch.roll(feats, np.random.randint(-10, 10), 1)
 
-        v = {"id": index, "source": feats}
+        if self.load_clap_emb:
+            v = {"id": index, "source": feats, "clap_emb": clap_emb}
+        else:
+            v = {"id": index, "source": feats}
 
         if self.is_compute_mask:
             T = self._get_mask_indices_dims(feats.size(-1))

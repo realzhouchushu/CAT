@@ -59,6 +59,7 @@ class MaeImagePretrainingConfig(FairseqDataclass):
     downsr_16hz: bool = field(default=False,metadata={"help": "if set, wav file's sample rate will be reduced to 16kHz."})
     target_length: int = field(default=1024,metadata={"help": "This setting will pad the audio spectrogram with zeros."})
     flexible_mask: bool = field(default=False, metadata={"help": "if true, we will using flexible inverse block mask method."})
+    load_clap_emb: bool = field(default=True, metadata={"help": "if true, we will load clap embeddings."})
     
     esc50_eval: bool = field(default=False, metadata={"help": "if true, the task is to finetune model on esc50 dataset."})
     spcv2_eval: bool = field(default=False, metadata={"help": "if true, the task is to finetune model on speech command v2 dataset."})
@@ -118,6 +119,7 @@ class MaeImagePretrainingTask(FairseqTask):
             num_samples=cfg.num_samples,
             weights_file=cfg.weights_file,
             flexible_mask=cfg.flexible_mask,
+            load_clap_emb=cfg.load_clap_emb,
             **mask_args,
         )
 

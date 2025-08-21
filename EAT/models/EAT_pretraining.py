@@ -82,6 +82,9 @@ class Data2VecMultiConfig(FairseqDataclass):
     mlp_ratio: float = 4
     layer_norm_first: bool = False
 
+    # clap cls projection type
+    proj_type: Optional[int] = None
+
     # EAT averages all Transformer block output (12 layers in total) 
     average_top_k_layers: int = field(
         default=12, metadata={"help": "how many layers to average"}
@@ -268,6 +271,16 @@ class Data2VecMultiModel(BaseFairseqModel):
             self.cls_proj = None
             if cfg.utterance_level:
                 self.cls_proj = nn.Linear(cfg.embed_dim, cfg.embed_dim)
+            
+            # self.clap_proj = None
+            if cfg.proj_type == 1:
+                self.clap_proj = nn.Linear(512, cfg.embed_dim)
+                logger.info("making clap proj 512 to 768")
+            elif cfg.proj_type == 2:
+                self.clap_proj = nn.Linear(cfg.embed_dim, 512)
+                logger.info("making clap proj 768 to 512")
+            else:
+                logger.info("making clap proj disabled")
 
         for pn, p in self.named_parameters():
             if len(p.shape) == 1 or pn.endswith(".bias") or "alibi_scale" in pn:
@@ -427,6 +440,7 @@ class Data2VecMultiModel(BaseFairseqModel):
         force_remove_masked=False,
         remove_extra_tokens=True,
         precomputed_mask=None,
+        clap_emb=None,
     ):
         if mode is None:
             assert self.cfg.supported_modality is not None
@@ -436,6 +450,7 @@ class Data2VecMultiModel(BaseFairseqModel):
             mode = mode.name
 
         feature_extractor = self.modality_encoders[mode]
+        #TODO: (chushu) [2025.8.19] unknow change here, self.num_extra_tokens
 
         mask_seeds = None
         if id is not None:
@@ -659,6 +674,17 @@ class Data2VecMultiModel(BaseFairseqModel):
             result["losses"]["cls"] = self.d2v_loss(cls_pred, cls_target) * (
                 self.cfg.cls_loss * sample_size
             )
+
+            if self.cfg.proj_type:
+                if self.cfg.proj_type == 1:
+                    clap_emb = self.clap_proj(clap_emb)
+                elif self.cfg.proj_type == 2:
+                    cls_pred = self.clap_proj(cls_pred)
+                clap_emb = clap_emb.repeat_interleave(self.cfg.clone_batch, 0).to(cls_target.dtype)
+                
+                result["losses"]["clap"] = self.d2v_loss(cls_pred, clap_emb) * (
+                    self.cfg.cls_loss * sample_size
+                )
             
         # dino loss experiment
         if self.cfg.cls_loss > 0 and self.utterance_level:

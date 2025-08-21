@@ -28,7 +28,7 @@ oms job submit --image lunalabs-acr-registry.cn-guangzhou.cr.aliyuncs.com/luna/z
 --memgb ${memgb} \
 --shmgb ${shmgb} \
 --replicas ${replicas} \
---launch-command "bash /opt/gpfs/home/chushu/codes/2506/fairseq/src/eat/finetuning_AS20K_oms.sh ${gpus}"
+--launch-command "bash /opt/gpfs/home/chushu/codes/2506/EAT/src/eat/finetuning_AS20K_oms.sh ${gpus}"
 
 oms job pods ${name}
 echo "##### submit job ${name} done #####\n"
