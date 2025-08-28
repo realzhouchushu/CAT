@@ -67,7 +67,7 @@ def get_clap_files(clap_folder: str) -> Dict[str, str]:
     for root, dirs, files in tqdm(os.walk(clap_folder), desc="Scanning CLAP embeddings folder"):
         for file in tqdm(files, desc="Processing CLAP files"):
             if file.endswith('.npy'):
-                basename = os.path.splitext(file)[0][1:]
+                basename = os.path.splitext(file)[0]
                 full_path = os.path.join(root, file)
                 clap_files[basename] = full_path
     
@@ -146,13 +146,13 @@ def save_json_output(output_path: str, matched_files: List[Dict],
 def main():
     parser = argparse.ArgumentParser(description='Process TSV files and CLAP embeddings')
     parser.add_argument('--tsv_path', 
-                       default='/opt/gpfs/home/chushu/data/AudioSet/16k_wav_tsv/unbal_train.tsv',
+                       default='/opt/gpfs/home/chushu/data/audioset/16k_wav_tsv/unbal_train.tsv',
                        help='Path to input TSV file')
     parser.add_argument('--clap_folder', 
                        default='/opt/gpfs/home/chushu/data/features/clap_features/clap_embs/unbalanced_train_segments',
                        help='Path to CLAP embeddings folder')
     parser.add_argument('--output_path', 
-                       default='/opt/gpfs/home/chushu/data/AudioSet/meta_w_clap/unbal_train.json',
+                       default='/opt/gpfs/home/chushu/data/audioset/meta_w_clap/unbal_train.json',
                        help='Path to output JSON file')
     
     args = parser.parse_args()

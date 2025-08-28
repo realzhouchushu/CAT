@@ -1,7 +1,7 @@
 #!/bin/bash
-model_model_path=/opt/gpfs/home/chushu/exp/eat/pre_8_AS2M/clap_0_2025-08-19_11-16-24/checkpoint_last.pt
+model_model_path=/opt/gpfs/home/chushu/exp/eat/pre_4_AS2M/clap_0_2025-08-27_09-23-59/checkpoint_last.pt
 
-SAVE_DIR_ROOT=/opt/gpfs/home/chushu/exp/eat/sft_8_AS20k
+SAVE_DIR_ROOT=/opt/gpfs/home/chushu/exp/eat/sft_4_AS20k_w_clap_CLS
 # 从 model_model_path 提取父目录名与文件名
 parent_dir="$(basename -- "$(dirname -- "$model_model_path")")"
 ckpt_name="$(basename -- "$model_model_path")"
@@ -22,7 +22,7 @@ python fairseq_cli/hydra_train.py -m \
     dataset.batch_size=48 \
     dataset.num_workers=24 \
     dataset.data_buffer_size=48 \
-    task.data=/opt/gpfs/home/chushu/data/AudioSet/setting/SFT_AS20K \
+    task.data=/opt/gpfs/home/chushu/data/audioset/setting/SFT_AS20k \
     task.target_length=1024 \
     task.roll_aug=true \
     task.load_clap_emb=false \
@@ -32,4 +32,4 @@ python fairseq_cli/hydra_train.py -m \
     model.num_classes=527 \
     model.mixup=0.8 \
     model.mask_ratio=0.2 \
-    model.prediction_mode=PredictionMode.CLAP_TYPE2 # CLS_TOKEN num_workers: 6 data_buffer_size: 10
+    model.prediction_mode=PredictionMode.CLS_TOKEN # CLS_TOKEN num_workers: 6 data_buffer_size: 10

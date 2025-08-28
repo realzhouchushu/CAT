@@ -1,0 +1,126 @@
+2025-08-26 20:39:37,510 - INFO - 开始音频归一化处理
+2025-08-26 20:39:37,511 - INFO - 源文件夹: /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train
+2025-08-26 20:39:37,511 - INFO - 目标文件夹: /opt/gpfs/data/raw_data/audioset/wav_16k/unbal_train
+2025-08-26 20:39:37,511 - INFO - 目标采样率: 16000 Hz
+2025-08-26 20:39:37,511 - INFO - 日志文件: /opt/gpfs/home/chushu/codes/2506/EAT/EAT/prepapre_data/process/log/normalize_unbal_train1.1og
+2025-08-26 20:39:37,511 - INFO - 指定进程数: 64
+2025-08-26 20:39:41,391 - INFO - 找到 1912137 个音频文件
+2025-08-26 20:39:41,392 - INFO - 使用 64 个进程进行处理
+2025-08-26 21:08:26,298 - INFO - 失败的文件列表:
+2025-08-26 21:08:26,298 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part37/YtpYfNeSrVu0.wav: 文件为空音频文件
+2025-08-26 21:08:26,298 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part37/YtKRkWDLfzZg.wav: 文件为空音频文件
+2025-08-26 21:08:26,298 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part37/Ys8s2tnpTD4s.wav: 文件为空音频文件
+2025-08-26 21:08:26,298 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part37/Ys9GfRQr3OAk.wav: 文件为空音频文件
+2025-08-26 21:08:26,298 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part24/YVcu0pVF1npM.wav: 文件为空音频文件
+2025-08-26 21:08:26,298 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part24/YW2GS8tXyKpE.wav: 文件为空音频文件
+2025-08-26 21:08:26,299 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part24/_YUasGDqtGxNI.m4a.part: 
+2025-08-26 21:08:26,299 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part27/YaPvNMALHyaI.wav: 文件为空音频文件
+2025-08-26 21:08:26,299 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part27/YaEVbRV_c9bk.wav: 文件为空音频文件
+2025-08-26 21:08:26,299 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part27/Y_vrj7xAGCUM.wav: 文件为空音频文件
+2025-08-26 21:08:26,299 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part27/Y_Vh0i3wnj7o.wav: 文件为空音频文件
+2025-08-26 21:08:26,299 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part10/Y9_AdiGNxqk0.wav: 文件为空音频文件
+2025-08-26 21:08:26,299 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part10/Y9wsqa5iuvUk.wav: 文件为空音频文件
+2025-08-26 21:08:26,299 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part10/Y9y6BOWnJo0g.wav: 文件为空音频文件
+2025-08-26 21:08:26,299 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part10/YA4b3ghHE-_s.wav: 文件为空音频文件
+2025-08-26 21:08:26,299 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/audios/unbalanced_train_segments/unbalanced_train_segments_part07/Y5vqWfePO8r0.wav: 文件为空音频文件
+2025-08-26 21:08:26,299 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/audios/unbalanced_train_segments/unbalanced_train_segments_part07/Y5mxIUqM-7ag.wav: 文件为空音频文件
+2025-08-26 21:08:26,299 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/audios/unbalanced_train_segments/unbalanced_train_segments_part07/Y6LDCRrtR-VU.wav: 文件为空音频文件
+2025-08-26 21:08:26,299 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/audios/unbalanced_train_segments/unbalanced_train_segments_part02/Y18tpMkI4f2I.wav: 文件为空音频文件
+2025-08-26 21:08:26,302 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/audios/unbalanced_train_segments/unbalanced_train_segments_part09/Y8DbyfttsxCA.wav: 文件为空音频文件
+2025-08-26 21:08:26,302 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/audios/unbalanced_train_segments/unbalanced_train_segments_part09/Y8Slj7B_LDfQ.wav: 文件为空音频文件
+2025-08-26 21:08:26,302 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/audios/unbalanced_train_segments/unbalanced_train_segments_part08/Y7LDMN0g-M_k.wav: 文件为空音频文件
+2025-08-26 21:08:26,302 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/audios/unbalanced_train_segments/unbalanced_train_segments_part08/Y7HRdlDPI19w.wav: 文件为空音频文件
+2025-08-26 21:08:26,302 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/audios/unbalanced_train_segments/unbalanced_train_segments_part08/Y7N0jHsBSkf0.wav: 文件为空音频文件
+2025-08-26 21:08:26,302 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/audios/unbalanced_train_segments/unbalanced_train_segments_part05/Y3XfKg7nY8qU.wav: 文件为空音频文件
+2025-08-26 21:08:26,302 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/audios/unbalanced_train_segments/unbalanced_train_segments_part05/Y3sSblRfEG2o.wav: 文件为空音频文件
+2025-08-26 21:08:26,302 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/audios/unbalanced_train_segments/unbalanced_train_segments_part01/Y06-g5jz-OGc.wav: 文件为空音频文件
+2025-08-26 21:08:26,302 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/audios/unbalanced_train_segments/unbalanced_train_segments_part01/Y-zVGs8QmK1I.wav: 文件为空音频文件
+2025-08-26 21:08:26,302 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/audios/unbalanced_train_segments/unbalanced_train_segments_part03/Y21OeWMonJv4.wav: 文件为空音频文件
+2025-08-26 21:08:26,302 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/audios/unbalanced_train_segments/unbalanced_train_segments_part03/Y1zTnrk9WbWw.wav: 文件为空音频文件
+2025-08-26 21:08:26,302 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/audios/unbalanced_train_segments/unbalanced_train_segments_part03/Y1YLFyYYjOBo.wav: 文件为空音频文件
+2025-08-26 21:08:26,302 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/audios/unbalanced_train_segments/unbalanced_train_segments_part03/Y1zFTs3nIcyg.wav: 文件为空音频文件
+2025-08-26 21:08:26,302 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/audios/unbalanced_train_segments/unbalanced_train_segments_part06/Y4hQHERijyVk.wav: 文件为空音频文件
+2025-08-26 21:08:26,302 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/audios/unbalanced_train_segments/unbalanced_train_segments_part06/Y5EjY15Dauug.wav: 文件为空音频文件
+2025-08-26 21:08:26,302 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/audios/unbalanced_train_segments/unbalanced_train_segments_part04/Y2Ns9xjl48DM.wav: 文件为空音频文件
+2025-08-26 21:08:26,302 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/audios/unbalanced_train_segments/unbalanced_train_segments_part04/Y3GmbeuJGqLI.wav: 文件为空音频文件
+2025-08-26 21:08:26,302 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/audios/unbalanced_train_segments/unbalanced_train_segments_part00/Y-dG6nL9hxCI.wav: 文件为空音频文件
+2025-08-26 21:08:26,302 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part30/Yf_GZxFbfYMs.wav: 文件为空音频文件
+2025-08-26 21:08:26,302 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part30/YeqnveHA0hrI.wav: 文件为空音频文件
+2025-08-26 21:08:26,302 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part35/YpqC6Kmsuj0w.wav: 文件为空音频文件
+2025-08-26 21:08:26,302 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part35/YoAl41EK2Kd0.wav: 文件为空音频文件
+2025-08-26 21:08:26,302 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part15/YFnYkF2oI_f0.wav: 文件为空音频文件
+2025-08-26 21:08:26,302 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part15/YFli8wjBFV2M.wav: 文件为空音频文件
+2025-08-26 21:08:26,302 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part36/Yr2PcA0hjBZk.wav: 文件为空音频文件
+2025-08-26 21:08:26,303 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part12/YBhz28EAvVD8.wav: 文件为空音频文件
+2025-08-26 21:08:26,303 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part12/YBMWN5t8lbLE.wav: 文件为空音频文件
+2025-08-26 21:08:26,303 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part12/YBjLqOn28WM8.wav: 文件为空音频文件
+2025-08-26 21:08:26,303 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part12/YBTxswE3Ktho.wav: 文件为空音频文件
+2025-08-26 21:08:26,303 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part20/YOAIeEamwwYY.wav: 文件为空音频文件
+2025-08-26 21:08:26,303 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part20/YOlyZvrGzq5c.wav: 文件为空音频文件
+2025-08-26 21:08:26,303 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part20/YOHJDtmjrCYM.wav: 文件为空音频文件
+2025-08-26 21:08:26,303 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part26/YYlwxbqtJST4.wav: 文件为空音频文件
+2025-08-26 21:08:26,303 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part17/YJTDe2G1VAx4.wav: 文件为空音频文件
+2025-08-26 21:08:26,303 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part17/YK-TjW8HcSU4.wav: 文件为空音频文件
+2025-08-26 21:08:26,303 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part13/YDScPeHqgZP4.wav: 文件为空音频文件
+2025-08-26 21:08:26,303 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part13/YDm1ZmRNHNsU.wav: 文件为空音频文件
+2025-08-26 21:08:26,303 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part13/YCmgWyoNh_LU.wav: 文件为空音频文件
+2025-08-26 21:08:26,303 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part13/YChxfpY3Y8aI.wav: 文件为空音频文件
+2025-08-26 21:08:26,303 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part11/YAxEYV27cadc.wav: 文件为空音频文件
+2025-08-26 21:08:26,303 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part11/YAphQhH5hBCU.wav: 文件为空音频文件
+2025-08-26 21:08:26,303 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part11/_YAOaeYCezPcY.m4a.ytdl: 
+2025-08-26 21:08:26,303 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part11/YAWY6XuJ8ylw.wav: 文件为空音频文件
+2025-08-26 21:08:26,303 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part11/YA_tBTdvg8E4.wav: 文件为空音频文件
+2025-08-26 21:08:26,303 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part18/YLYmdmOQwHL4.wav: 文件为空音频文件
+2025-08-26 21:08:26,303 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part18/YLAnLq0qql2o.wav: 文件为空音频文件
+2025-08-26 21:08:26,303 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part18/YLX354PKuB6s.wav: 文件为空音频文件
+2025-08-26 21:08:26,303 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part18/YLhsnmpK0xkQ.wav: 文件为空音频文件
+2025-08-26 21:08:26,303 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part18/YKaFEguoHLKo.wav: 文件为空音频文件
+2025-08-26 21:08:26,303 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part39/YwM5Qf5xXT8w.wav: 文件为空音频文件
+2025-08-26 21:08:26,303 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part39/Yy8Vmi3tHgaw.wav: 文件为空音频文件
+2025-08-26 21:08:26,304 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part19/YMOV1oBlyYpU.wav: 文件为空音频文件
+2025-08-26 21:08:26,304 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part19/YM8a7DAniBpw.wav: 文件为空音频文件
+2025-08-26 21:08:26,304 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part21/YQb04wAv0c_4.wav: 文件为空音频文件
+2025-08-26 21:08:26,304 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part21/YQfILH7zmFxk.wav: 文件为空音频文件
+2025-08-26 21:08:26,304 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part21/YQaBgMk4ccos.wav: 文件为空音频文件
+2025-08-26 21:08:26,304 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part21/YPWBIIb7pwRo.wav: 文件为空音频文件
+2025-08-26 21:08:26,304 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part21/YQcGpyXhIENI.wav: 文件为空音频文件
+2025-08-26 21:08:26,304 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part31/Ygp-5bdPzSDc.wav: 文件为空音频文件
+2025-08-26 21:08:26,304 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part31/YgT-IsJN7uis.wav: 文件为空音频文件
+2025-08-26 21:08:26,304 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part31/YgVEix6vNL7k.wav: 文件为空音频文件
+2025-08-26 21:08:26,304 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part31/Yh3XDhqBwU1A.wav: 文件为空音频文件
+2025-08-26 21:08:26,304 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part31/YhZ0_tspxeX0.wav: 文件为空音频文件
+2025-08-26 21:08:26,304 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part28/YbjLiWLXtXK4.wav: 文件为空音频文件
+2025-08-26 21:08:26,304 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part28/Ybj0u9F6DEhc.wav: 文件为空音频文件
+2025-08-26 21:08:26,304 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part28/Yb4TNdsnx6B8.wav: 文件为空音频文件
+2025-08-26 21:08:26,304 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part14/YFI3GVFsW3Ag.wav: 文件为空音频文件
+2025-08-26 21:08:26,304 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part22/YRFzGhgLcpv0.wav: 文件为空音频文件
+2025-08-26 21:08:26,304 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part22/YRk2WE9gLCpA.wav: 文件为空音频文件
+2025-08-26 21:08:26,304 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part22/YSV8Dlz7hlII.wav: 文件为空音频文件
+2025-08-26 21:08:26,304 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part34/Yn90ELmvCw2c.wav: 文件为空音频文件
+2025-08-26 21:08:26,304 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part34/YmDPXk7MF6YE.wav: 文件为空音频文件
+2025-08-26 21:08:26,304 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part34/YnN6vKa-1urE.wav: 文件为空音频文件
+2025-08-26 21:08:26,304 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part34/YmkZH8ApES24.wav: 文件为空音频文件
+2025-08-26 21:08:26,304 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part29/YcnzMmXjihdQ.wav: 文件为空音频文件
+2025-08-26 21:08:26,304 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part23/YTV2NtVguqeE.wav: 文件为空音频文件
+2025-08-26 21:08:26,304 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part32/YizFhj77r7Uc.wav: 文件为空音频文件
+2025-08-26 21:08:26,304 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part32/YiYWzoGSLYPg.wav: 文件为空音频文件
+2025-08-26 21:08:26,305 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part32/Yjt4Z46pknFo.wav: 文件为空音频文件
+2025-08-26 21:08:26,305 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part32/YileDehaisZE.wav: 文件为空音频文件
+2025-08-26 21:08:26,305 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part16/YHUfTrnZ-RSk.wav: 文件为空音频文件
+2025-08-26 21:08:26,305 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part16/YIZjp4g5t_vo.wav: 文件为空音频文件
+2025-08-26 21:08:26,305 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part16/YI2ggIHVTgjs.wav: 文件为空音频文件
+2025-08-26 21:08:26,305 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part16/YHlk9XC9SHa8.wav: 文件为空音频文件
+2025-08-26 21:08:26,305 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part16/YHkWYbsFGDsY.wav: 文件为空音频文件
+2025-08-26 21:08:26,305 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part25/YXQoLtCFZG-c.wav: 文件为空音频文件
+2025-08-26 21:08:26,305 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part25/YWNtE9AvBOKg.wav: 文件为空音频文件
+2025-08-26 21:08:26,305 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part25/YWM2t24JnElk.wav: 文件为空音频文件
+2025-08-26 21:08:26,305 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part25/YWtFGPDqfOgE.wav: 文件为空音频文件
+2025-08-26 21:08:26,305 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part25/_YWM2t24JnElk.m4a.ytdl: 
+2025-08-26 21:08:26,305 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part25/YWudGD6ZHRoY.wav: 文件为空音频文件
+2025-08-26 21:08:26,305 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part33/Ylrv96Tkaifc.wav: 文件为空音频文件
+2025-08-26 21:08:26,305 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part33/YlGhZqXf8zw0.wav: 文件为空音频文件
+2025-08-26 21:08:26,305 - INFO -   - /opt/gpfs/data/raw_data/audioset/raw_data/unbal_train/unbalanced_train_segments_part33/YkR-dohOhXnQ.wav: 文件为空音频文件
+2025-08-26 21:08:26,305 - INFO - 处理完成！成功: 1912024, 失败: 113
+2025-08-26 21:08:26,305 - INFO - 总处理时间: 1724.61秒
+2025-08-26 21:08:26,305 - INFO - 平均每文件处理时间: 0.001秒
+2025-08-26 21:08:27,241 - INFO - 音频归一化处理完成！

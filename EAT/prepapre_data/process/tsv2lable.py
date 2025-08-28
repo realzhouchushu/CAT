@@ -129,8 +129,8 @@ def generate_label_file(audio_basenames: List[str], ytid_to_labels: Dict[str, st
         with open(lbl_file_path, 'w', encoding='utf-8') as f:
             for audio_basename in audio_basenames:
                 # 查找对应的标签
-                if audio_basename in ytid_to_labels:
-                    labels = ytid_to_labels[audio_basename]
+                if audio_basename[1:] in ytid_to_labels:
+                    labels = ytid_to_labels[audio_basename[1:]]
                     # 写入：音频basename + 空格 + 标签
                     f.write(f"{audio_basename} {labels}\n")
                 else:

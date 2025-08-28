@@ -7,7 +7,7 @@ train_mode=clap
 config_option=0
 
 # shared config
-SAVE_DIR_ROOT=/opt/gpfs/home/chushu/exp/eat/pre_8_AS2M
+SAVE_DIR_ROOT=/opt/gpfs/home/chushu/exp/eat/pre_4_AS2M
 checkpoint_save_dir=${SAVE_DIR_ROOT}/${train_mode}_${config_option}_$(date +"%Y-%m-%d_%H-%M-%S")
 checkpoint_restore_file=${checkpoint_save_dir}/checkpoint_last.pt
 
@@ -22,12 +22,12 @@ echo "checkpoint_save_dir: ${checkpoint_save_dir}"
 
 if [[ $train_mode == "default" && ${config_option} -eq 0 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/opt/gpfs/home/chushu/data/AudioSet/setting/PRETRAIN_AS2M
+    task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M
     task_load_clap_emb=false
     model_proj_type=null
 elif [[ $train_mode == "clap" && ${config_option} -eq 0 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/opt/gpfs/home/chushu/data/AudioSet/setting/PRETRAIN_AS2M_w_CLAP
+    task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
     task_load_clap_emb=true
     model_proj_type=2
     model_clone_batch=4

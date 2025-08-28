@@ -58,8 +58,9 @@ def get_audio_files(source_dir: str, logger: logging.Logger) -> List[Path]:
     
     # 直接获取所有文件，不检查扩展名
     audio_files = []
-    for file_path in source_path.iterdir():
-        audio_files.append(file_path)
+    for root, dirs, files in os.walk(source_path):
+        for file in files:
+            audio_files.append(os.path.join(root, file))
     
     return audio_files
 
@@ -67,6 +68,7 @@ def get_audio_files(source_dir: str, logger: logging.Logger) -> List[Path]:
 def normalize_audio_worker(args: Tuple[Path, str, int]) -> Tuple[str, bool, str]:
     """多进程工作函数：归一化单个音频文件"""
     input_path, target_dir, target_sr = args
+    input_path = Path(input_path)
     
     try:
         # 读取音频文件
