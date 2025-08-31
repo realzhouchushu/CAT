@@ -273,12 +273,24 @@ class Data2VecMultiModel(BaseFairseqModel):
                 self.cls_proj = nn.Linear(cfg.embed_dim, cfg.embed_dim)
             
             # self.clap_proj = None
-            if cfg.proj_type == 1:
+            if cfg.proj_type == 1: # clap
                 self.clap_proj = nn.Linear(512, cfg.embed_dim)
                 logger.info("making clap proj 512 to 768")
             elif cfg.proj_type == 2:
                 self.clap_proj = nn.Linear(cfg.embed_dim, 512)
                 logger.info("making clap proj 768 to 512")
+            elif cfg.proj_type == 3: # ast mlp_head input
+                self.clap_proj = nn.Linear(768, cfg.embed_dim)
+                logger.info("making clap proj 768 to 768")
+            elif cfg.proj_type == 4: 
+                self.clap_proj = nn.Linear(cfg.embed_dim, 768)
+                logger.info("making clap proj 768 to 768")
+            elif cfg.proj_type == 5: # ast mlp_head output
+                self.clap_proj = nn.Linear(527, cfg.embed_dim)
+                logger.info("making clap proj 527 to 768")
+            elif cfg.proj_type == 6:
+                self.clap_proj = nn.Linear(cfg.embed_dim, 527)
+                logger.info("making clap proj 768 to 527")
             else:
                 logger.info("making clap proj disabled")
 
@@ -676,9 +688,9 @@ class Data2VecMultiModel(BaseFairseqModel):
             )
 
             if self.cfg.proj_type:
-                if self.cfg.proj_type == 1:
+                if self.cfg.proj_type % 2 == 1:
                     clap_emb = self.clap_proj(clap_emb)
-                elif self.cfg.proj_type == 2:
+                else:
                     cls_pred = self.clap_proj(cls_pred)
                 clap_emb = clap_emb.repeat_interleave(self.cfg.clone_batch, 0).to(cls_target.dtype)
                 

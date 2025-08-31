@@ -2,9 +2,9 @@ cd /opt/gpfs/home/chushu/codes/2506/EAT
 pip install nvitop
 pip install --editable ./
 
-model_model_path=/opt/gpfs/home/chushu/exp/eat/pre_4_AS2M/clap_0_2025-08-27_09-23-59/checkpoint_last.pt
+model_model_path=/opt/gpfs/home/chushu/exp/eat/pre_4_AS2M/ast_0_2025-08-29_13-16-21/checkpoint_last.pt
 
-SAVE_DIR_ROOT=/opt/gpfs/home/chushu/exp/eat/sft_4_AS20k_w_clap_CLS
+SAVE_DIR_ROOT=/opt/gpfs/home/chushu/exp/eat/sft_4_AS20k_w_ast_CLS
 # 从 model_model_path 提取父目录名与文件名
 parent_dir="$(basename -- "$(dirname -- "$model_model_path")")"
 ckpt_name="$(basename -- "$model_model_path")"

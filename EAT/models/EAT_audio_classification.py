@@ -34,8 +34,13 @@ class PredictionMode(Enum):
     MEAN_POOLING = auto()
     CLS_TOKEN = auto()
     LIN_SOFTMAX = auto()
+    # NOTE: (chushu) [2025.08.29]: tmp useless
     CLAP_TYPE1 = auto()
     CLAP_TYPE2 = auto()
+    CLAP_TYPE3 = auto()
+    CLAP_TYPE4 = auto()
+    CLAP_TYPE5 = auto()
+    CLAP_TYPE6 = auto()
 
 # we follow the work of data2vec 2.0 on image modality and Audio-MAE in EAT 
 @dataclass
@@ -256,14 +261,22 @@ class MaeImageClassificationModel(BaseFairseqModel):
             self.head = nn.Linear(512, cfg.num_classes)
             if self.cfg.use_fc_norm:
                 self.fc_norm = nn.LayerNorm(512, eps=1e-6)
-                nn.init.constant_(self.fc_norm.bias, 0)
-                nn.init.constant_(self.fc_norm.weight, 1.0)
+        elif self.cfg.prediction_mode == PredictionMode.CLAP_TYPE4:
+            self.head = nn.Linear(768, cfg.num_classes)
+            if self.cfg.use_fc_norm:
+                self.fc_norm = nn.LayerNorm(768, eps=1e-6)
+        elif self.cfg.prediction_mode == PredictionMode.CLAP_TYPE6:
+            self.head = nn.Linear(527, cfg.num_classes)
+            if self.cfg.use_fc_norm:
+                self.fc_norm = nn.LayerNorm(527, eps=1e-6)
         else:
             self.head = nn.Linear(pretrained_args.model.embed_dim, cfg.num_classes)
             if self.cfg.use_fc_norm:
                 self.fc_norm = nn.LayerNorm(pretrained_args.model.embed_dim, eps=1e-6)
-                nn.init.constant_(self.fc_norm.bias, 0)
-                nn.init.constant_(self.fc_norm.weight, 1.0)
+        
+        if self.cfg.use_fc_norm:
+            nn.init.constant_(self.fc_norm.bias, 0)
+            nn.init.constant_(self.fc_norm.weight, 1.0)
         # if self.cfg.use_fc_norm:
         #     self.fc_norm = nn.LayerNorm(pretrained_args.model.embed_dim, eps=1e-6)
         #     nn.init.constant_(self.fc_norm.bias, 0)
@@ -408,9 +421,9 @@ class MaeImageClassificationModel(BaseFairseqModel):
             x = x - torch.log(-(torch.expm1(x)))
             x = torch.nan_to_num(x, nan=0, posinf=0, neginf=0)
             x = x.to(dtype=dtype)
-        elif self.cfg.prediction_mode == PredictionMode.CLAP_TYPE1:
+        elif self.cfg.prediction_mode == PredictionMode.CLAP_TYPE1 or self.cfg.prediction_mode == PredictionMode.CLAP_TYPE3 or self.cfg.prediction_mode == PredictionMode.CLAP_TYPE5:
             raise Exception(f"unknown prediction mode {self.cfg.prediction_mode.name}")
-        elif self.cfg.prediction_mode == PredictionMode.CLAP_TYPE2:
+        elif self.cfg.prediction_mode == PredictionMode.CLAP_TYPE2 or self.cfg.prediction_mode == PredictionMode.CLAP_TYPE4 or self.cfg.prediction_mode == PredictionMode.CLAP_TYPE6:
             x = x[:,0]
             x = self.model.clap_proj(x)
         else:

@@ -1,5 +1,5 @@
 # config options
-train_mode=clap
+train_mode=ast
 config_option=0
 
 # shared config
@@ -26,6 +26,20 @@ elif [[ $train_mode == "clap" && ${config_option} -eq 0 ]]; then
     task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
     task_load_clap_emb=true
     model_proj_type=2
+    model_clone_batch=4
+    dataset_batch_size=48
+elif [[ $train_mode == "ast" && ${config_option} -eq 0 ]]; then
+    echo "Config ${train_mode} ${config_option}"
+    task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M_w_AST/mlp_head_in
+    task_load_clap_emb=true
+    model_proj_type=4
+    model_clone_batch=4
+    dataset_batch_size=48
+elif [[ $train_mode == "ast" && ${config_option} -eq 1 ]]; then
+    echo "Config ${train_mode} ${config_option}"
+    task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M_w_AST/mlp_head_out
+    task_load_clap_emb=true
+    model_proj_type=6
     model_clone_batch=4
     dataset_batch_size=48
 fi
