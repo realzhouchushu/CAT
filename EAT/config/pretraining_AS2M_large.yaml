@@ -103,6 +103,7 @@ model:
 
   supported_modality: IMAGE
   cls_loss: 1
+  clap_loss: 1
 
   ema_encoder_only: false
 

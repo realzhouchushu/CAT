@@ -143,6 +143,7 @@ class Data2VecMultiConfig(FairseqDataclass):
 
     # d2v_loss is the frame-level loss while cls_loss is the utterance-level loss
     cls_loss: float = 0
+    clap_loss: float = 0
     recon_loss: float = 0
     d2v_loss: float = 1
 
@@ -687,7 +688,7 @@ class Data2VecMultiModel(BaseFairseqModel):
                 self.cfg.cls_loss * sample_size
             )
 
-            if self.cfg.proj_type:
+            if self.cfg.proj_type and self.cfg.clap_loss > 0:
                 if self.cfg.proj_type % 2 == 1:
                     clap_emb = self.clap_proj(clap_emb)
                 else:
@@ -695,7 +696,7 @@ class Data2VecMultiModel(BaseFairseqModel):
                 clap_emb = clap_emb.repeat_interleave(self.cfg.clone_batch, 0).to(cls_target.dtype)
                 
                 result["losses"]["clap"] = self.d2v_loss(cls_pred, clap_emb) * (
-                    self.cfg.cls_loss * sample_size
+                    self.cfg.clap_loss * sample_size
                 )
             
         # dino loss experiment

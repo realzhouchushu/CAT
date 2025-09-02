@@ -1,6 +1,6 @@
 # config options
 train_mode=ast
-config_option=0
+config_option=1
 
 # shared config
 SAVE_DIR_ROOT=/opt/gpfs/home/chushu/exp/eat/pre_4_AS2M
@@ -37,6 +37,14 @@ elif [[ $train_mode == "ast" && ${config_option} -eq 0 ]]; then
     dataset_batch_size=48
 elif [[ $train_mode == "ast" && ${config_option} -eq 1 ]]; then
     echo "Config ${train_mode} ${config_option}"
+    task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M_w_AST/mlp_head_in
+    task_load_clap_emb=true
+    model_proj_type=4
+    model_clone_batch=4
+    model_clap_loss=0.001
+    dataset_batch_size=48
+elif [[ $train_mode == "ast" && ${config_option} -eq 2 ]]; then
+    echo "Config ${train_mode} ${config_option}"
     task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M_w_AST/mlp_head_out
     task_load_clap_emb=true
     model_proj_type=6
@@ -58,4 +66,5 @@ python fairseq_cli/hydra_train.py -m \
     task.h5_format=False \
     task.load_clap_emb=${task_load_clap_emb} \
     model.proj_type=${model_proj_type} \
-    model.clone_batch=${model_clone_batch}
+    model.clone_batch=${model_clone_batch} \
+    model.clap_loss=${model_clap_loss}
