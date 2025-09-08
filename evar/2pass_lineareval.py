@@ -14,7 +14,8 @@ making it possible to use the TF model in the inference phase.
 2. Run lineareval.py with `--step=2pass_2_train_test`. Conduct linear evaluation by using embeddings from the cache using torch.
 3. (if repeat > 1) Repeat the step 2 with incremented random seed.
 """
-
+import sys
+sys.path.append('/opt/gpfs/home/chushu/codes/2506/EAT/evar/evar')
 from evar.utils import run_command
 import fire
 
@@ -25,7 +26,7 @@ def lineareval_two_pass(config_file, task, options='', lr=None, hidden=(), stand
     seed = seed or 42
     command_line = [
         'python',
-        'lineareval.py',
+        './evar/lineareval.py',
         config_file,
         task, 
         f'--options={options}',

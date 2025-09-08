@@ -25,7 +25,7 @@ def flatten_list(lists):
     return list(chain.from_iterable(lists))
 
 
-BASE = 'evar/metadata'
+BASE = './evar/evar/metadata'
 
 
 # UrbanSound8K https://urbansounddataset.weebly.com/urbansound8k.html
@@ -33,7 +33,7 @@ BASE = 'evar/metadata'
 def convert_us8k_metadata(root):
     US8K = Path(root)
     df = pd.read_csv(US8K/f'metadata/UrbanSound8K.csv')
-    df['file_name'] = df.fold.map(lambda x: f'audio/fold{x}/') + df.slice_file_name
+    df['file_name'] = df.fold.map(lambda x: f'fold{x}/') + df.slice_file_name
 
     re_df = pd.DataFrame(df['class'].values, index=df.file_name, columns=['label'])
     re_df['fold'] = df.fold.values
@@ -60,7 +60,7 @@ def convert_esc50_metadata(root):
     df = pd.read_csv(root/'meta/esc50.csv')
     repl_map = {'filename': 'file_name', 'category': 'label'}
     df.columns = [repl_map[c] if c in repl_map else c for c in df.columns]
-    df.file_name = 'audio/' + df.file_name
+    df.file_name = df.file_name
     df.to_csv(f'{BASE}/esc50.csv', index=None)
 
     # test
@@ -248,7 +248,7 @@ def vc1():
 
 def surge(root):
     files = sorted(Path(root).glob('*/*.ogg'))
-    tone_split_map = {tone: split for tone, split in pd.read_csv('evar/predefined/dataset_surge_tone_splits.csv').values}
+    tone_split_map = {tone: split for tone, split in pd.read_csv('./evar/evar/predefined/dataset_surge_tone_splits.csv').values}
     df = pd.DataFrame({'file_name': [str(f).replace(root+'/', '') for f in files],
                     'label': [f.stem for f in files],
                     'split': [tone_split_map[f.parent.name] for f in files]})

@@ -1,0 +1,47 @@
+# AR parameters such as FFT parameters.
+audio_repr: ar_eat.AR_EAT
+weight_file: /opt/gpfs/home/chushu/exp/eat/pre_4_AS2M/clap_0_2025-08-27_09-23-59/checkpoint_last.pt
+feature_d: 768 # required, input feature dim
+sample_rate: 16000 # required
+target_length: 1024
+framework: fairseq
+mode: finetune
+prediction_mode: CLS_TOKEN
+model_dir: /opt/gpfs/home/chushu/codes/2506/EAT/EAT
+
+# # Training parameters.
+# batch_size: 128
+# lr_lineareval: 0.0003
+# report_per_epochs: 20
+# early_stop_epochs: 20
+
+# # AST Fine-tuning parameters.
+# # CAUTION: The following parameters not confirmed to work. ##
+# warmup_epochs: 4
+# mixup: 0.5
+# ft_bs: 64
+# ft_lr: 2.0
+# ft_early_stop_epochs: -1 # -1: no early stopping
+# ft_epochs: 200
+# ft_freq_mask: 24 # for ESC-50 in this case
+# ft_time_mask: 96 # for ESC-50
+# # ft_rrc: True
+
+# Linear evaluaition parameters.
+batch_size: 128
+lr_lineareval: 0.00003
+report_per_epochs: 50
+early_stop_epochs: 20
+
+# Fine-tuning parameters.
+training_mask: 0.0
+warmup_epochs: 5
+mixup: 0.5
+ft_bs: 128
+ft_lr: 2.0
+ft_early_stop_epochs: -1  # -1: no early stopping
+ft_epochs: 200
+ft_freq_mask: 30
+ft_time_mask: 192
+ft_noise: 0.0
+ft_rrc: True

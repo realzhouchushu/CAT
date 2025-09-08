@@ -30,6 +30,7 @@ Example terminal outputs:
     The "as20k" has 42118 files out of 2025310
 
 """
+import os
 from re import U
 import urllib.request
 import json
@@ -47,13 +48,36 @@ def download_segment_csv():
     CLASS_LABEL_URL = 'http://storage.googleapis.com/us_audioset/youtube_corpus/v1/csv/class_labels_indices.csv'
 
     for subset_url in [EVAL_URL, BALANCED_TRAIN_URL, UNBALANCED_TRAIN_URL, CLASS_LABEL_URL]:
-        subset_path = '/tmp/' + Path(subset_url).name
-        if Path(subset_path).is_file():
+        subset_path = './tmp/' + Path(subset_url).name
+        # 获取绝对路径
+        os.makedirs(os.path.dirname(subset_path), exist_ok=True)
+        
+        # 检查文件是否存在且不为空
+        if Path(subset_path).is_file() and Path(subset_path).stat().st_size > 0:
+            print(f'File {subset_path} already exists and is not empty, skipping...')
             continue
-        with open(subset_path, 'w') as f:
-            subset_data = urllib.request.urlopen(subset_url).read().decode()
-            f.write(subset_data)
-            print('Wrote', subset_path)
+        
+        print(f'Downloading {subset_url} to {subset_path}...')
+        # with open(subset_path, 'w') as f:
+        #     subset_data = urllib.request.urlopen(subset_url).read().decode()
+        #     f.write(subset_data)
+        #     print('Wrote', subset_path)
+
+        try:
+            import requests
+            proxies = {
+                "http": "socks5h://127.0.0.1:1080",
+                "https": "socks5h://127.0.0.1:1080",
+            }
+            r = requests.get(subset_url, proxies=proxies)
+            with open(subset_path, "wb") as f:
+                f.write(r.content)
+        except Exception as e:
+            print(f'Failed to download {subset_url}: {e}')
+            # 删除空文件
+            if Path(subset_path).is_file() and Path(subset_path).stat().st_size == 0:
+                Path(subset_path).unlink()
+                print(f'Removed empty file {subset_path}')
 
 
 def gen_weight(train_files_csv, label_file, output_file):
@@ -99,15 +123,15 @@ def make_metadata(as_dir='work/16k/as'):
     src_folder = Path(as_dir)
 
     # download the original metadata.
-    download_segment_csv()
+    # download_segment_csv()
 
     # load label maps.
-    e_df = pd.read_csv('/tmp/eval_segments.csv', skiprows=2, sep=', ', engine='python')
-    e_df['split'] = 'eval_segments'
-    b_df = pd.read_csv('/tmp/balanced_train_segments.csv', skiprows=2, sep=', ', engine='python')
-    b_df['split'] = 'balanced_train_segments'
-    u_df = pd.read_csv('/tmp/unbalanced_train_segments.csv', skiprows=2, sep=', ', engine='python')
-    u_df['split'] = 'unbalanced_train_segments'
+    e_df = pd.read_csv('./tmp/eval_segments.csv', skiprows=2, sep=', ', engine='python')
+    e_df['split'] = 'eval'
+    b_df = pd.read_csv('./tmp/balanced_train_segments.csv', skiprows=2, sep=', ', engine='python')
+    b_df['split'] = 'bal_train'
+    u_df = pd.read_csv('./tmp/unbalanced_train_segments.csv', skiprows=2, sep=', ', engine='python')
+    u_df['split'] = 'unbal_train'
     df = pd.concat([e_df, b_df, u_df])
     df = df[['# YTID', 'positive_labels', 'split']].copy()
     df.columns = ['ytid', 'label', 'split']
@@ -121,7 +145,7 @@ def make_metadata(as_dir='work/16k/as'):
     # mark existing samples.
     files = list(src_folder.glob('*/**/*.wav'))
     _splits = [str(f.parent).replace(as_dir, '').split('/')[1] for f in files]
-    _ids = [f.stem[:11] for f in files]
+    _ids = [f.stem[1:] for f in files]
     filenames = [str(f).replace(as_dir+'/', '') for f in files]
     id2split = {_id: _split for _id, _split in zip(_ids, _splits)}
     id2file = {_id: _file for _id, _file in zip(_ids, filenames)}
@@ -135,16 +159,16 @@ def make_metadata(as_dir='work/16k/as'):
     ## as
     d = df.copy()
     print('The full "as" has', len(d), 'files.')
-    d['split'] = [{'balanced_train_segments': 'train', 'unbalanced_train_segments': 'train', 'eval_segments': 'test'}[s] for s in d.split.values]
+    d['split'] = [{'bal_train': 'train', 'unbal_train': 'train', 'eval': 'test'}[s] for s in d.split.values]
     d[['file_name', 'label', 'split']].to_csv('evar/metadata/as.csv', index=None)
 
     ## as weight
-    gen_weight('evar/metadata/as.csv', '/tmp/class_labels_indices.csv', 'evar/metadata/weight_as.csv')
+    gen_weight('evar/metadata/as.csv', './tmp/class_labels_indices.csv', 'evar/metadata/weight_as.csv')
 
     ### as20k
-    d = df[df.split.isin(['eval_segments', 'balanced_train_segments'])].copy()
+    d = df[df.split.isin(['eval', 'bal_train'])].copy()
     print('The "as20k" has', len(d), 'files out of', len(df))
-    d['split'] = [{'balanced_train_segments': 'train', 'eval_segments': 'test'}[s] for s in d.split.values]
+    d['split'] = [{'bal_train': 'train', 'eval': 'test'}[s] for s in d.split.values]
     d[['file_name', 'label', 'split']].to_csv('evar/metadata/as20k.csv', index=None)
 
 

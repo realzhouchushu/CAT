@@ -1,0 +1,714 @@
+2025-09-08 07:05:40 INFO {'audio_repr': 'ar_eat.AR_EAT', 'weight_file': '/opt/gpfs/home/chushu/exp/eat/pre_4_AS2M/default_0_2025-09-05_16-17-52/checkpoint_last.pt', 'feature_d': 768, 'sample_rate': 16000, 'target_length': 1024, 'framework': 'fairseq', 'mode': 'finetune', 'prediction_mode': 'CLS_TOKEN', 'model_dir': '/opt/gpfs/home/chushu/codes/2506/EAT/EAT', 'batch_size': 64, 'lr_lineareval': 3e-05, 'report_per_epochs': 50, 'early_stop_epochs': 20, 'training_mask': 0.0, 'warmup_epochs': 5, 'mixup': 0.5, 'ft_bs': 128, 'ft_lr': 2.0, 'ft_early_stop_epochs': -1, 'ft_epochs': 200, 'ft_freq_mask': 30, 'ft_time_mask': 192, 'ft_noise': 0.0, 'ft_rrc': True, 'name': '', 'task_metadata': '/opt/gpfs/home/chushu/codes/2506/EAT/evar/evar/metadata/voxforge.csv', 'task_data': '/opt/gpfs/data/raw_data/voxforge/16k', 'unit_samples': 92800, 'id': 'default_0_2025-09-05_16-17-52-checkpoint_last_voxforge_703de4f6', 'task_name': 'voxforge', 'return_filename': False, 'mean': None, 'std': None, 'runtime_cfg': {'lr': 1e-05, 'seed': 42, 'hidden': (), 'standard_scaler': True, 'mixup': False, 'epochs': 200, 'early_stop_epochs': 20, 'id': '50d291e1'}}
+2025-09-08 07:05:40 INFO  classes: ['de', 'en', 'es', 'fr', 'it', 'ru']
+2025-09-08 07:05:40 INFO Train:121281, valid:26684, test:28463, multi label:False
+2025-09-08 07:05:40 INFO  using cached embeddings: embs-default_0_2025-09-05_16-17-52-checkpoint_last_voxforge_703de4f6-train-1
+2025-09-08 07:05:40 INFO  using cached embeddings: embs-default_0_2025-09-05_16-17-52-checkpoint_last_voxforge_703de4f6-valid-1
+2025-09-08 07:05:41 INFO  using cached embeddings: embs-default_0_2025-09-05_16-17-52-checkpoint_last_voxforge_703de4f6-test-1
+2025-09-08 07:05:46 INFO {'audio_repr': 'ar_eat.AR_EAT', 'weight_file': '/opt/gpfs/home/chushu/exp/eat/pre_4_AS2M/default_0_2025-09-05_16-17-52/checkpoint_last.pt', 'feature_d': 768, 'sample_rate': 16000, 'target_length': 1024, 'framework': 'fairseq', 'mode': 'finetune', 'prediction_mode': 'CLS_TOKEN', 'model_dir': '/opt/gpfs/home/chushu/codes/2506/EAT/EAT', 'batch_size': 64, 'lr_lineareval': 3e-05, 'report_per_epochs': 50, 'early_stop_epochs': 20, 'training_mask': 0.0, 'warmup_epochs': 5, 'mixup': 0.5, 'ft_bs': 128, 'ft_lr': 2.0, 'ft_early_stop_epochs': -1, 'ft_epochs': 200, 'ft_freq_mask': 30, 'ft_time_mask': 192, 'ft_noise': 0.0, 'ft_rrc': True, 'name': '', 'task_metadata': '/opt/gpfs/home/chushu/codes/2506/EAT/evar/evar/metadata/voxforge.csv', 'task_data': '/opt/gpfs/data/raw_data/voxforge/16k', 'unit_samples': 92800, 'id': 'default_0_2025-09-05_16-17-52-checkpoint_last_voxforge_703de4f6', 'task_name': 'voxforge', 'return_filename': False, 'mean': None, 'std': None, 'runtime_cfg': {'lr': 1e-05, 'seed': 42, 'hidden': (), 'standard_scaler': True, 'mixup': False, 'epochs': 200, 'early_stop_epochs': 20, 'id': '50d291e1'}}
+2025-09-08 07:05:47 INFO  classes: ['de', 'en', 'es', 'fr', 'it', 'ru']
+2025-09-08 07:05:47 INFO Train:121281, valid:26684, test:28463, multi label:False
+2025-09-08 07:05:47 INFO  using cached embeddings: embs-default_0_2025-09-05_16-17-52-checkpoint_last_voxforge_703de4f6-train-1
+2025-09-08 07:05:47 INFO  using cached embeddings: embs-default_0_2025-09-05_16-17-52-checkpoint_last_voxforge_703de4f6-valid-1
+2025-09-08 07:05:47 INFO  using cached embeddings: embs-default_0_2025-09-05_16-17-52-checkpoint_last_voxforge_703de4f6-test-1
+2025-09-08 07:05:47 INFO 🚀 Started Linear evaluation:
+2025-09-08 07:05:48 INFO  stats|train: mean=0.0000, std=1.0000
+2025-09-08 07:05:48 INFO  stats|valid: mean=0.0000, std=1.0067
+2025-09-08 07:05:48 INFO Training model: MLP(
+  (mlp): Sequential(
+    (0): Linear(in_features=768, out_features=6, bias=True)
+  )
+)
+2025-09-08 07:05:48 INFO Details - metric: acc, loss: <function loss_nll_with_logits at 0x7f187cf249d0>, optimizer: Adam (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    capturable: False
+    decoupled_weight_decay: False
+    differentiable: False
+    eps: 1e-08
+    foreach: None
+    fused: None
+    lr: 1e-05
+    maximize: False
+    weight_decay: 1e-08
+), n_class: 6
+2025-09-08 07:05:50 INFO epoch 0001/200: lr: 0.0000100: loss=59.273171 val_acc=0.3737071 val_loss=55.2423782
+2025-09-08 07:05:52 INFO epoch 0002/200: lr: 0.0000100: loss=53.554249 val_acc=0.4544671 val_loss=51.5205269
+2025-09-08 07:05:53 INFO epoch 0003/200: lr: 0.0000100: loss=50.447320 val_acc=0.4943037 val_loss=49.2492981
+2025-09-08 07:05:55 INFO epoch 0004/200: lr: 0.0000100: loss=48.284464 val_acc=0.5206116 val_loss=47.5711746
+2025-09-08 07:05:56 INFO epoch 0005/200: lr: 0.0000100: loss=46.616488 val_acc=0.5400615 val_loss=46.2789383
+2025-09-08 07:05:58 INFO epoch 0006/200: lr: 0.0000100: loss=45.253208 val_acc=0.5540773 val_loss=45.1892853
+2025-09-08 07:05:59 INFO epoch 0007/200: lr: 0.0000100: loss=44.100836 val_acc=0.5683181 val_loss=44.2836990
+2025-09-08 07:06:01 INFO epoch 0008/200: lr: 0.0000100: loss=43.104421 val_acc=0.5782866 val_loss=43.4639969
+2025-09-08 07:06:02 INFO epoch 0009/200: lr: 0.0000100: loss=42.227531 val_acc=0.5883301 val_loss=42.7349815
+2025-09-08 07:06:04 INFO epoch 0010/200: lr: 0.0000100: loss=41.444523 val_acc=0.5964248 val_loss=42.0982780
+2025-09-08 07:06:05 INFO epoch 0011/200: lr: 0.0000100: loss=40.737848 val_acc=0.6015965 val_loss=41.5094109
+2025-09-08 07:06:07 INFO epoch 0012/200: lr: 0.0000100: loss=40.093923 val_acc=0.6076675 val_loss=40.9644508
+2025-09-08 07:06:09 INFO epoch 0013/200: lr: 0.0000100: loss=39.500826 val_acc=0.6128017 val_loss=40.4521027
+2025-09-08 07:06:10 INFO epoch 0014/200: lr: 0.0000100: loss=38.951602 val_acc=0.6186479 val_loss=39.9935837
+2025-09-08 07:06:12 INFO epoch 0015/200: lr: 0.0000100: loss=38.438495 val_acc=0.6234822 val_loss=39.5605202
+2025-09-08 07:06:13 INFO epoch 0016/200: lr: 0.0000100: loss=37.957353 val_acc=0.6279793 val_loss=39.1278801
+2025-09-08 07:06:15 INFO epoch 0017/200: lr: 0.0000100: loss=37.504404 val_acc=0.6313521 val_loss=38.7457237
+2025-09-08 07:06:16 INFO epoch 0018/200: lr: 0.0000100: loss=37.074903 val_acc=0.6349873 val_loss=38.3521118
+2025-09-08 07:06:18 INFO epoch 0019/200: lr: 0.0000100: loss=36.668439 val_acc=0.6380228 val_loss=38.0063972
+2025-09-08 07:06:19 INFO epoch 0020/200: lr: 0.0000100: loss=36.281094 val_acc=0.6406461 val_loss=37.6614952
+2025-09-08 07:06:21 INFO epoch 0021/200: lr: 0.0000100: loss=35.912973 val_acc=0.6433069 val_loss=37.3374863
+2025-09-08 07:06:22 INFO epoch 0022/200: lr: 0.0000100: loss=35.559063 val_acc=0.6463049 val_loss=37.0168877
+2025-09-08 07:06:24 INFO epoch 0023/200: lr: 0.0000100: loss=35.220733 val_acc=0.6489282 val_loss=36.7116203
+2025-09-08 07:06:25 INFO epoch 0024/200: lr: 0.0000100: loss=34.896466 val_acc=0.6512517 val_loss=36.4311180
+2025-09-08 07:06:27 INFO epoch 0025/200: lr: 0.0000100: loss=34.584653 val_acc=0.6538375 val_loss=36.1362724
+2025-09-08 07:06:29 INFO epoch 0026/200: lr: 0.0000100: loss=34.284172 val_acc=0.6564983 val_loss=35.8685913
+2025-09-08 07:06:30 INFO epoch 0027/200: lr: 0.0000100: loss=33.995382 val_acc=0.6597212 val_loss=35.6059532
+2025-09-08 07:06:32 INFO epoch 0028/200: lr: 0.0000100: loss=33.716240 val_acc=0.6624569 val_loss=35.3571205
+2025-09-08 07:06:33 INFO epoch 0029/200: lr: 0.0000100: loss=33.445842 val_acc=0.6638810 val_loss=35.1135712
+2025-09-08 07:06:35 INFO epoch 0030/200: lr: 0.0000100: loss=33.184369 val_acc=0.6668041 val_loss=34.8701820
+2025-09-08 07:06:36 INFO epoch 0031/200: lr: 0.0000100: loss=32.930931 val_acc=0.6680033 val_loss=34.6601982
+2025-09-08 07:06:38 INFO epoch 0032/200: lr: 0.0000100: loss=32.685082 val_acc=0.6699146 val_loss=34.4223175
+2025-09-08 07:06:39 INFO epoch 0033/200: lr: 0.0000100: loss=32.446803 val_acc=0.6716010 val_loss=34.2004929
+2025-09-08 07:06:41 INFO epoch 0034/200: lr: 0.0000100: loss=32.214453 val_acc=0.6731375 val_loss=33.9888115
+2025-09-08 07:06:42 INFO epoch 0035/200: lr: 0.0000100: loss=31.989960 val_acc=0.6751986 val_loss=33.7784462
+2025-09-08 07:06:44 INFO epoch 0036/200: lr: 0.0000100: loss=31.770152 val_acc=0.6767726 val_loss=33.5930481
+2025-09-08 07:06:45 INFO epoch 0037/200: lr: 0.0000100: loss=31.557622 val_acc=0.6796207 val_loss=33.4076500
+2025-09-08 07:06:47 INFO epoch 0038/200: lr: 0.0000100: loss=31.349825 val_acc=0.6808200 val_loss=33.2118263
+2025-09-08 07:06:48 INFO epoch 0039/200: lr: 0.0000100: loss=31.147917 val_acc=0.6821691 val_loss=33.0292854
+2025-09-08 07:06:50 INFO epoch 0040/200: lr: 0.0000100: loss=30.951187 val_acc=0.6835932 val_loss=32.8488503
+2025-09-08 07:06:52 INFO epoch 0041/200: lr: 0.0000100: loss=30.759084 val_acc=0.6853545 val_loss=32.6776772
+2025-09-08 07:06:53 INFO epoch 0042/200: lr: 0.0000100: loss=30.570608 val_acc=0.6865537 val_loss=32.5008354
+2025-09-08 07:06:55 INFO epoch 0043/200: lr: 0.0000100: loss=30.387251 val_acc=0.6881652 val_loss=32.3350716
+2025-09-08 07:06:56 INFO epoch 0044/200: lr: 0.0000100: loss=30.208718 val_acc=0.6892520 val_loss=32.1839371
+2025-09-08 07:06:58 INFO epoch 0045/200: lr: 0.0000100: loss=30.034136 val_acc=0.6909759 val_loss=32.0258751
+2025-09-08 07:06:59 INFO epoch 0046/200: lr: 0.0000100: loss=29.863053 val_acc=0.6921001 val_loss=31.8669605
+2025-09-08 07:07:01 INFO epoch 0047/200: lr: 0.0000100: loss=29.696279 val_acc=0.6930745 val_loss=31.7179108
+2025-09-08 07:07:02 INFO epoch 0048/200: lr: 0.0000100: loss=29.531984 val_acc=0.6943112 val_loss=31.5871067
+2025-09-08 07:07:04 INFO epoch 0049/200: lr: 0.0000100: loss=29.371294 val_acc=0.6963724 val_loss=31.4228649
+2025-09-08 07:07:05 INFO epoch 0050/200: lr: 0.0000100: loss=29.214416 val_acc=0.6976465 val_loss=31.2814751
+2025-09-08 07:07:07 INFO epoch 0051/200: lr: 0.0000100: loss=29.061564 val_acc=0.6976840 val_loss=31.1429482
+2025-09-08 07:07:08 INFO epoch 0052/200: lr: 0.0000100: loss=28.910209 val_acc=0.6986584 val_loss=31.0086384
+2025-09-08 07:07:10 INFO epoch 0053/200: lr: 0.0000100: loss=28.763456 val_acc=0.6998576 val_loss=30.8714237
+2025-09-08 07:07:12 INFO epoch 0054/200: lr: 0.0000100: loss=28.617937 val_acc=0.7012817 val_loss=30.7607784
+2025-09-08 07:07:13 INFO epoch 0055/200: lr: 0.0000100: loss=28.475707 val_acc=0.7015815 val_loss=30.6242447
+2025-09-08 07:07:15 INFO epoch 0056/200: lr: 0.0000100: loss=28.336707 val_acc=0.7032304 val_loss=30.4960155
+2025-09-08 07:07:16 INFO epoch 0057/200: lr: 0.0000100: loss=28.199035 val_acc=0.7034927 val_loss=30.3872890
+2025-09-08 07:07:18 INFO epoch 0058/200: lr: 0.0000100: loss=28.065678 val_acc=0.7048044 val_loss=30.2640781
+2025-09-08 07:07:19 INFO epoch 0059/200: lr: 0.0000100: loss=27.933592 val_acc=0.7061535 val_loss=30.1301804
+2025-09-08 07:07:21 INFO epoch 0060/200: lr: 0.0000100: loss=27.804970 val_acc=0.7069780 val_loss=30.0267220
+2025-09-08 07:07:22 INFO epoch 0061/200: lr: 0.0000100: loss=27.677633 val_acc=0.7084020 val_loss=29.9024220
+2025-09-08 07:07:24 INFO epoch 0062/200: lr: 0.0000100: loss=27.552409 val_acc=0.7093764 val_loss=29.8081341
+2025-09-08 07:07:25 INFO epoch 0063/200: lr: 0.0000100: loss=27.430158 val_acc=0.7097137 val_loss=29.6935329
+2025-09-08 07:07:27 INFO epoch 0064/200: lr: 0.0000100: loss=27.309821 val_acc=0.7111752 val_loss=29.5773983
+2025-09-08 07:07:28 INFO epoch 0065/200: lr: 0.0000100: loss=27.190894 val_acc=0.7121871 val_loss=29.4832439
+2025-09-08 07:07:30 INFO epoch 0066/200: lr: 0.0000100: loss=27.073883 val_acc=0.7131614 val_loss=29.3783455
+2025-09-08 07:07:31 INFO epoch 0067/200: lr: 0.0000100: loss=26.959806 val_acc=0.7136861 val_loss=29.2749844
+2025-09-08 07:07:33 INFO epoch 0068/200: lr: 0.0000100: loss=26.846594 val_acc=0.7148853 val_loss=29.1750507
+2025-09-08 07:07:34 INFO epoch 0069/200: lr: 0.0000100: loss=26.735086 val_acc=0.7155224 val_loss=29.0723267
+2025-09-08 07:07:36 INFO epoch 0070/200: lr: 0.0000100: loss=26.625647 val_acc=0.7160471 val_loss=28.9881153
+2025-09-08 07:07:37 INFO epoch 0071/200: lr: 0.0000100: loss=26.517249 val_acc=0.7169840 val_loss=28.8918591
+2025-09-08 07:07:39 INFO epoch 0072/200: lr: 0.0000100: loss=26.411688 val_acc=0.7181457 val_loss=28.8014812
+2025-09-08 07:07:41 INFO epoch 0073/200: lr: 0.0000100: loss=26.306631 val_acc=0.7184830 val_loss=28.6909904
+2025-09-08 07:07:42 INFO epoch 0074/200: lr: 0.0000100: loss=26.204848 val_acc=0.7192325 val_loss=28.6164856
+2025-09-08 07:07:44 INFO epoch 0075/200: lr: 0.0000100: loss=26.103316 val_acc=0.7205816 val_loss=28.5283432
+2025-09-08 07:07:45 INFO epoch 0076/200: lr: 0.0000100: loss=26.003338 val_acc=0.7209189 val_loss=28.4453239
+2025-09-08 07:07:47 INFO epoch 0077/200: lr: 0.0000100: loss=25.906038 val_acc=0.7218183 val_loss=28.3638725
+2025-09-08 07:07:48 INFO epoch 0078/200: lr: 0.0000100: loss=25.808938 val_acc=0.7228676 val_loss=28.2696743
+2025-09-08 07:07:50 INFO epoch 0079/200: lr: 0.0000100: loss=25.714055 val_acc=0.7235422 val_loss=28.1865807
+2025-09-08 07:07:51 INFO epoch 0080/200: lr: 0.0000100: loss=25.620180 val_acc=0.7246290 val_loss=28.1127415
+2025-09-08 07:07:53 INFO epoch 0081/200: lr: 0.0000100: loss=25.527874 val_acc=0.7254160 val_loss=28.0292225
+2025-09-08 07:07:54 INFO epoch 0082/200: lr: 0.0000100: loss=25.437041 val_acc=0.7259781 val_loss=27.9488678
+2025-09-08 07:07:56 INFO epoch 0083/200: lr: 0.0000100: loss=25.347010 val_acc=0.7261280 val_loss=27.8834553
+2025-09-08 07:07:57 INFO epoch 0084/200: lr: 0.0000100: loss=25.258178 val_acc=0.7272148 val_loss=27.7961311
+2025-09-08 07:07:59 INFO epoch 0085/200: lr: 0.0000100: loss=25.170606 val_acc=0.7273272 val_loss=27.7273293
+2025-09-08 07:08:00 INFO epoch 0086/200: lr: 0.0000100: loss=25.084651 val_acc=0.7283766 val_loss=27.6419029
+2025-09-08 07:08:02 INFO epoch 0087/200: lr: 0.0000100: loss=25.000043 val_acc=0.7288637 val_loss=27.5771637
+2025-09-08 07:08:03 INFO epoch 0088/200: lr: 0.0000100: loss=24.916120 val_acc=0.7296507 val_loss=27.4999008
+2025-09-08 07:08:05 INFO epoch 0089/200: lr: 0.0000100: loss=24.833456 val_acc=0.7300630 val_loss=27.4317684
+2025-09-08 07:08:06 INFO epoch 0090/200: lr: 0.0000100: loss=24.751564 val_acc=0.7305127 val_loss=27.3727055
+2025-09-08 07:08:08 INFO epoch 0091/200: lr: 0.0000100: loss=24.671633 val_acc=0.7309999 val_loss=27.3010063
+2025-09-08 07:08:09 INFO epoch 0092/200: lr: 0.0000100: loss=24.591937 val_acc=0.7311123 val_loss=27.2291737
+2025-09-08 07:08:11 INFO epoch 0093/200: lr: 0.0000100: loss=24.513443 val_acc=0.7317494 val_loss=27.1630859
+2025-09-08 07:08:12 INFO epoch 0094/200: lr: 0.0000100: loss=24.436338 val_acc=0.7327237 val_loss=27.0917301
+2025-09-08 07:08:14 INFO epoch 0095/200: lr: 0.0000100: loss=24.360537 val_acc=0.7327612 val_loss=27.0365639
+2025-09-08 07:08:15 INFO epoch 0096/200: lr: 0.0000100: loss=24.285269 val_acc=0.7338855 val_loss=26.9806976
+2025-09-08 07:08:17 INFO epoch 0097/200: lr: 0.0000100: loss=24.210932 val_acc=0.7337730 val_loss=26.9149418
+2025-09-08 07:08:18 INFO epoch 0098/200: lr: 0.0000100: loss=24.138033 val_acc=0.7342228 val_loss=26.8488426
+2025-09-08 07:08:20 INFO epoch 0099/200: lr: 0.0000100: loss=24.065078 val_acc=0.7350847 val_loss=26.7821999
+2025-09-08 07:08:21 INFO epoch 0100/200: lr: 0.0000100: loss=23.994695 val_acc=0.7354595 val_loss=26.7291031
+2025-09-08 07:08:23 INFO epoch 0101/200: lr: 0.0000100: loss=23.923745 val_acc=0.7361340 val_loss=26.6641464
+2025-09-08 07:08:25 INFO epoch 0102/200: lr: 0.0000100: loss=23.854793 val_acc=0.7362464 val_loss=26.6184807
+2025-09-08 07:08:26 INFO epoch 0103/200: lr: 0.0000100: loss=23.785929 val_acc=0.7368461 val_loss=26.5546970
+2025-09-08 07:08:28 INFO epoch 0104/200: lr: 0.0000100: loss=23.718199 val_acc=0.7374082 val_loss=26.4997253
+2025-09-08 07:08:29 INFO epoch 0105/200: lr: 0.0000100: loss=23.651534 val_acc=0.7379328 val_loss=26.4480534
+2025-09-08 07:08:30 INFO epoch 0106/200: lr: 0.0000100: loss=23.585515 val_acc=0.7386449 val_loss=26.3901367
+2025-09-08 07:08:32 INFO epoch 0107/200: lr: 0.0000100: loss=23.519966 val_acc=0.7394319 val_loss=26.3324928
+2025-09-08 07:08:33 INFO epoch 0108/200: lr: 0.0000100: loss=23.455760 val_acc=0.7394319 val_loss=26.2815571
+2025-09-08 07:08:35 INFO epoch 0109/200: lr: 0.0000100: loss=23.392154 val_acc=0.7399191 val_loss=26.2256279
+2025-09-08 07:08:36 INFO epoch 0110/200: lr: 0.0000100: loss=23.328993 val_acc=0.7405561 val_loss=26.1773949
+2025-09-08 07:08:38 INFO epoch 0111/200: lr: 0.0000100: loss=23.266882 val_acc=0.7412682 val_loss=26.1284790
+2025-09-08 07:08:39 INFO epoch 0112/200: lr: 0.0000100: loss=23.205661 val_acc=0.7419427 val_loss=26.0761948
+2025-09-08 07:08:41 INFO epoch 0113/200: lr: 0.0000100: loss=23.145053 val_acc=0.7423924 val_loss=26.0232811
+2025-09-08 07:08:42 INFO epoch 0114/200: lr: 0.0000100: loss=23.085020 val_acc=0.7421676 val_loss=25.9743748
+2025-09-08 07:08:44 INFO epoch 0115/200: lr: 0.0000100: loss=23.026177 val_acc=0.7430670 val_loss=25.9274960
+2025-09-08 07:08:46 INFO epoch 0116/200: lr: 0.0000100: loss=22.967772 val_acc=0.7436291 val_loss=25.8917007
+2025-09-08 07:08:47 INFO epoch 0117/200: lr: 0.0000100: loss=22.909891 val_acc=0.7439289 val_loss=25.8419380
+2025-09-08 07:08:49 INFO epoch 0118/200: lr: 0.0000100: loss=22.852457 val_acc=0.7443412 val_loss=25.7963200
+2025-09-08 07:08:50 INFO epoch 0119/200: lr: 0.0000100: loss=22.796336 val_acc=0.7448658 val_loss=25.7506199
+2025-09-08 07:08:52 INFO epoch 0120/200: lr: 0.0000100: loss=22.740841 val_acc=0.7449408 val_loss=25.7032948
+2025-09-08 07:08:53 INFO epoch 0121/200: lr: 0.0000100: loss=22.685856 val_acc=0.7455404 val_loss=25.6623917
+2025-09-08 07:08:55 INFO epoch 0122/200: lr: 0.0000100: loss=22.631390 val_acc=0.7457653 val_loss=25.6255932
+2025-09-08 07:08:56 INFO epoch 0123/200: lr: 0.0000100: loss=22.578387 val_acc=0.7461775 val_loss=25.5780983
+2025-09-08 07:08:58 INFO epoch 0124/200: lr: 0.0000100: loss=22.524731 val_acc=0.7461025 val_loss=25.5410042
+2025-09-08 07:08:59 INFO epoch 0125/200: lr: 0.0000100: loss=22.472911 val_acc=0.7463649 val_loss=25.5019913
+2025-09-08 07:09:01 INFO epoch 0126/200: lr: 0.0000100: loss=22.421238 val_acc=0.7469645 val_loss=25.4525566
+2025-09-08 07:09:02 INFO epoch 0127/200: lr: 0.0000100: loss=22.369934 val_acc=0.7476016 val_loss=25.4047661
+2025-09-08 07:09:04 INFO epoch 0128/200: lr: 0.0000100: loss=22.319382 val_acc=0.7475266 val_loss=25.3807945
+2025-09-08 07:09:05 INFO epoch 0129/200: lr: 0.0000100: loss=22.269466 val_acc=0.7480887 val_loss=25.3421040
+2025-09-08 07:09:07 INFO epoch 0130/200: lr: 0.0000100: loss=22.220115 val_acc=0.7480513 val_loss=25.3043938
+2025-09-08 07:09:08 INFO epoch 0131/200: lr: 0.0000100: loss=22.170851 val_acc=0.7484260 val_loss=25.2598534
+2025-09-08 07:09:10 INFO epoch 0132/200: lr: 0.0000100: loss=22.122818 val_acc=0.7489132 val_loss=25.2238522
+2025-09-08 07:09:11 INFO epoch 0133/200: lr: 0.0000100: loss=22.075190 val_acc=0.7487633 val_loss=25.1837044
+2025-09-08 07:09:13 INFO epoch 0134/200: lr: 0.0000100: loss=22.028136 val_acc=0.7494379 val_loss=25.1502762
+2025-09-08 07:09:14 INFO epoch 0135/200: lr: 0.0000100: loss=21.981512 val_acc=0.7489882 val_loss=25.1123562
+2025-09-08 07:09:16 INFO epoch 0136/200: lr: 0.0000100: loss=21.935664 val_acc=0.7500375 val_loss=25.0819149
+2025-09-08 07:09:17 INFO epoch 0137/200: lr: 0.0000100: loss=21.890448 val_acc=0.7500750 val_loss=25.0525742
+2025-09-08 07:09:19 INFO epoch 0138/200: lr: 0.0000100: loss=21.845305 val_acc=0.7504122 val_loss=25.0128536
+2025-09-08 07:09:20 INFO epoch 0139/200: lr: 0.0000100: loss=21.800915 val_acc=0.7510868 val_loss=24.9731884
+2025-09-08 07:09:22 INFO epoch 0140/200: lr: 0.0000100: loss=21.757363 val_acc=0.7512367 val_loss=24.9364090
+2025-09-08 07:09:23 INFO epoch 0141/200: lr: 0.0000100: loss=21.713649 val_acc=0.7514615 val_loss=24.9099598
+2025-09-08 07:09:25 INFO epoch 0142/200: lr: 0.0000100: loss=21.670941 val_acc=0.7516864 val_loss=24.8890629
+2025-09-08 07:09:26 INFO epoch 0143/200: lr: 0.0000100: loss=21.628639 val_acc=0.7517988 val_loss=24.8554363
+2025-09-08 07:09:28 INFO epoch 0144/200: lr: 0.0000100: loss=21.585998 val_acc=0.7520986 val_loss=24.8298321
+2025-09-08 07:09:29 INFO epoch 0145/200: lr: 0.0000100: loss=21.544951 val_acc=0.7526608 val_loss=24.7910995
+2025-09-08 07:09:31 INFO epoch 0146/200: lr: 0.0000100: loss=21.503742 val_acc=0.7522860 val_loss=24.7640285
+2025-09-08 07:09:32 INFO epoch 0147/200: lr: 0.0000100: loss=21.463298 val_acc=0.7531480 val_loss=24.7268963
+2025-09-08 07:09:34 INFO epoch 0148/200: lr: 0.0000100: loss=21.423173 val_acc=0.7529981 val_loss=24.7032204
+2025-09-08 07:09:35 INFO epoch 0149/200: lr: 0.0000100: loss=21.383438 val_acc=0.7536351 val_loss=24.6742363
+2025-09-08 07:09:37 INFO epoch 0150/200: lr: 0.0000100: loss=21.344282 val_acc=0.7534103 val_loss=24.6431122
+2025-09-08 07:09:38 INFO epoch 0151/200: lr: 0.0000100: loss=21.305669 val_acc=0.7535227 val_loss=24.6169014
+2025-09-08 07:09:40 INFO epoch 0152/200: lr: 0.0000100: loss=21.266872 val_acc=0.7538975 val_loss=24.5832710
+2025-09-08 07:09:42 INFO epoch 0153/200: lr: 0.0000100: loss=21.229262 val_acc=0.7543097 val_loss=24.5672703
+2025-09-08 07:09:43 INFO epoch 0154/200: lr: 0.0000100: loss=21.192240 val_acc=0.7542722 val_loss=24.5450020
+2025-09-08 07:09:45 INFO epoch 0155/200: lr: 0.0000100: loss=21.154589 val_acc=0.7542722 val_loss=24.5158081
+2025-09-08 07:09:46 INFO epoch 0156/200: lr: 0.0000100: loss=21.118506 val_acc=0.7544596 val_loss=24.4817009
+2025-09-08 07:09:48 INFO epoch 0157/200: lr: 0.0000100: loss=21.081974 val_acc=0.7546095 val_loss=24.4573517
+2025-09-08 07:09:49 INFO epoch 0158/200: lr: 0.0000100: loss=21.046262 val_acc=0.7550967 val_loss=24.4255428
+2025-09-08 07:09:51 INFO epoch 0159/200: lr: 0.0000100: loss=21.010933 val_acc=0.7554340 val_loss=24.4061756
+2025-09-08 07:09:52 INFO epoch 0160/200: lr: 0.0000100: loss=20.976019 val_acc=0.7554340 val_loss=24.3833389
+2025-09-08 07:09:54 INFO epoch 0161/200: lr: 0.0000100: loss=20.940921 val_acc=0.7557338 val_loss=24.3531456
+2025-09-08 07:09:55 INFO epoch 0162/200: lr: 0.0000100: loss=20.906661 val_acc=0.7556963 val_loss=24.3358669
+2025-09-08 07:09:57 INFO epoch 0163/200: lr: 0.0000100: loss=20.872970 val_acc=0.7562584 val_loss=24.3153973
+2025-09-08 07:09:58 INFO epoch 0164/200: lr: 0.0000100: loss=20.839567 val_acc=0.7559961 val_loss=24.2877674
+2025-09-08 07:10:00 INFO epoch 0165/200: lr: 0.0000100: loss=20.806561 val_acc=0.7565582 val_loss=24.2663574
+2025-09-08 07:10:01 INFO epoch 0166/200: lr: 0.0000100: loss=20.773449 val_acc=0.7566332 val_loss=24.2444649
+2025-09-08 07:10:03 INFO epoch 0167/200: lr: 0.0000100: loss=20.741369 val_acc=0.7568580 val_loss=24.2196198
+2025-09-08 07:10:04 INFO epoch 0168/200: lr: 0.0000100: loss=20.709187 val_acc=0.7568580 val_loss=24.1908875
+2025-09-08 07:10:06 INFO epoch 0169/200: lr: 0.0000100: loss=20.677700 val_acc=0.7575326 val_loss=24.1769218
+2025-09-08 07:10:07 INFO epoch 0170/200: lr: 0.0000100: loss=20.646124 val_acc=0.7578324 val_loss=24.1564159
+2025-09-08 07:10:09 INFO epoch 0171/200: lr: 0.0000100: loss=20.615859 val_acc=0.7579074 val_loss=24.1204395
+2025-09-08 07:10:10 INFO epoch 0172/200: lr: 0.0000100: loss=20.584701 val_acc=0.7579448 val_loss=24.1173897
+2025-09-08 07:10:12 INFO epoch 0173/200: lr: 0.0000100: loss=20.554713 val_acc=0.7580198 val_loss=24.0931892
+2025-09-08 07:10:13 INFO epoch 0174/200: lr: 0.0000100: loss=20.524264 val_acc=0.7582072 val_loss=24.0776386
+2025-09-08 07:10:15 INFO epoch 0175/200: lr: 0.0000100: loss=20.495488 val_acc=0.7583571 val_loss=24.0601292
+2025-09-08 07:10:16 INFO epoch 0176/200: lr: 0.0000100: loss=20.465758 val_acc=0.7580573 val_loss=24.0399647
+2025-09-08 07:10:18 INFO epoch 0177/200: lr: 0.0000100: loss=20.437025 val_acc=0.7585444 val_loss=24.0162830
+2025-09-08 07:10:19 INFO epoch 0178/200: lr: 0.0000100: loss=20.407818 val_acc=0.7586943 val_loss=23.9903870
+2025-09-08 07:10:21 INFO epoch 0179/200: lr: 0.0000100: loss=20.380058 val_acc=0.7589567 val_loss=23.9779167
+2025-09-08 07:10:22 INFO epoch 0180/200: lr: 0.0000100: loss=20.351520 val_acc=0.7589192 val_loss=23.9677372
+2025-09-08 07:10:24 INFO epoch 0181/200: lr: 0.0000100: loss=20.324535 val_acc=0.7588443 val_loss=23.9420395
+2025-09-08 07:10:25 INFO epoch 0182/200: lr: 0.0000100: loss=20.297334 val_acc=0.7592940 val_loss=23.9225655
+2025-09-08 07:10:27 INFO epoch 0183/200: lr: 0.0000100: loss=20.269473 val_acc=0.7593689 val_loss=23.9036522
+2025-09-08 07:10:28 INFO epoch 0184/200: lr: 0.0000100: loss=20.242486 val_acc=0.7592565 val_loss=23.8881149
+2025-09-08 07:10:30 INFO epoch 0185/200: lr: 0.0000100: loss=20.216336 val_acc=0.7599310 val_loss=23.8720818
+2025-09-08 07:10:31 INFO epoch 0186/200: lr: 0.0000100: loss=20.189871 val_acc=0.7595563 val_loss=23.8566551
+2025-09-08 07:10:33 INFO epoch 0187/200: lr: 0.0000100: loss=20.164517 val_acc=0.7597811 val_loss=23.8443089
+2025-09-08 07:10:34 INFO epoch 0188/200: lr: 0.0000100: loss=20.138332 val_acc=0.7595938 val_loss=23.8234940
+2025-09-08 07:10:36 INFO epoch 0189/200: lr: 0.0000100: loss=20.113313 val_acc=0.7598936 val_loss=23.8145847
+2025-09-08 07:10:37 INFO epoch 0190/200: lr: 0.0000100: loss=20.087539 val_acc=0.7600809 val_loss=23.7909412
+2025-09-08 07:10:39 INFO epoch 0191/200: lr: 0.0000100: loss=20.063296 val_acc=0.7604182 val_loss=23.7852192
+2025-09-08 07:10:40 INFO epoch 0192/200: lr: 0.0000100: loss=20.038444 val_acc=0.7603433 val_loss=23.7600536
+2025-09-08 07:10:42 INFO epoch 0193/200: lr: 0.0000100: loss=20.014176 val_acc=0.7603808 val_loss=23.7410049
+2025-09-08 07:10:43 INFO epoch 0194/200: lr: 0.0000100: loss=19.989970 val_acc=0.7610553 val_loss=23.7303944
+2025-09-08 07:10:45 INFO epoch 0195/200: lr: 0.0000100: loss=19.966796 val_acc=0.7607555 val_loss=23.7156620
+2025-09-08 07:10:46 INFO epoch 0196/200: lr: 0.0000100: loss=19.943358 val_acc=0.7609054 val_loss=23.7007027
+2025-09-08 07:10:48 INFO epoch 0197/200: lr: 0.0000100: loss=19.919596 val_acc=0.7609804 val_loss=23.6923523
+2025-09-08 07:10:49 INFO epoch 0198/200: lr: 0.0000100: loss=19.896591 val_acc=0.7608305 val_loss=23.6795406
+2025-09-08 07:10:51 INFO epoch 0199/200: lr: 0.0000100: loss=19.873546 val_acc=0.7608679 val_loss=23.6672230
+2025-09-08 07:10:52 INFO epoch 0200/200: lr: 0.0000100: loss=19.850910 val_acc=0.7611303 val_loss=23.6474438
+2025-09-08 07:10:52 INFO Training complete in 5m 4s
+2025-09-08 07:10:52 INFO Best val_acc@200 = 0.7611302653275371
+2025-09-08 07:10:52 INFO Best val_loss@200 = 23.647443771362305
+2025-09-08 07:10:53 INFO  stats|test: mean=0.0003, std=1.0032
+2025-09-08 07:10:53 INFO Linear evaluation: default_0_2025-09-05_16-17-52-checkpoint_last_voxforge_ffd34b73 voxforge -> 0.80923
+{'audio_repr': 'ar_eat.AR_EAT', 'weight_file': '/opt/gpfs/home/chushu/exp/eat/pre_4_AS2M/default_0_2025-09-05_16-17-52/checkpoint_last.pt', 'feature_d': 768, 'sample_rate': 16000, 'target_length': 1024, 'framework': 'fairseq', 'mode': 'finetune', 'prediction_mode': 'CLS_TOKEN', 'model_dir': '/opt/gpfs/home/chushu/codes/2506/EAT/EAT', 'batch_size': 64, 'lr_lineareval': 3e-05, 'report_per_epochs': 50, 'early_stop_epochs': 20, 'training_mask': 0.0, 'warmup_epochs': 5, 'mixup': 0.5, 'ft_bs': 128, 'ft_lr': 2.0, 'ft_early_stop_epochs': -1, 'ft_epochs': 200, 'ft_freq_mask': 30, 'ft_time_mask': 192, 'ft_noise': 0.0, 'ft_rrc': True, 'name': '', 'task_metadata': '/opt/gpfs/home/chushu/codes/2506/EAT/evar/evar/metadata/voxforge.csv', 'task_data': '/opt/gpfs/data/raw_data/voxforge/16k', 'unit_samples': 92800, 'id': 'default_0_2025-09-05_16-17-52-checkpoint_last_voxforge_703de4f6', 'task_name': 'voxforge', 'return_filename': False, 'mean': None, 'std': None, 'runtime_cfg': {'lr': 1e-05, 'seed': 42, 'hidden': (), 'standard_scaler': True, 'mixup': False, 'epochs': 200, 'early_stop_epochs': 20, 'id': '50d291e1'}}
+/opt/gpfs/home/chushu/codes/2506/EAT/evar/logs/default_0_2025-09-05_16-17-52-checkpoint_last_voxforge_703de4f6/default-0-2025-09-05-16-17-52-checkpoint-last-voxforge-LE_ffd34b73_0.80923.csv
+2025-09-08 07:10:53 INFO  -> /opt/gpfs/home/chushu/codes/2506/EAT/evar/results/scores.csv
+2025-09-08 07:10:59 INFO {'audio_repr': 'ar_eat.AR_EAT', 'weight_file': '/opt/gpfs/home/chushu/exp/eat/pre_4_AS2M/default_0_2025-09-05_16-17-52/checkpoint_last.pt', 'feature_d': 768, 'sample_rate': 16000, 'target_length': 1024, 'framework': 'fairseq', 'mode': 'finetune', 'prediction_mode': 'CLS_TOKEN', 'model_dir': '/opt/gpfs/home/chushu/codes/2506/EAT/EAT', 'batch_size': 64, 'lr_lineareval': 3e-05, 'report_per_epochs': 50, 'early_stop_epochs': 20, 'training_mask': 0.0, 'warmup_epochs': 5, 'mixup': 0.5, 'ft_bs': 128, 'ft_lr': 2.0, 'ft_early_stop_epochs': -1, 'ft_epochs': 200, 'ft_freq_mask': 30, 'ft_time_mask': 192, 'ft_noise': 0.0, 'ft_rrc': True, 'name': '', 'task_metadata': '/opt/gpfs/home/chushu/codes/2506/EAT/evar/evar/metadata/voxforge.csv', 'task_data': '/opt/gpfs/data/raw_data/voxforge/16k', 'unit_samples': 92800, 'id': 'default_0_2025-09-05_16-17-52-checkpoint_last_voxforge_703de4f6', 'task_name': 'voxforge', 'return_filename': False, 'mean': None, 'std': None, 'runtime_cfg': {'lr': 1e-05, 'seed': 43, 'hidden': (), 'standard_scaler': True, 'mixup': False, 'epochs': 200, 'early_stop_epochs': 20, 'id': '7d7f1d32'}}
+2025-09-08 07:11:00 INFO  classes: ['de', 'en', 'es', 'fr', 'it', 'ru']
+2025-09-08 07:11:00 INFO Train:121281, valid:26684, test:28463, multi label:False
+2025-09-08 07:11:00 INFO  using cached embeddings: embs-default_0_2025-09-05_16-17-52-checkpoint_last_voxforge_703de4f6-train-1
+2025-09-08 07:11:00 INFO  using cached embeddings: embs-default_0_2025-09-05_16-17-52-checkpoint_last_voxforge_703de4f6-valid-1
+2025-09-08 07:11:00 INFO  using cached embeddings: embs-default_0_2025-09-05_16-17-52-checkpoint_last_voxforge_703de4f6-test-1
+2025-09-08 07:11:00 INFO 🚀 Started Linear evaluation:
+2025-09-08 07:11:01 INFO  stats|train: mean=0.0000, std=1.0000
+2025-09-08 07:11:01 INFO  stats|valid: mean=0.0000, std=1.0067
+2025-09-08 07:11:01 INFO Training model: MLP(
+  (mlp): Sequential(
+    (0): Linear(in_features=768, out_features=6, bias=True)
+  )
+)
+2025-09-08 07:11:01 INFO Details - metric: acc, loss: <function loss_nll_with_logits at 0x7f431bd689d0>, optimizer: Adam (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    capturable: False
+    decoupled_weight_decay: False
+    differentiable: False
+    eps: 1e-08
+    foreach: None
+    fused: None
+    lr: 1e-05
+    maximize: False
+    weight_decay: 1e-08
+), n_class: 6
+2025-09-08 07:11:03 INFO epoch 0001/200: lr: 0.0000100: loss=59.380040 val_acc=0.3512217 val_loss=55.2903137
+2025-09-08 07:11:05 INFO epoch 0002/200: lr: 0.0000100: loss=53.781868 val_acc=0.4499700 val_loss=51.7790298
+2025-09-08 07:11:06 INFO epoch 0003/200: lr: 0.0000100: loss=50.642543 val_acc=0.4942288 val_loss=49.4732666
+2025-09-08 07:11:08 INFO epoch 0004/200: lr: 0.0000100: loss=48.427739 val_acc=0.5193374 val_loss=47.7815208
+2025-09-08 07:11:09 INFO epoch 0005/200: lr: 0.0000100: loss=46.712155 val_acc=0.5396492 val_loss=46.4059029
+2025-09-08 07:11:11 INFO epoch 0006/200: lr: 0.0000100: loss=45.313011 val_acc=0.5540773 val_loss=45.3035431
+2025-09-08 07:11:12 INFO epoch 0007/200: lr: 0.0000100: loss=44.130865 val_acc=0.5670439 val_loss=44.3311119
+2025-09-08 07:11:14 INFO epoch 0008/200: lr: 0.0000100: loss=43.110135 val_acc=0.5788862 val_loss=43.5153275
+2025-09-08 07:11:15 INFO epoch 0009/200: lr: 0.0000100: loss=42.212441 val_acc=0.5890421 val_loss=42.7714691
+2025-09-08 07:11:17 INFO epoch 0010/200: lr: 0.0000100: loss=41.410296 val_acc=0.5971743 val_loss=42.1096306
+2025-09-08 07:11:18 INFO epoch 0011/200: lr: 0.0000100: loss=40.687234 val_acc=0.6044446 val_loss=41.5130348
+2025-09-08 07:11:20 INFO epoch 0012/200: lr: 0.0000100: loss=40.028486 val_acc=0.6106281 val_loss=40.9552689
+2025-09-08 07:11:21 INFO epoch 0013/200: lr: 0.0000100: loss=39.422319 val_acc=0.6157997 val_loss=40.4464645
+2025-09-08 07:11:23 INFO epoch 0014/200: lr: 0.0000100: loss=38.861707 val_acc=0.6210463 val_loss=39.9612160
+2025-09-08 07:11:24 INFO epoch 0015/200: lr: 0.0000100: loss=38.340303 val_acc=0.6255809 val_loss=39.5104256
+2025-09-08 07:11:26 INFO epoch 0016/200: lr: 0.0000100: loss=37.851969 val_acc=0.6307900 val_loss=39.0973969
+2025-09-08 07:11:27 INFO epoch 0017/200: lr: 0.0000100: loss=37.392879 val_acc=0.6349123 val_loss=38.6880302
+2025-09-08 07:11:29 INFO epoch 0018/200: lr: 0.0000100: loss=36.960176 val_acc=0.6390721 val_loss=38.3202515
+2025-09-08 07:11:30 INFO epoch 0019/200: lr: 0.0000100: loss=36.549933 val_acc=0.6429696 val_loss=37.9572868
+2025-09-08 07:11:32 INFO epoch 0020/200: lr: 0.0000100: loss=36.159431 val_acc=0.6454430 val_loss=37.6045761
+2025-09-08 07:11:34 INFO epoch 0021/200: lr: 0.0000100: loss=35.788339 val_acc=0.6486659 val_loss=37.2856369
+2025-09-08 07:11:35 INFO epoch 0022/200: lr: 0.0000100: loss=35.433540 val_acc=0.6524884 val_loss=36.9610634
+2025-09-08 07:11:37 INFO epoch 0023/200: lr: 0.0000100: loss=35.093943 val_acc=0.6550742 val_loss=36.6559181
+2025-09-08 07:11:38 INFO epoch 0024/200: lr: 0.0000100: loss=34.768280 val_acc=0.6568730 val_loss=36.3605156
+2025-09-08 07:11:40 INFO epoch 0025/200: lr: 0.0000100: loss=34.455718 val_acc=0.6594589 val_loss=36.0738106
+2025-09-08 07:11:41 INFO epoch 0026/200: lr: 0.0000100: loss=34.155103 val_acc=0.6614451 val_loss=35.8050385
+2025-09-08 07:11:43 INFO epoch 0027/200: lr: 0.0000100: loss=33.866589 val_acc=0.6638810 val_loss=35.5513802
+2025-09-08 07:11:45 INFO epoch 0028/200: lr: 0.0000100: loss=33.588083 val_acc=0.6667666 val_loss=35.2921219
+2025-09-08 07:11:46 INFO epoch 0029/200: lr: 0.0000100: loss=33.318583 val_acc=0.6684905 val_loss=35.0357895
+2025-09-08 07:11:48 INFO epoch 0030/200: lr: 0.0000100: loss=33.058132 val_acc=0.6713386 val_loss=34.8167648
+2025-09-08 07:11:49 INFO epoch 0031/200: lr: 0.0000100: loss=32.805438 val_acc=0.6731375 val_loss=34.5970764
+2025-09-08 07:11:51 INFO epoch 0032/200: lr: 0.0000100: loss=32.561809 val_acc=0.6762479 val_loss=34.3554840
+2025-09-08 07:11:52 INFO epoch 0033/200: lr: 0.0000100: loss=32.325463 val_acc=0.6784965 val_loss=34.1546097
+2025-09-08 07:11:54 INFO epoch 0034/200: lr: 0.0000100: loss=32.096510 val_acc=0.6797706 val_loss=33.9392433
+2025-09-08 07:11:55 INFO epoch 0035/200: lr: 0.0000100: loss=31.873199 val_acc=0.6802953 val_loss=33.7331085
+2025-09-08 07:11:57 INFO epoch 0036/200: lr: 0.0000100: loss=31.656436 val_acc=0.6826563 val_loss=33.5335045
+2025-09-08 07:11:59 INFO epoch 0037/200: lr: 0.0000100: loss=31.445140 val_acc=0.6842303 val_loss=33.3393326
+2025-09-08 07:12:00 INFO epoch 0038/200: lr: 0.0000100: loss=31.239627 val_acc=0.6857293 val_loss=33.1555824
+2025-09-08 07:12:02 INFO epoch 0039/200: lr: 0.0000100: loss=31.038759 val_acc=0.6871908 val_loss=32.9710884
+2025-09-08 07:12:03 INFO epoch 0040/200: lr: 0.0000100: loss=30.844634 val_acc=0.6890646 val_loss=32.8008575
+2025-09-08 07:12:05 INFO epoch 0041/200: lr: 0.0000100: loss=30.654359 val_acc=0.6905636 val_loss=32.6204071
+2025-09-08 07:12:06 INFO epoch 0042/200: lr: 0.0000100: loss=30.469733 val_acc=0.6919502 val_loss=32.4644012
+2025-09-08 07:12:08 INFO epoch 0043/200: lr: 0.0000100: loss=30.288407 val_acc=0.6932619 val_loss=32.2911949
+2025-09-08 07:12:10 INFO epoch 0044/200: lr: 0.0000100: loss=30.111795 val_acc=0.6947234 val_loss=32.1217918
+2025-09-08 07:12:11 INFO epoch 0045/200: lr: 0.0000100: loss=29.938228 val_acc=0.6967846 val_loss=31.9791603
+2025-09-08 07:12:13 INFO epoch 0046/200: lr: 0.0000100: loss=29.769452 val_acc=0.6977590 val_loss=31.8256607
+2025-09-08 07:12:14 INFO epoch 0047/200: lr: 0.0000100: loss=29.604212 val_acc=0.6983586 val_loss=31.6840420
+2025-09-08 07:12:16 INFO epoch 0048/200: lr: 0.0000100: loss=29.442364 val_acc=0.6997826 val_loss=31.5251198
+2025-09-08 07:12:17 INFO epoch 0049/200: lr: 0.0000100: loss=29.283399 val_acc=0.7010943 val_loss=31.3755894
+2025-09-08 07:12:19 INFO epoch 0050/200: lr: 0.0000100: loss=29.128060 val_acc=0.7030055 val_loss=31.2472878
+2025-09-08 07:12:20 INFO epoch 0051/200: lr: 0.0000100: loss=28.976141 val_acc=0.7032304 val_loss=31.1009750
+2025-09-08 07:12:22 INFO epoch 0052/200: lr: 0.0000100: loss=28.826440 val_acc=0.7043547 val_loss=30.9713993
+2025-09-08 07:12:24 INFO epoch 0053/200: lr: 0.0000100: loss=28.679751 val_acc=0.7053290 val_loss=30.8323364
+2025-09-08 07:12:25 INFO epoch 0054/200: lr: 0.0000100: loss=28.537231 val_acc=0.7069405 val_loss=30.7026691
+2025-09-08 07:12:27 INFO epoch 0055/200: lr: 0.0000100: loss=28.396545 val_acc=0.7088892 val_loss=30.5792027
+2025-09-08 07:12:28 INFO epoch 0056/200: lr: 0.0000100: loss=28.258846 val_acc=0.7094888 val_loss=30.4626827
+2025-09-08 07:12:30 INFO epoch 0057/200: lr: 0.0000100: loss=28.124570 val_acc=0.7107630 val_loss=30.3336353
+2025-09-08 07:12:31 INFO epoch 0058/200: lr: 0.0000100: loss=27.991423 val_acc=0.7118123 val_loss=30.2176552
+2025-09-08 07:12:33 INFO epoch 0059/200: lr: 0.0000100: loss=27.861664 val_acc=0.7127867 val_loss=30.1036453
+2025-09-08 07:12:34 INFO epoch 0060/200: lr: 0.0000100: loss=27.732954 val_acc=0.7138735 val_loss=29.9958706
+2025-09-08 07:12:36 INFO epoch 0061/200: lr: 0.0000100: loss=27.607533 val_acc=0.7146979 val_loss=29.8761826
+2025-09-08 07:12:38 INFO epoch 0062/200: lr: 0.0000100: loss=27.483745 val_acc=0.7150727 val_loss=29.7797489
+2025-09-08 07:12:39 INFO epoch 0063/200: lr: 0.0000100: loss=27.362636 val_acc=0.7156723 val_loss=29.6577225
+2025-09-08 07:12:41 INFO epoch 0064/200: lr: 0.0000100: loss=27.242601 val_acc=0.7174337 val_loss=29.5528622
+2025-09-08 07:12:42 INFO epoch 0065/200: lr: 0.0000100: loss=27.125614 val_acc=0.7178459 val_loss=29.4485493
+2025-09-08 07:12:44 INFO epoch 0066/200: lr: 0.0000100: loss=27.010098 val_acc=0.7183706 val_loss=29.3418865
+2025-09-08 07:12:45 INFO epoch 0067/200: lr: 0.0000100: loss=26.896831 val_acc=0.7189327 val_loss=29.2454891
+2025-09-08 07:12:47 INFO epoch 0068/200: lr: 0.0000100: loss=26.785088 val_acc=0.7199071 val_loss=29.1475410
+2025-09-08 07:12:48 INFO epoch 0069/200: lr: 0.0000100: loss=26.675252 val_acc=0.7206566 val_loss=29.0568905
+2025-09-08 07:12:50 INFO epoch 0070/200: lr: 0.0000100: loss=26.566971 val_acc=0.7215935 val_loss=28.9631863
+2025-09-08 07:12:52 INFO epoch 0071/200: lr: 0.0000100: loss=26.460502 val_acc=0.7217434 val_loss=28.8595181
+2025-09-08 07:12:53 INFO epoch 0072/200: lr: 0.0000100: loss=26.355552 val_acc=0.7225678 val_loss=28.7794304
+2025-09-08 07:12:55 INFO epoch 0073/200: lr: 0.0000100: loss=26.251807 val_acc=0.7231674 val_loss=28.6867847
+2025-09-08 07:12:56 INFO epoch 0074/200: lr: 0.0000100: loss=26.149998 val_acc=0.7237671 val_loss=28.5879345
+2025-09-08 07:12:58 INFO epoch 0075/200: lr: 0.0000100: loss=26.050178 val_acc=0.7245915 val_loss=28.5148430
+2025-09-08 07:12:59 INFO epoch 0076/200: lr: 0.0000100: loss=25.951707 val_acc=0.7256408 val_loss=28.4211369
+2025-09-08 07:13:01 INFO epoch 0077/200: lr: 0.0000100: loss=25.854444 val_acc=0.7264278 val_loss=28.3318748
+2025-09-08 07:13:03 INFO epoch 0078/200: lr: 0.0000100: loss=25.758717 val_acc=0.7267651 val_loss=28.2563667
+2025-09-08 07:13:04 INFO epoch 0079/200: lr: 0.0000100: loss=25.663888 val_acc=0.7269525 val_loss=28.1814117
+2025-09-08 07:13:06 INFO epoch 0080/200: lr: 0.0000100: loss=25.571260 val_acc=0.7272148 val_loss=28.0943851
+2025-09-08 07:13:07 INFO epoch 0081/200: lr: 0.0000100: loss=25.479775 val_acc=0.7280768 val_loss=28.0146217
+2025-09-08 07:13:09 INFO epoch 0082/200: lr: 0.0000100: loss=25.389028 val_acc=0.7285265 val_loss=27.9315109
+2025-09-08 07:13:10 INFO epoch 0083/200: lr: 0.0000100: loss=25.299997 val_acc=0.7286014 val_loss=27.8555279
+2025-09-08 07:13:12 INFO epoch 0084/200: lr: 0.0000100: loss=25.212071 val_acc=0.7289012 val_loss=27.7872829
+2025-09-08 07:13:13 INFO epoch 0085/200: lr: 0.0000100: loss=25.125909 val_acc=0.7299505 val_loss=27.7127571
+2025-09-08 07:13:15 INFO epoch 0086/200: lr: 0.0000100: loss=25.039490 val_acc=0.7304752 val_loss=27.6329994
+2025-09-08 07:13:16 INFO epoch 0087/200: lr: 0.0000100: loss=24.956110 val_acc=0.7314870 val_loss=27.5657635
+2025-09-08 07:13:18 INFO epoch 0088/200: lr: 0.0000100: loss=24.872988 val_acc=0.7315620 val_loss=27.4979515
+2025-09-08 07:13:20 INFO epoch 0089/200: lr: 0.0000100: loss=24.791285 val_acc=0.7319367 val_loss=27.4260387
+2025-09-08 07:13:21 INFO epoch 0090/200: lr: 0.0000100: loss=24.710296 val_acc=0.7329486 val_loss=27.3660717
+2025-09-08 07:13:23 INFO epoch 0091/200: lr: 0.0000100: loss=24.630546 val_acc=0.7325738 val_loss=27.2918835
+2025-09-08 07:13:24 INFO epoch 0092/200: lr: 0.0000100: loss=24.552313 val_acc=0.7334358 val_loss=27.2274494
+2025-09-08 07:13:26 INFO epoch 0093/200: lr: 0.0000100: loss=24.474243 val_acc=0.7343727 val_loss=27.1456184
+2025-09-08 07:13:27 INFO epoch 0094/200: lr: 0.0000100: loss=24.397672 val_acc=0.7348973 val_loss=27.0929585
+2025-09-08 07:13:29 INFO epoch 0095/200: lr: 0.0000100: loss=24.321872 val_acc=0.7352721 val_loss=27.0265808
+2025-09-08 07:13:30 INFO epoch 0096/200: lr: 0.0000100: loss=24.247644 val_acc=0.7353095 val_loss=26.9708939
+2025-09-08 07:13:32 INFO epoch 0097/200: lr: 0.0000100: loss=24.174114 val_acc=0.7359092 val_loss=26.9131813
+2025-09-08 07:13:34 INFO epoch 0098/200: lr: 0.0000100: loss=24.101798 val_acc=0.7365462 val_loss=26.8437061
+2025-09-08 07:13:35 INFO epoch 0099/200: lr: 0.0000100: loss=24.029673 val_acc=0.7372958 val_loss=26.7916317
+2025-09-08 07:13:37 INFO epoch 0100/200: lr: 0.0000100: loss=23.958832 val_acc=0.7375956 val_loss=26.7238388
+2025-09-08 07:13:38 INFO epoch 0101/200: lr: 0.0000100: loss=23.889082 val_acc=0.7382326 val_loss=26.6654015
+2025-09-08 07:13:40 INFO epoch 0102/200: lr: 0.0000100: loss=23.820466 val_acc=0.7383076 val_loss=26.6118813
+2025-09-08 07:13:41 INFO epoch 0103/200: lr: 0.0000100: loss=23.752049 val_acc=0.7392070 val_loss=26.5525131
+2025-09-08 07:13:43 INFO epoch 0104/200: lr: 0.0000100: loss=23.684839 val_acc=0.7396192 val_loss=26.5008812
+2025-09-08 07:13:45 INFO epoch 0105/200: lr: 0.0000100: loss=23.617651 val_acc=0.7399565 val_loss=26.4418297
+2025-09-08 07:13:46 INFO epoch 0106/200: lr: 0.0000100: loss=23.552329 val_acc=0.7404062 val_loss=26.4045372
+2025-09-08 07:13:48 INFO epoch 0107/200: lr: 0.0000100: loss=23.487181 val_acc=0.7404062 val_loss=26.3334599
+2025-09-08 07:13:49 INFO epoch 0108/200: lr: 0.0000100: loss=23.423795 val_acc=0.7412682 val_loss=26.2811756
+2025-09-08 07:13:51 INFO epoch 0109/200: lr: 0.0000100: loss=23.360131 val_acc=0.7416804 val_loss=26.2298450
+2025-09-08 07:13:52 INFO epoch 0110/200: lr: 0.0000100: loss=23.297327 val_acc=0.7418303 val_loss=26.1836891
+2025-09-08 07:13:54 INFO epoch 0111/200: lr: 0.0000100: loss=23.236268 val_acc=0.7427297 val_loss=26.1442032
+2025-09-08 07:13:56 INFO epoch 0112/200: lr: 0.0000100: loss=23.174535 val_acc=0.7428796 val_loss=26.0858440
+2025-09-08 07:13:57 INFO epoch 0113/200: lr: 0.0000100: loss=23.114916 val_acc=0.7437041 val_loss=26.0395718
+2025-09-08 07:13:59 INFO epoch 0114/200: lr: 0.0000100: loss=23.055416 val_acc=0.7438165 val_loss=25.9928513
+2025-09-08 07:14:00 INFO epoch 0115/200: lr: 0.0000100: loss=22.997078 val_acc=0.7442288 val_loss=25.9341106
+2025-09-08 07:14:02 INFO epoch 0116/200: lr: 0.0000100: loss=22.938124 val_acc=0.7448284 val_loss=25.8947468
+2025-09-08 07:14:03 INFO epoch 0117/200: lr: 0.0000100: loss=22.881690 val_acc=0.7455404 val_loss=25.8482094
+2025-09-08 07:14:05 INFO epoch 0118/200: lr: 0.0000100: loss=22.825138 val_acc=0.7456154 val_loss=25.7992592
+2025-09-08 07:14:06 INFO epoch 0119/200: lr: 0.0000100: loss=22.769480 val_acc=0.7453155 val_loss=25.7631836
+2025-09-08 07:14:08 INFO epoch 0120/200: lr: 0.0000100: loss=22.713619 val_acc=0.7458027 val_loss=25.7171593
+2025-09-08 07:14:09 INFO epoch 0121/200: lr: 0.0000100: loss=22.659192 val_acc=0.7464398 val_loss=25.6637020
+2025-09-08 07:14:11 INFO epoch 0122/200: lr: 0.0000100: loss=22.605741 val_acc=0.7460651 val_loss=25.6251030
+2025-09-08 07:14:12 INFO epoch 0123/200: lr: 0.0000100: loss=22.552248 val_acc=0.7470769 val_loss=25.5803375
+2025-09-08 07:14:14 INFO epoch 0124/200: lr: 0.0000100: loss=22.499686 val_acc=0.7472643 val_loss=25.5433540
+2025-09-08 07:14:15 INFO epoch 0125/200: lr: 0.0000100: loss=22.447536 val_acc=0.7473767 val_loss=25.5082169
+2025-09-08 07:14:17 INFO epoch 0126/200: lr: 0.0000100: loss=22.396501 val_acc=0.7478264 val_loss=25.4597034
+2025-09-08 07:14:19 INFO epoch 0127/200: lr: 0.0000100: loss=22.345856 val_acc=0.7479014 val_loss=25.4241180
+2025-09-08 07:14:20 INFO epoch 0128/200: lr: 0.0000100: loss=22.295514 val_acc=0.7480138 val_loss=25.3907013
+2025-09-08 07:14:22 INFO epoch 0129/200: lr: 0.0000100: loss=22.246069 val_acc=0.7483511 val_loss=25.3441010
+2025-09-08 07:14:23 INFO epoch 0130/200: lr: 0.0000100: loss=22.196747 val_acc=0.7485010 val_loss=25.3124657
+2025-09-08 07:14:25 INFO epoch 0131/200: lr: 0.0000100: loss=22.148746 val_acc=0.7492130 val_loss=25.2721233
+2025-09-08 07:14:26 INFO epoch 0132/200: lr: 0.0000100: loss=22.100752 val_acc=0.7486509 val_loss=25.2406597
+2025-09-08 07:14:28 INFO epoch 0133/200: lr: 0.0000100: loss=22.053327 val_acc=0.7494753 val_loss=25.1923790
+2025-09-08 07:14:30 INFO epoch 0134/200: lr: 0.0000100: loss=22.006419 val_acc=0.7499625 val_loss=25.1656246
+2025-09-08 07:14:31 INFO epoch 0135/200: lr: 0.0000100: loss=21.960316 val_acc=0.7504122 val_loss=25.1268158
+2025-09-08 07:14:33 INFO epoch 0136/200: lr: 0.0000100: loss=21.914209 val_acc=0.7506746 val_loss=25.1009407
+2025-09-08 07:14:34 INFO epoch 0137/200: lr: 0.0000100: loss=21.869068 val_acc=0.7504497 val_loss=25.0671329
+2025-09-08 07:14:36 INFO epoch 0138/200: lr: 0.0000100: loss=21.824517 val_acc=0.7502998 val_loss=25.0351238
+2025-09-08 07:14:37 INFO epoch 0139/200: lr: 0.0000100: loss=21.780699 val_acc=0.7508245 val_loss=24.9953232
+2025-09-08 07:14:39 INFO epoch 0140/200: lr: 0.0000100: loss=21.736889 val_acc=0.7507870 val_loss=24.9679317
+2025-09-08 07:14:40 INFO epoch 0141/200: lr: 0.0000100: loss=21.693123 val_acc=0.7520612 val_loss=24.9323921
+2025-09-08 07:14:42 INFO epoch 0142/200: lr: 0.0000100: loss=21.650992 val_acc=0.7520986 val_loss=24.8979969
+2025-09-08 07:14:43 INFO epoch 0143/200: lr: 0.0000100: loss=21.608497 val_acc=0.7522485 val_loss=24.8643837
+2025-09-08 07:14:45 INFO epoch 0144/200: lr: 0.0000100: loss=21.566987 val_acc=0.7520237 val_loss=24.8388577
+2025-09-08 07:14:47 INFO epoch 0145/200: lr: 0.0000100: loss=21.525687 val_acc=0.7526982 val_loss=24.8076248
+2025-09-08 07:14:48 INFO epoch 0146/200: lr: 0.0000100: loss=21.485383 val_acc=0.7529231 val_loss=24.7689495
+2025-09-08 07:14:50 INFO epoch 0147/200: lr: 0.0000100: loss=21.444437 val_acc=0.7526982 val_loss=24.7472973
+2025-09-08 07:14:51 INFO epoch 0148/200: lr: 0.0000100: loss=21.405410 val_acc=0.7534103 val_loss=24.7058620
+2025-09-08 07:14:53 INFO epoch 0149/200: lr: 0.0000100: loss=21.365838 val_acc=0.7538600 val_loss=24.6869545
+2025-09-08 07:14:54 INFO epoch 0150/200: lr: 0.0000100: loss=21.326803 val_acc=0.7536726 val_loss=24.6619167
+2025-09-08 07:14:56 INFO epoch 0151/200: lr: 0.0000100: loss=21.288446 val_acc=0.7541223 val_loss=24.6371441
+2025-09-08 07:14:57 INFO epoch 0152/200: lr: 0.0000100: loss=21.250093 val_acc=0.7539349 val_loss=24.6045399
+2025-09-08 07:14:59 INFO epoch 0153/200: lr: 0.0000100: loss=21.212618 val_acc=0.7542347 val_loss=24.5889854
+2025-09-08 07:15:00 INFO epoch 0154/200: lr: 0.0000100: loss=21.175287 val_acc=0.7550217 val_loss=24.5509262
+2025-09-08 07:15:02 INFO epoch 0155/200: lr: 0.0000100: loss=21.138441 val_acc=0.7548344 val_loss=24.5288696
+2025-09-08 07:15:03 INFO epoch 0156/200: lr: 0.0000100: loss=21.102089 val_acc=0.7552841 val_loss=24.4931221
+2025-09-08 07:15:05 INFO epoch 0157/200: lr: 0.0000100: loss=21.065902 val_acc=0.7551342 val_loss=24.4729996
+2025-09-08 07:15:06 INFO epoch 0158/200: lr: 0.0000100: loss=21.030562 val_acc=0.7560711 val_loss=24.4380093
+2025-09-08 07:15:08 INFO epoch 0159/200: lr: 0.0000100: loss=20.994871 val_acc=0.7555839 val_loss=24.4269371
+2025-09-08 07:15:09 INFO epoch 0160/200: lr: 0.0000100: loss=20.960148 val_acc=0.7556588 val_loss=24.4005089
+2025-09-08 07:15:11 INFO epoch 0161/200: lr: 0.0000100: loss=20.925843 val_acc=0.7564458 val_loss=24.3791027
+2025-09-08 07:15:12 INFO epoch 0162/200: lr: 0.0000100: loss=20.891392 val_acc=0.7564083 val_loss=24.3596306
+2025-09-08 07:15:14 INFO epoch 0163/200: lr: 0.0000100: loss=20.858072 val_acc=0.7570079 val_loss=24.3279781
+2025-09-08 07:15:15 INFO epoch 0164/200: lr: 0.0000100: loss=20.824256 val_acc=0.7562584 val_loss=24.3183270
+2025-09-08 07:15:17 INFO epoch 0165/200: lr: 0.0000100: loss=20.792205 val_acc=0.7571204 val_loss=24.2849216
+2025-09-08 07:15:18 INFO epoch 0166/200: lr: 0.0000100: loss=20.759472 val_acc=0.7567456 val_loss=24.2677135
+2025-09-08 07:15:20 INFO epoch 0167/200: lr: 0.0000100: loss=20.727334 val_acc=0.7568955 val_loss=24.2404099
+2025-09-08 07:15:21 INFO epoch 0168/200: lr: 0.0000100: loss=20.695224 val_acc=0.7572703 val_loss=24.2090645
+2025-09-08 07:15:23 INFO epoch 0169/200: lr: 0.0000100: loss=20.663961 val_acc=0.7574951 val_loss=24.2000751
+2025-09-08 07:15:24 INFO epoch 0170/200: lr: 0.0000100: loss=20.633342 val_acc=0.7575701 val_loss=24.1700706
+2025-09-08 07:15:26 INFO epoch 0171/200: lr: 0.0000100: loss=20.602431 val_acc=0.7584695 val_loss=24.1611977
+2025-09-08 07:15:27 INFO epoch 0172/200: lr: 0.0000100: loss=20.572006 val_acc=0.7579823 val_loss=24.1404076
+2025-09-08 07:15:29 INFO epoch 0173/200: lr: 0.0000100: loss=20.542078 val_acc=0.7585819 val_loss=24.1051388
+2025-09-08 07:15:30 INFO epoch 0174/200: lr: 0.0000100: loss=20.512030 val_acc=0.7591441 val_loss=24.0911865
+2025-09-08 07:15:32 INFO epoch 0175/200: lr: 0.0000100: loss=20.482802 val_acc=0.7594439 val_loss=24.0690193
+2025-09-08 07:15:33 INFO epoch 0176/200: lr: 0.0000100: loss=20.453974 val_acc=0.7591066 val_loss=24.0470467
+2025-09-08 07:15:35 INFO epoch 0177/200: lr: 0.0000100: loss=20.424907 val_acc=0.7595188 val_loss=24.0325012
+2025-09-08 07:15:36 INFO epoch 0178/200: lr: 0.0000100: loss=20.396619 val_acc=0.7594439 val_loss=24.0198135
+2025-09-08 07:15:38 INFO epoch 0179/200: lr: 0.0000100: loss=20.368110 val_acc=0.7598186 val_loss=23.9974213
+2025-09-08 07:15:39 INFO epoch 0180/200: lr: 0.0000100: loss=20.340009 val_acc=0.7598936 val_loss=23.9862614
+2025-09-08 07:15:41 INFO epoch 0181/200: lr: 0.0000100: loss=20.312945 val_acc=0.7599310 val_loss=23.9623470
+2025-09-08 07:15:42 INFO epoch 0182/200: lr: 0.0000100: loss=20.285236 val_acc=0.7607555 val_loss=23.9407921
+2025-09-08 07:15:44 INFO epoch 0183/200: lr: 0.0000100: loss=20.258248 val_acc=0.7606056 val_loss=23.9300995
+2025-09-08 07:15:45 INFO epoch 0184/200: lr: 0.0000100: loss=20.231493 val_acc=0.7605681 val_loss=23.9114723
+2025-09-08 07:15:47 INFO epoch 0185/200: lr: 0.0000100: loss=20.204757 val_acc=0.7610928 val_loss=23.8962688
+2025-09-08 07:15:49 INFO epoch 0186/200: lr: 0.0000100: loss=20.179194 val_acc=0.7607555 val_loss=23.8867874
+2025-09-08 07:15:50 INFO epoch 0187/200: lr: 0.0000100: loss=20.152893 val_acc=0.7607555 val_loss=23.8618965
+2025-09-08 07:15:52 INFO epoch 0188/200: lr: 0.0000100: loss=20.127335 val_acc=0.7616924 val_loss=23.8424492
+2025-09-08 07:15:53 INFO epoch 0189/200: lr: 0.0000100: loss=20.102265 val_acc=0.7613551 val_loss=23.8417377
+2025-09-08 07:15:55 INFO epoch 0190/200: lr: 0.0000100: loss=20.077031 val_acc=0.7612427 val_loss=23.8236561
+2025-09-08 07:15:56 INFO epoch 0191/200: lr: 0.0000100: loss=20.052362 val_acc=0.7616924 val_loss=23.8039379
+2025-09-08 07:15:58 INFO epoch 0192/200: lr: 0.0000100: loss=20.027810 val_acc=0.7613551 val_loss=23.7917728
+2025-09-08 07:15:59 INFO epoch 0193/200: lr: 0.0000100: loss=20.003566 val_acc=0.7620297 val_loss=23.7668953
+2025-09-08 07:16:01 INFO epoch 0194/200: lr: 0.0000100: loss=19.979450 val_acc=0.7622920 val_loss=23.7566471
+2025-09-08 07:16:03 INFO epoch 0195/200: lr: 0.0000100: loss=19.955487 val_acc=0.7623670 val_loss=23.7355175
+2025-09-08 07:16:04 INFO epoch 0196/200: lr: 0.0000100: loss=19.931790 val_acc=0.7624794 val_loss=23.7145023
+2025-09-08 07:16:06 INFO epoch 0197/200: lr: 0.0000100: loss=19.908696 val_acc=0.7622171 val_loss=23.7062626
+2025-09-08 07:16:07 INFO epoch 0198/200: lr: 0.0000100: loss=19.885520 val_acc=0.7626293 val_loss=23.6913853
+2025-09-08 07:16:09 INFO epoch 0199/200: lr: 0.0000100: loss=19.862544 val_acc=0.7623670 val_loss=23.6862316
+2025-09-08 07:16:10 INFO epoch 0200/200: lr: 0.0000100: loss=19.840044 val_acc=0.7627792 val_loss=23.6695690
+2025-09-08 07:16:10 INFO Training complete in 5m 9s
+2025-09-08 07:16:10 INFO Best val_acc@200 = 0.7627791935242093
+2025-09-08 07:16:10 INFO Best val_loss@200 = 23.66956901550293
+2025-09-08 07:16:10 INFO  stats|test: mean=0.0003, std=1.0032
+2025-09-08 07:16:11 INFO Linear evaluation: default_0_2025-09-05_16-17-52-checkpoint_last_voxforge_e488b153 voxforge -> 0.80870
+{'audio_repr': 'ar_eat.AR_EAT', 'weight_file': '/opt/gpfs/home/chushu/exp/eat/pre_4_AS2M/default_0_2025-09-05_16-17-52/checkpoint_last.pt', 'feature_d': 768, 'sample_rate': 16000, 'target_length': 1024, 'framework': 'fairseq', 'mode': 'finetune', 'prediction_mode': 'CLS_TOKEN', 'model_dir': '/opt/gpfs/home/chushu/codes/2506/EAT/EAT', 'batch_size': 64, 'lr_lineareval': 3e-05, 'report_per_epochs': 50, 'early_stop_epochs': 20, 'training_mask': 0.0, 'warmup_epochs': 5, 'mixup': 0.5, 'ft_bs': 128, 'ft_lr': 2.0, 'ft_early_stop_epochs': -1, 'ft_epochs': 200, 'ft_freq_mask': 30, 'ft_time_mask': 192, 'ft_noise': 0.0, 'ft_rrc': True, 'name': '', 'task_metadata': '/opt/gpfs/home/chushu/codes/2506/EAT/evar/evar/metadata/voxforge.csv', 'task_data': '/opt/gpfs/data/raw_data/voxforge/16k', 'unit_samples': 92800, 'id': 'default_0_2025-09-05_16-17-52-checkpoint_last_voxforge_703de4f6', 'task_name': 'voxforge', 'return_filename': False, 'mean': None, 'std': None, 'runtime_cfg': {'lr': 1e-05, 'seed': 43, 'hidden': (), 'standard_scaler': True, 'mixup': False, 'epochs': 200, 'early_stop_epochs': 20, 'id': '7d7f1d32'}}
+/opt/gpfs/home/chushu/codes/2506/EAT/evar/logs/default_0_2025-09-05_16-17-52-checkpoint_last_voxforge_703de4f6/default-0-2025-09-05-16-17-52-checkpoint-last-voxforge-LE_e488b153_0.80870.csv
+2025-09-08 07:16:11 INFO  -> /opt/gpfs/home/chushu/codes/2506/EAT/evar/results/scores.csv
+2025-09-08 07:16:17 INFO {'audio_repr': 'ar_eat.AR_EAT', 'weight_file': '/opt/gpfs/home/chushu/exp/eat/pre_4_AS2M/default_0_2025-09-05_16-17-52/checkpoint_last.pt', 'feature_d': 768, 'sample_rate': 16000, 'target_length': 1024, 'framework': 'fairseq', 'mode': 'finetune', 'prediction_mode': 'CLS_TOKEN', 'model_dir': '/opt/gpfs/home/chushu/codes/2506/EAT/EAT', 'batch_size': 64, 'lr_lineareval': 3e-05, 'report_per_epochs': 50, 'early_stop_epochs': 20, 'training_mask': 0.0, 'warmup_epochs': 5, 'mixup': 0.5, 'ft_bs': 128, 'ft_lr': 2.0, 'ft_early_stop_epochs': -1, 'ft_epochs': 200, 'ft_freq_mask': 30, 'ft_time_mask': 192, 'ft_noise': 0.0, 'ft_rrc': True, 'name': '', 'task_metadata': '/opt/gpfs/home/chushu/codes/2506/EAT/evar/evar/metadata/voxforge.csv', 'task_data': '/opt/gpfs/data/raw_data/voxforge/16k', 'unit_samples': 92800, 'id': 'default_0_2025-09-05_16-17-52-checkpoint_last_voxforge_703de4f6', 'task_name': 'voxforge', 'return_filename': False, 'mean': None, 'std': None, 'runtime_cfg': {'lr': 1e-05, 'seed': 44, 'hidden': (), 'standard_scaler': True, 'mixup': False, 'epochs': 200, 'early_stop_epochs': 20, 'id': 'cb151996'}}
+2025-09-08 07:16:18 INFO  classes: ['de', 'en', 'es', 'fr', 'it', 'ru']
+2025-09-08 07:16:18 INFO Train:121281, valid:26684, test:28463, multi label:False
+2025-09-08 07:16:18 INFO  using cached embeddings: embs-default_0_2025-09-05_16-17-52-checkpoint_last_voxforge_703de4f6-train-1
+2025-09-08 07:16:18 INFO  using cached embeddings: embs-default_0_2025-09-05_16-17-52-checkpoint_last_voxforge_703de4f6-valid-1
+2025-09-08 07:16:18 INFO  using cached embeddings: embs-default_0_2025-09-05_16-17-52-checkpoint_last_voxforge_703de4f6-test-1
+2025-09-08 07:16:18 INFO 🚀 Started Linear evaluation:
+2025-09-08 07:16:19 INFO  stats|train: mean=0.0000, std=1.0000
+2025-09-08 07:16:19 INFO  stats|valid: mean=0.0000, std=1.0067
+2025-09-08 07:16:19 INFO Training model: MLP(
+  (mlp): Sequential(
+    (0): Linear(in_features=768, out_features=6, bias=True)
+  )
+)
+2025-09-08 07:16:19 INFO Details - metric: acc, loss: <function loss_nll_with_logits at 0x7ff34e5c49d0>, optimizer: Adam (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    capturable: False
+    decoupled_weight_decay: False
+    differentiable: False
+    eps: 1e-08
+    foreach: None
+    fused: None
+    lr: 1e-05
+    maximize: False
+    weight_decay: 1e-08
+), n_class: 6
+2025-09-08 07:16:21 INFO epoch 0001/200: lr: 0.0000100: loss=60.376191 val_acc=0.3204917 val_loss=56.1556702
+2025-09-08 07:16:23 INFO epoch 0002/200: lr: 0.0000100: loss=54.261154 val_acc=0.4390646 val_loss=52.3384666
+2025-09-08 07:16:24 INFO epoch 0003/200: lr: 0.0000100: loss=50.955724 val_acc=0.4853470 val_loss=49.9775085
+2025-09-08 07:16:26 INFO epoch 0004/200: lr: 0.0000100: loss=48.680684 val_acc=0.5143532 val_loss=48.2676086
+2025-09-08 07:16:27 INFO epoch 0005/200: lr: 0.0000100: loss=46.947214 val_acc=0.5346275 val_loss=46.9209824
+2025-09-08 07:16:29 INFO epoch 0006/200: lr: 0.0000100: loss=45.544240 val_acc=0.5517164 val_loss=45.8099022
+2025-09-08 07:16:31 INFO epoch 0007/200: lr: 0.0000100: loss=44.365591 val_acc=0.5658822 val_loss=44.8565445
+2025-09-08 07:16:32 INFO epoch 0008/200: lr: 0.0000100: loss=43.351404 val_acc=0.5772373 val_loss=44.0125542
+2025-09-08 07:16:34 INFO epoch 0009/200: lr: 0.0000100: loss=42.459051 val_acc=0.5866062 val_loss=43.2714539
+2025-09-08 07:16:35 INFO epoch 0010/200: lr: 0.0000100: loss=41.660730 val_acc=0.5938765 val_loss=42.5757637
+2025-09-08 07:16:37 INFO epoch 0011/200: lr: 0.0000100: loss=40.938947 val_acc=0.6019337 val_loss=41.9732666
+2025-09-08 07:16:38 INFO epoch 0012/200: lr: 0.0000100: loss=40.279018 val_acc=0.6083421 val_loss=41.4114456
+2025-09-08 07:16:40 INFO epoch 0013/200: lr: 0.0000100: loss=39.673001 val_acc=0.6134013 val_loss=40.8911247
+2025-09-08 07:16:42 INFO epoch 0014/200: lr: 0.0000100: loss=39.109383 val_acc=0.6190226 val_loss=40.3909035
+2025-09-08 07:16:43 INFO epoch 0015/200: lr: 0.0000100: loss=38.584942 val_acc=0.6229951 val_loss=39.9325829
+2025-09-08 07:16:45 INFO epoch 0016/200: lr: 0.0000100: loss=38.093189 val_acc=0.6282416 val_loss=39.4983635
+2025-09-08 07:16:46 INFO epoch 0017/200: lr: 0.0000100: loss=37.629352 val_acc=0.6322141 val_loss=39.0764694
+2025-09-08 07:16:48 INFO epoch 0018/200: lr: 0.0000100: loss=37.190988 val_acc=0.6361490 val_loss=38.6974525
+2025-09-08 07:16:50 INFO epoch 0019/200: lr: 0.0000100: loss=36.774547 val_acc=0.6400839 val_loss=38.3315582
+2025-09-08 07:16:51 INFO epoch 0020/200: lr: 0.0000100: loss=36.379130 val_acc=0.6441313 val_loss=37.9461403
+2025-09-08 07:16:53 INFO epoch 0021/200: lr: 0.0000100: loss=36.001728 val_acc=0.6474292 val_loss=37.6170006
+2025-09-08 07:16:54 INFO epoch 0022/200: lr: 0.0000100: loss=35.640950 val_acc=0.6494903 val_loss=37.2816429
+2025-09-08 07:16:56 INFO epoch 0023/200: lr: 0.0000100: loss=35.295681 val_acc=0.6522635 val_loss=36.9612045
+2025-09-08 07:16:57 INFO epoch 0024/200: lr: 0.0000100: loss=34.964268 val_acc=0.6547369 val_loss=36.6635513
+2025-09-08 07:16:59 INFO epoch 0025/200: lr: 0.0000100: loss=34.646128 val_acc=0.6575476 val_loss=36.3779716
+2025-09-08 07:17:01 INFO epoch 0026/200: lr: 0.0000100: loss=34.339061 val_acc=0.6588967 val_loss=36.0957031
+2025-09-08 07:17:02 INFO epoch 0027/200: lr: 0.0000100: loss=34.044516 val_acc=0.6623445 val_loss=35.8166351
+2025-09-08 07:17:04 INFO epoch 0028/200: lr: 0.0000100: loss=33.759490 val_acc=0.6642557 val_loss=35.5634193
+2025-09-08 07:17:05 INFO epoch 0029/200: lr: 0.0000100: loss=33.483837 val_acc=0.6655674 val_loss=35.3058891
+2025-09-08 07:17:07 INFO epoch 0030/200: lr: 0.0000100: loss=33.217820 val_acc=0.6689027 val_loss=35.0597305
+2025-09-08 07:17:09 INFO epoch 0031/200: lr: 0.0000100: loss=32.959983 val_acc=0.6717509 val_loss=34.8330116
+2025-09-08 07:17:10 INFO epoch 0032/200: lr: 0.0000100: loss=32.710277 val_acc=0.6729126 val_loss=34.5991783
+2025-09-08 07:17:12 INFO epoch 0033/200: lr: 0.0000100: loss=32.468668 val_acc=0.6756109 val_loss=34.3792992
+2025-09-08 07:17:13 INFO epoch 0034/200: lr: 0.0000100: loss=32.233788 val_acc=0.6772973 val_loss=34.1620407
+2025-09-08 07:17:15 INFO epoch 0035/200: lr: 0.0000100: loss=32.005300 val_acc=0.6789462 val_loss=33.9474564
+2025-09-08 07:17:17 INFO epoch 0036/200: lr: 0.0000100: loss=31.783862 val_acc=0.6811198 val_loss=33.7492027
+2025-09-08 07:17:18 INFO epoch 0037/200: lr: 0.0000100: loss=31.568448 val_acc=0.6826563 val_loss=33.5364037
+2025-09-08 07:17:20 INFO epoch 0038/200: lr: 0.0000100: loss=31.358190 val_acc=0.6845301 val_loss=33.3507271
+2025-09-08 07:17:21 INFO epoch 0039/200: lr: 0.0000100: loss=31.153582 val_acc=0.6858042 val_loss=33.1698151
+2025-09-08 07:17:23 INFO epoch 0040/200: lr: 0.0000100: loss=30.953762 val_acc=0.6866662 val_loss=32.9801216
+2025-09-08 07:17:24 INFO epoch 0041/200: lr: 0.0000100: loss=30.759546 val_acc=0.6887273 val_loss=32.7953873
+2025-09-08 07:17:26 INFO epoch 0042/200: lr: 0.0000100: loss=30.570487 val_acc=0.6898891 val_loss=32.6276665
+2025-09-08 07:17:28 INFO epoch 0043/200: lr: 0.0000100: loss=30.385519 val_acc=0.6909384 val_loss=32.4534454
+2025-09-08 07:17:29 INFO epoch 0044/200: lr: 0.0000100: loss=30.205469 val_acc=0.6922126 val_loss=32.2986069
+2025-09-08 07:17:31 INFO epoch 0045/200: lr: 0.0000100: loss=30.029360 val_acc=0.6937865 val_loss=32.1300621
+2025-09-08 07:17:32 INFO epoch 0046/200: lr: 0.0000100: loss=29.856686 val_acc=0.6944986 val_loss=31.9723606
+2025-09-08 07:17:34 INFO epoch 0047/200: lr: 0.0000100: loss=29.687774 val_acc=0.6965597 val_loss=31.8274422
+2025-09-08 07:17:35 INFO epoch 0048/200: lr: 0.0000100: loss=29.522959 val_acc=0.6977590 val_loss=31.6624470
+2025-09-08 07:17:37 INFO epoch 0049/200: lr: 0.0000100: loss=29.361955 val_acc=0.6980962 val_loss=31.5250511
+2025-09-08 07:17:39 INFO epoch 0050/200: lr: 0.0000100: loss=29.204109 val_acc=0.6993329 val_loss=31.3769379
+2025-09-08 07:17:40 INFO epoch 0051/200: lr: 0.0000100: loss=29.049219 val_acc=0.6995203 val_loss=31.2366333
+2025-09-08 07:17:42 INFO epoch 0052/200: lr: 0.0000100: loss=28.898242 val_acc=0.7010943 val_loss=31.1045017
+2025-09-08 07:17:43 INFO epoch 0053/200: lr: 0.0000100: loss=28.748671 val_acc=0.7023310 val_loss=30.9648170
+2025-09-08 07:17:45 INFO epoch 0054/200: lr: 0.0000100: loss=28.603673 val_acc=0.7033428 val_loss=30.8349171
+2025-09-08 07:17:46 INFO epoch 0055/200: lr: 0.0000100: loss=28.460937 val_acc=0.7040549 val_loss=30.7003002
+2025-09-08 07:17:48 INFO epoch 0056/200: lr: 0.0000100: loss=28.320262 val_acc=0.7060411 val_loss=30.5774021
+2025-09-08 07:17:50 INFO epoch 0057/200: lr: 0.0000100: loss=28.184069 val_acc=0.7069030 val_loss=30.4508724
+2025-09-08 07:17:51 INFO epoch 0058/200: lr: 0.0000100: loss=28.048478 val_acc=0.7075776 val_loss=30.3360653
+2025-09-08 07:17:53 INFO epoch 0059/200: lr: 0.0000100: loss=27.915949 val_acc=0.7082521 val_loss=30.2147808
+2025-09-08 07:17:54 INFO epoch 0060/200: lr: 0.0000100: loss=27.786016 val_acc=0.7094139 val_loss=30.0935440
+2025-09-08 07:17:56 INFO epoch 0061/200: lr: 0.0000100: loss=27.659105 val_acc=0.7109504 val_loss=29.9841633
+2025-09-08 07:17:58 INFO epoch 0062/200: lr: 0.0000100: loss=27.533065 val_acc=0.7119997 val_loss=29.8679047
+2025-09-08 07:17:59 INFO epoch 0063/200: lr: 0.0000100: loss=27.409943 val_acc=0.7126743 val_loss=29.7555790
+2025-09-08 07:18:01 INFO epoch 0064/200: lr: 0.0000100: loss=27.288785 val_acc=0.7134238 val_loss=29.6397057
+2025-09-08 07:18:02 INFO epoch 0065/200: lr: 0.0000100: loss=27.169631 val_acc=0.7139859 val_loss=29.5433083
+2025-09-08 07:18:04 INFO epoch 0066/200: lr: 0.0000100: loss=27.052640 val_acc=0.7150352 val_loss=29.4406967
+2025-09-08 07:18:05 INFO epoch 0067/200: lr: 0.0000100: loss=26.937575 val_acc=0.7158972 val_loss=29.3275013
+2025-09-08 07:18:07 INFO epoch 0068/200: lr: 0.0000100: loss=26.824398 val_acc=0.7169090 val_loss=29.2371922
+2025-09-08 07:18:08 INFO epoch 0069/200: lr: 0.0000100: loss=26.713035 val_acc=0.7178834 val_loss=29.1342335
+2025-09-08 07:18:10 INFO epoch 0070/200: lr: 0.0000100: loss=26.603725 val_acc=0.7187078 val_loss=29.0268803
+2025-09-08 07:18:11 INFO epoch 0071/200: lr: 0.0000100: loss=26.496111 val_acc=0.7191575 val_loss=28.9461403
+2025-09-08 07:18:13 INFO epoch 0072/200: lr: 0.0000100: loss=26.389917 val_acc=0.7202818 val_loss=28.8481655
+2025-09-08 07:18:15 INFO epoch 0073/200: lr: 0.0000100: loss=26.286281 val_acc=0.7211812 val_loss=28.7513905
+2025-09-08 07:18:16 INFO epoch 0074/200: lr: 0.0000100: loss=26.183305 val_acc=0.7220057 val_loss=28.6556416
+2025-09-08 07:18:18 INFO epoch 0075/200: lr: 0.0000100: loss=26.082286 val_acc=0.7226803 val_loss=28.5751247
+2025-09-08 07:18:19 INFO epoch 0076/200: lr: 0.0000100: loss=25.982873 val_acc=0.7234298 val_loss=28.4785557
+2025-09-08 07:18:21 INFO epoch 0077/200: lr: 0.0000100: loss=25.885071 val_acc=0.7242168 val_loss=28.3878555
+2025-09-08 07:18:22 INFO epoch 0078/200: lr: 0.0000100: loss=25.788641 val_acc=0.7245915 val_loss=28.3015385
+2025-09-08 07:18:24 INFO epoch 0079/200: lr: 0.0000100: loss=25.693049 val_acc=0.7249288 val_loss=28.2259178
+2025-09-08 07:18:25 INFO epoch 0080/200: lr: 0.0000100: loss=25.599521 val_acc=0.7256783 val_loss=28.1502724
+2025-09-08 07:18:27 INFO epoch 0081/200: lr: 0.0000100: loss=25.507011 val_acc=0.7268775 val_loss=28.0726032
+2025-09-08 07:18:29 INFO epoch 0082/200: lr: 0.0000100: loss=25.415329 val_acc=0.7274022 val_loss=27.9827995
+2025-09-08 07:18:30 INFO epoch 0083/200: lr: 0.0000100: loss=25.326050 val_acc=0.7277020 val_loss=27.9172611
+2025-09-08 07:18:32 INFO epoch 0084/200: lr: 0.0000100: loss=25.236634 val_acc=0.7276270 val_loss=27.8361187
+2025-09-08 07:18:33 INFO epoch 0085/200: lr: 0.0000100: loss=25.149812 val_acc=0.7286389 val_loss=27.7625713
+2025-09-08 07:18:35 INFO epoch 0086/200: lr: 0.0000100: loss=25.062950 val_acc=0.7293509 val_loss=27.6931019
+2025-09-08 07:18:36 INFO epoch 0087/200: lr: 0.0000100: loss=24.979064 val_acc=0.7296133 val_loss=27.6196194
+2025-09-08 07:18:38 INFO epoch 0088/200: lr: 0.0000100: loss=24.895306 val_acc=0.7302878 val_loss=27.5357895
+2025-09-08 07:18:40 INFO epoch 0089/200: lr: 0.0000100: loss=24.812596 val_acc=0.7314121 val_loss=27.4721832
+2025-09-08 07:18:41 INFO epoch 0090/200: lr: 0.0000100: loss=24.731196 val_acc=0.7314496 val_loss=27.3983059
+2025-09-08 07:18:43 INFO epoch 0091/200: lr: 0.0000100: loss=24.650714 val_acc=0.7324989 val_loss=27.3281441
+2025-09-08 07:18:44 INFO epoch 0092/200: lr: 0.0000100: loss=24.571590 val_acc=0.7333608 val_loss=27.2604256
+2025-09-08 07:18:46 INFO epoch 0093/200: lr: 0.0000100: loss=24.493778 val_acc=0.7340729 val_loss=27.1914558
+2025-09-08 07:18:48 INFO epoch 0094/200: lr: 0.0000100: loss=24.415762 val_acc=0.7344476 val_loss=27.1281223
+2025-09-08 07:18:49 INFO epoch 0095/200: lr: 0.0000100: loss=24.340648 val_acc=0.7349723 val_loss=27.0650234
+2025-09-08 07:18:51 INFO epoch 0096/200: lr: 0.0000100: loss=24.265650 val_acc=0.7353470 val_loss=26.9956837
+2025-09-08 07:18:52 INFO epoch 0097/200: lr: 0.0000100: loss=24.190981 val_acc=0.7359092 val_loss=26.9409237
+2025-09-08 07:18:54 INFO epoch 0098/200: lr: 0.0000100: loss=24.118627 val_acc=0.7363963 val_loss=26.8739891
+2025-09-08 07:18:56 INFO epoch 0099/200: lr: 0.0000100: loss=24.046293 val_acc=0.7367711 val_loss=26.8181705
+2025-09-08 07:18:57 INFO epoch 0100/200: lr: 0.0000100: loss=23.975045 val_acc=0.7367336 val_loss=26.7577171
+2025-09-08 07:18:59 INFO epoch 0101/200: lr: 0.0000100: loss=23.904778 val_acc=0.7384200 val_loss=26.6961479
+2025-09-08 07:19:00 INFO epoch 0102/200: lr: 0.0000100: loss=23.835079 val_acc=0.7381952 val_loss=26.6438694
+2025-09-08 07:19:02 INFO epoch 0103/200: lr: 0.0000100: loss=23.766913 val_acc=0.7386074 val_loss=26.5952606
+2025-09-08 07:19:03 INFO epoch 0104/200: lr: 0.0000100: loss=23.699569 val_acc=0.7386449 val_loss=26.5382309
+2025-09-08 07:19:05 INFO epoch 0105/200: lr: 0.0000100: loss=23.632155 val_acc=0.7394693 val_loss=26.4827442
+2025-09-08 07:19:07 INFO epoch 0106/200: lr: 0.0000100: loss=23.566965 val_acc=0.7402189 val_loss=26.4203110
+2025-09-08 07:19:08 INFO epoch 0107/200: lr: 0.0000100: loss=23.501339 val_acc=0.7396942 val_loss=26.3625145
+2025-09-08 07:19:10 INFO epoch 0108/200: lr: 0.0000100: loss=23.437591 val_acc=0.7401814 val_loss=26.3164654
+2025-09-08 07:19:11 INFO epoch 0109/200: lr: 0.0000100: loss=23.373305 val_acc=0.7411557 val_loss=26.2611713
+2025-09-08 07:19:13 INFO epoch 0110/200: lr: 0.0000100: loss=23.311410 val_acc=0.7414930 val_loss=26.2018890
+2025-09-08 07:19:14 INFO epoch 0111/200: lr: 0.0000100: loss=23.249059 val_acc=0.7418678 val_loss=26.1557846
+2025-09-08 07:19:16 INFO epoch 0112/200: lr: 0.0000100: loss=23.187853 val_acc=0.7424299 val_loss=26.1080399
+2025-09-08 07:19:18 INFO epoch 0113/200: lr: 0.0000100: loss=23.127899 val_acc=0.7423924 val_loss=26.0539131
+2025-09-08 07:19:19 INFO epoch 0114/200: lr: 0.0000100: loss=23.067380 val_acc=0.7429546 val_loss=26.0079784
+2025-09-08 07:19:21 INFO epoch 0115/200: lr: 0.0000100: loss=23.009125 val_acc=0.7429171 val_loss=25.9626484
+2025-09-08 07:19:22 INFO epoch 0116/200: lr: 0.0000100: loss=22.951132 val_acc=0.7438540 val_loss=25.9128513
+2025-09-08 07:19:24 INFO epoch 0117/200: lr: 0.0000100: loss=22.893175 val_acc=0.7437041 val_loss=25.8682957
+2025-09-08 07:19:25 INFO epoch 0118/200: lr: 0.0000100: loss=22.836435 val_acc=0.7447534 val_loss=25.8127651
+2025-09-08 07:19:27 INFO epoch 0119/200: lr: 0.0000100: loss=22.780648 val_acc=0.7442288 val_loss=25.7710152
+2025-09-08 07:19:28 INFO epoch 0120/200: lr: 0.0000100: loss=22.724821 val_acc=0.7450157 val_loss=25.7317371
+2025-09-08 07:19:30 INFO epoch 0121/200: lr: 0.0000100: loss=22.670566 val_acc=0.7452406 val_loss=25.6779881
+2025-09-08 07:19:32 INFO epoch 0122/200: lr: 0.0000100: loss=22.616599 val_acc=0.7457653 val_loss=25.6508369
+2025-09-08 07:19:33 INFO epoch 0123/200: lr: 0.0000100: loss=22.563080 val_acc=0.7463274 val_loss=25.6067696
+2025-09-08 07:19:35 INFO epoch 0124/200: lr: 0.0000100: loss=22.510129 val_acc=0.7465148 val_loss=25.5563698
+2025-09-08 07:19:36 INFO epoch 0125/200: lr: 0.0000100: loss=22.457280 val_acc=0.7473392 val_loss=25.5091438
+2025-09-08 07:19:38 INFO epoch 0126/200: lr: 0.0000100: loss=22.406597 val_acc=0.7468895 val_loss=25.4736805
+2025-09-08 07:19:39 INFO epoch 0127/200: lr: 0.0000100: loss=22.355611 val_acc=0.7479014 val_loss=25.4365540
+2025-09-08 07:19:41 INFO epoch 0128/200: lr: 0.0000100: loss=22.305194 val_acc=0.7480887 val_loss=25.3895893
+2025-09-08 07:19:43 INFO epoch 0129/200: lr: 0.0000100: loss=22.255499 val_acc=0.7482386 val_loss=25.3559055
+2025-09-08 07:19:44 INFO epoch 0130/200: lr: 0.0000100: loss=22.206439 val_acc=0.7481262 val_loss=25.3263512
+2025-09-08 07:19:46 INFO epoch 0131/200: lr: 0.0000100: loss=22.157684 val_acc=0.7484260 val_loss=25.2896385
+2025-09-08 07:19:47 INFO epoch 0132/200: lr: 0.0000100: loss=22.109453 val_acc=0.7490631 val_loss=25.2449207
+2025-09-08 07:19:49 INFO epoch 0133/200: lr: 0.0000100: loss=22.061916 val_acc=0.7496252 val_loss=25.2115211
+2025-09-08 07:19:51 INFO epoch 0134/200: lr: 0.0000100: loss=22.015283 val_acc=0.7500000 val_loss=25.1744385
+2025-09-08 07:19:52 INFO epoch 0135/200: lr: 0.0000100: loss=21.969481 val_acc=0.7500000 val_loss=25.1342239
+2025-09-08 07:19:54 INFO epoch 0136/200: lr: 0.0000100: loss=21.923329 val_acc=0.7505996 val_loss=25.0990753
+2025-09-08 07:19:55 INFO epoch 0137/200: lr: 0.0000100: loss=21.877656 val_acc=0.7504872 val_loss=25.0592442
+2025-09-08 07:19:57 INFO epoch 0138/200: lr: 0.0000100: loss=21.833683 val_acc=0.7511992 val_loss=25.0350552
+2025-09-08 07:19:58 INFO epoch 0139/200: lr: 0.0000100: loss=21.788628 val_acc=0.7513116 val_loss=25.0004368
+2025-09-08 07:20:00 INFO epoch 0140/200: lr: 0.0000100: loss=21.745355 val_acc=0.7508619 val_loss=24.9673958
+2025-09-08 07:20:01 INFO epoch 0141/200: lr: 0.0000100: loss=21.701562 val_acc=0.7518738 val_loss=24.9385738
+2025-09-08 07:20:03 INFO epoch 0142/200: lr: 0.0000100: loss=21.659756 val_acc=0.7518738 val_loss=24.9009151
+2025-09-08 07:20:04 INFO epoch 0143/200: lr: 0.0000100: loss=21.616972 val_acc=0.7523984 val_loss=24.8608818
+2025-09-08 07:20:06 INFO epoch 0144/200: lr: 0.0000100: loss=21.575537 val_acc=0.7523610 val_loss=24.8397102
+2025-09-08 07:20:07 INFO epoch 0145/200: lr: 0.0000100: loss=21.534038 val_acc=0.7529981 val_loss=24.8073292
+2025-09-08 07:20:09 INFO epoch 0146/200: lr: 0.0000100: loss=21.492881 val_acc=0.7526608 val_loss=24.7802200
+2025-09-08 07:20:11 INFO epoch 0147/200: lr: 0.0000100: loss=21.452554 val_acc=0.7529981 val_loss=24.7452507
+2025-09-08 07:20:12 INFO epoch 0148/200: lr: 0.0000100: loss=21.412890 val_acc=0.7537476 val_loss=24.7218914
+2025-09-08 07:20:14 INFO epoch 0149/200: lr: 0.0000100: loss=21.373615 val_acc=0.7540848 val_loss=24.6890335
+2025-09-08 07:20:15 INFO epoch 0150/200: lr: 0.0000100: loss=21.334430 val_acc=0.7536726 val_loss=24.6619549
+2025-09-08 07:20:17 INFO epoch 0151/200: lr: 0.0000100: loss=21.295541 val_acc=0.7544221 val_loss=24.6319160
+2025-09-08 07:20:19 INFO epoch 0152/200: lr: 0.0000100: loss=21.257865 val_acc=0.7547969 val_loss=24.6116009
+2025-09-08 07:20:20 INFO epoch 0153/200: lr: 0.0000100: loss=21.219869 val_acc=0.7549843 val_loss=24.5842819
+2025-09-08 07:20:22 INFO epoch 0154/200: lr: 0.0000100: loss=21.182876 val_acc=0.7553965 val_loss=24.5550671
+2025-09-08 07:20:23 INFO epoch 0155/200: lr: 0.0000100: loss=21.145968 val_acc=0.7553590 val_loss=24.5296707
+2025-09-08 07:20:25 INFO epoch 0156/200: lr: 0.0000100: loss=21.109807 val_acc=0.7559961 val_loss=24.4916801
+2025-09-08 07:20:26 INFO epoch 0157/200: lr: 0.0000100: loss=21.072825 val_acc=0.7558462 val_loss=24.4647121
+2025-09-08 07:20:28 INFO epoch 0158/200: lr: 0.0000100: loss=21.038217 val_acc=0.7556588 val_loss=24.4517689
+2025-09-08 07:20:29 INFO epoch 0159/200: lr: 0.0000100: loss=21.002763 val_acc=0.7562584 val_loss=24.4273167
+2025-09-08 07:20:31 INFO epoch 0160/200: lr: 0.0000100: loss=20.968194 val_acc=0.7560336 val_loss=24.3957157
+2025-09-08 07:20:33 INFO epoch 0161/200: lr: 0.0000100: loss=20.933706 val_acc=0.7558837 val_loss=24.3710861
+2025-09-08 07:20:34 INFO epoch 0162/200: lr: 0.0000100: loss=20.899659 val_acc=0.7568206 val_loss=24.3539696
+2025-09-08 07:20:36 INFO epoch 0163/200: lr: 0.0000100: loss=20.865777 val_acc=0.7563334 val_loss=24.3260765
+2025-09-08 07:20:37 INFO epoch 0164/200: lr: 0.0000100: loss=20.832691 val_acc=0.7569330 val_loss=24.3071823
+2025-09-08 07:20:39 INFO epoch 0165/200: lr: 0.0000100: loss=20.799622 val_acc=0.7568206 val_loss=24.2781734
+2025-09-08 07:20:40 INFO epoch 0166/200: lr: 0.0000100: loss=20.766971 val_acc=0.7569705 val_loss=24.2513275
+2025-09-08 07:20:42 INFO epoch 0167/200: lr: 0.0000100: loss=20.735314 val_acc=0.7576076 val_loss=24.2362366
+2025-09-08 07:20:43 INFO epoch 0168/200: lr: 0.0000100: loss=20.703079 val_acc=0.7577949 val_loss=24.2110195
+2025-09-08 07:20:45 INFO epoch 0169/200: lr: 0.0000100: loss=20.671539 val_acc=0.7581697 val_loss=24.1869774
+2025-09-08 07:20:47 INFO epoch 0170/200: lr: 0.0000100: loss=20.640436 val_acc=0.7578699 val_loss=24.1691933
+2025-09-08 07:20:48 INFO epoch 0171/200: lr: 0.0000100: loss=20.609464 val_acc=0.7584320 val_loss=24.1468449
+2025-09-08 07:20:49 INFO epoch 0172/200: lr: 0.0000100: loss=20.578846 val_acc=0.7591066 val_loss=24.1340065
+2025-09-08 07:20:51 INFO epoch 0173/200: lr: 0.0000100: loss=20.549122 val_acc=0.7582072 val_loss=24.1088276
+2025-09-08 07:20:53 INFO epoch 0174/200: lr: 0.0000100: loss=20.519071 val_acc=0.7589192 val_loss=24.0845089
+2025-09-08 07:20:54 INFO epoch 0175/200: lr: 0.0000100: loss=20.489029 val_acc=0.7586943 val_loss=24.0632706
+2025-09-08 07:20:56 INFO epoch 0176/200: lr: 0.0000100: loss=20.460263 val_acc=0.7588068 val_loss=24.0424805
+2025-09-08 07:20:57 INFO epoch 0177/200: lr: 0.0000100: loss=20.431822 val_acc=0.7586569 val_loss=24.0302753
+2025-09-08 07:20:59 INFO epoch 0178/200: lr: 0.0000100: loss=20.402574 val_acc=0.7589192 val_loss=24.0216427
+2025-09-08 07:21:00 INFO epoch 0179/200: lr: 0.0000100: loss=20.374735 val_acc=0.7598186 val_loss=23.9958115
+2025-09-08 07:21:02 INFO epoch 0180/200: lr: 0.0000100: loss=20.346971 val_acc=0.7591815 val_loss=23.9768925
+2025-09-08 07:21:03 INFO epoch 0181/200: lr: 0.0000100: loss=20.319200 val_acc=0.7598186 val_loss=23.9606876
+2025-09-08 07:21:05 INFO epoch 0182/200: lr: 0.0000100: loss=20.292294 val_acc=0.7601184 val_loss=23.9437618
+2025-09-08 07:21:07 INFO epoch 0183/200: lr: 0.0000100: loss=20.265205 val_acc=0.7598936 val_loss=23.9184532
+2025-09-08 07:21:08 INFO epoch 0184/200: lr: 0.0000100: loss=20.238523 val_acc=0.7606056 val_loss=23.8962593
+2025-09-08 07:21:10 INFO epoch 0185/200: lr: 0.0000100: loss=20.211920 val_acc=0.7612052 val_loss=23.8798389
+2025-09-08 07:21:11 INFO epoch 0186/200: lr: 0.0000100: loss=20.185053 val_acc=0.7606431 val_loss=23.8771057
+2025-09-08 07:21:13 INFO epoch 0187/200: lr: 0.0000100: loss=20.160442 val_acc=0.7612052 val_loss=23.8545799
+2025-09-08 07:21:14 INFO epoch 0188/200: lr: 0.0000100: loss=20.134495 val_acc=0.7613176 val_loss=23.8328133
+2025-09-08 07:21:16 INFO epoch 0189/200: lr: 0.0000100: loss=20.109033 val_acc=0.7615800 val_loss=23.8218231
+2025-09-08 07:21:17 INFO epoch 0190/200: lr: 0.0000100: loss=20.083987 val_acc=0.7614301 val_loss=23.8084431
+2025-09-08 07:21:19 INFO epoch 0191/200: lr: 0.0000100: loss=20.058824 val_acc=0.7615425 val_loss=23.7979317
+2025-09-08 07:21:21 INFO epoch 0192/200: lr: 0.0000100: loss=20.034873 val_acc=0.7618423 val_loss=23.7771263
+2025-09-08 07:21:22 INFO epoch 0193/200: lr: 0.0000100: loss=20.010259 val_acc=0.7617674 val_loss=23.7611504
+2025-09-08 07:21:24 INFO epoch 0194/200: lr: 0.0000100: loss=19.986363 val_acc=0.7617674 val_loss=23.7520618
+2025-09-08 07:21:25 INFO epoch 0195/200: lr: 0.0000100: loss=19.962724 val_acc=0.7619922 val_loss=23.7273617
+2025-09-08 07:21:27 INFO epoch 0196/200: lr: 0.0000100: loss=19.938987 val_acc=0.7618423 val_loss=23.7202644
+2025-09-08 07:21:28 INFO epoch 0197/200: lr: 0.0000100: loss=19.915867 val_acc=0.7625169 val_loss=23.7052822
+2025-09-08 07:21:30 INFO epoch 0198/200: lr: 0.0000100: loss=19.892974 val_acc=0.7625918 val_loss=23.6911392
+2025-09-08 07:21:31 INFO epoch 0199/200: lr: 0.0000100: loss=19.870269 val_acc=0.7622545 val_loss=23.6810665
+2025-09-08 07:21:33 INFO epoch 0200/200: lr: 0.0000100: loss=19.847303 val_acc=0.7621421 val_loss=23.6697979
+2025-09-08 07:21:33 INFO Training complete in 5m 14s
+2025-09-08 07:21:33 INFO Best val_acc@198 = 0.7625918153200419
+2025-09-08 07:21:33 INFO Best val_loss@198 = 23.691139221191406
+2025-09-08 07:21:33 INFO  stats|test: mean=0.0003, std=1.0032
+2025-09-08 07:21:33 INFO Linear evaluation: default_0_2025-09-05_16-17-52-checkpoint_last_voxforge_c7fbda7f voxforge -> 0.80923
+{'audio_repr': 'ar_eat.AR_EAT', 'weight_file': '/opt/gpfs/home/chushu/exp/eat/pre_4_AS2M/default_0_2025-09-05_16-17-52/checkpoint_last.pt', 'feature_d': 768, 'sample_rate': 16000, 'target_length': 1024, 'framework': 'fairseq', 'mode': 'finetune', 'prediction_mode': 'CLS_TOKEN', 'model_dir': '/opt/gpfs/home/chushu/codes/2506/EAT/EAT', 'batch_size': 64, 'lr_lineareval': 3e-05, 'report_per_epochs': 50, 'early_stop_epochs': 20, 'training_mask': 0.0, 'warmup_epochs': 5, 'mixup': 0.5, 'ft_bs': 128, 'ft_lr': 2.0, 'ft_early_stop_epochs': -1, 'ft_epochs': 200, 'ft_freq_mask': 30, 'ft_time_mask': 192, 'ft_noise': 0.0, 'ft_rrc': True, 'name': '', 'task_metadata': '/opt/gpfs/home/chushu/codes/2506/EAT/evar/evar/metadata/voxforge.csv', 'task_data': '/opt/gpfs/data/raw_data/voxforge/16k', 'unit_samples': 92800, 'id': 'default_0_2025-09-05_16-17-52-checkpoint_last_voxforge_703de4f6', 'task_name': 'voxforge', 'return_filename': False, 'mean': None, 'std': None, 'runtime_cfg': {'lr': 1e-05, 'seed': 44, 'hidden': (), 'standard_scaler': True, 'mixup': False, 'epochs': 200, 'early_stop_epochs': 20, 'id': 'cb151996'}}
+/opt/gpfs/home/chushu/codes/2506/EAT/evar/logs/default_0_2025-09-05_16-17-52-checkpoint_last_voxforge_703de4f6/default-0-2025-09-05-16-17-52-checkpoint-last-voxforge-LE_c7fbda7f_0.80923.csv
+2025-09-08 07:21:33 INFO  -> /opt/gpfs/home/chushu/codes/2506/EAT/evar/results/scores.csv

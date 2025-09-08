@@ -2,10 +2,11 @@
 
 from evar.common import (pd, np, WORK, METADATA_DIR)
 
+DATASET_ROOT = "/opt/gpfs/data/raw_data"
 
 _defs = {
     # folds, unit_sec, data_folder (None if task name is the folder name), balanced training when fine-tining
-    'us8k': [10, 4.0, None, False],
+    'us8k': [10, 4.0, 'UrbanSound8K', False],
     'esc50': [5, 5.0, None, False],
     'fsd50k': [1, 7.6358, None, False], ## Changed to NOT balanced: to make it the same as PaSST.
     'fsdnoisy18k': [1, 8.25, None, False],
@@ -39,6 +40,11 @@ _fs_table = {
     48000: '48k',
 }
 
+_override_workfolder = {
+    'as20k': '/opt/gpfs/data/raw_data/audioset/wav_16k',
+    'as': '/opt/gpfs/data/raw_data/audioset/wav_16k',
+}
+
 def get_original_folder(task, folder):
     orgs = {
         'us8k': 'UrbanSound8K',
@@ -49,7 +55,7 @@ def get_original_folder(task, folder):
     }
     return orgs[task] if task in orgs else folder
 
-
+#TODO: (chushu) [2025.09.04] change here for more dataset
 def get_defs(cfg, task, original_data=False):
     """Get task definition parameters.
 
@@ -63,5 +69,7 @@ def get_defs(cfg, task, original_data=False):
     """
     folds, unit_sec, folder, balanced = _defs[task]
     folder = folder or task
-    workfolder = f'{WORK}/original/{get_original_folder(task, folder)}' if original_data else f'{WORK}/{_fs_table[cfg.sample_rate]}/{folder}'
+    workfolder = f'{DATASET_ROOT}/{get_original_folder(task, folder)}/raw_audio' if original_data else f'{DATASET_ROOT}/{folder}/{_fs_table[cfg.sample_rate]}'
+    if task in _override_workfolder:
+        workfolder = _override_workfolder[task]
     return f'{METADATA_DIR}/{task}.csv', workfolder, folds, unit_sec, balanced

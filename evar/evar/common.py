@@ -12,10 +12,11 @@ from torch.utils.data import DataLoader, Dataset
 
 
 # Folders
-WORK = 'work'
-METADATA_DIR = 'evar/metadata'
-RESULT_DIR = 'results'
-LOG_DIR = 'logs'
+ROOT_DIR = "/opt/gpfs/home/chushu/codes/2506/EAT/evar/"
+WORK = ROOT_DIR + 'work'
+METADATA_DIR = ROOT_DIR + 'evar/metadata'
+RESULT_DIR = ROOT_DIR + 'results'
+LOG_DIR = ROOT_DIR + 'logs'
 
 
 def eval_if_possible(text):

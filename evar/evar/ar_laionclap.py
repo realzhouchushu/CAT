@@ -19,7 +19,7 @@ except:
 
 def load_state_dict(checkpoint_path: str, map_location="cpu", skip_params=True):
     # https://github.com/LAION-AI/CLAP/blob/817041c079af560fa2c610287c68c7c97ace50b6/src/laion_clap/clap_module/factory.py#L53
-    checkpoint = torch.load(checkpoint_path, map_location=map_location)
+    checkpoint = torch.load(checkpoint_path, map_location=map_location, weights_only=False)
     if isinstance(checkpoint, dict) and "state_dict" in checkpoint:
         state_dict = checkpoint["state_dict"]
     else:
@@ -89,11 +89,11 @@ class AR_LAIONCLAP(BaseCLAP):
     def __init__(self, cfg):
         super().__init__(cfg=cfg)
 
-        self.backbone = laion_clap.CLAP_Module()
+        self.backbone = laion_clap.CLAP_Module(enable_fusion=True)
         # workaround to make sure: del state_dict["text_branch.embeddings.position_ids"]
         print(version.parse(transformers.__version__))
-        self.backbone.load_ckpt = load_ckpt.__get__(self.backbone, laion_clap.CLAP_Module)  
-        self.backbone.load_ckpt()
+        self.backbone.load_ckpt = load_ckpt.__get__(self.backbone, laion_clap.CLAP_Module)
+        self.backbone.load_ckpt(ckpt='/opt/gpfs/home/chushu/huggingface/pubmodels/lukewys/laion_clap/630k-audioset-fusion-best.pt')
 
     def encode_frames(self, batch_audio):
         assert False, 'encode_frames for LAION-CLAP is not supported for now'

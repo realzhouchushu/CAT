@@ -24,6 +24,9 @@ from pathlib import Path
 from multiprocessing import Pool
 from tqdm import tqdm
 import fire
+import socks
+import socket
+import requests
 
 
 TFDS_URL = 'https://storage.googleapis.com/tfds-data/manual_checksums/crema_d.txt'
@@ -45,9 +48,22 @@ def _download_worker(args):
 
 
 def download_extract_cremad(dest_path):
-    lines = urllib.request.urlopen(TFDS_URL)
-    urls = [line.decode('utf-8').strip().split()[0] for line in lines]
-    urls = [url for url in urls if url[-4:] == '.wav'] # wav only, excluding summaryTable.csv
+    socks.set_default_proxy(socks.SOCKS5, "127.0.0.1", 1080)  # 代理地址和端口
+    socket.socket = socks.socksocket
+    # lines = urllib.request.urlopen(TFDS_URL)
+    # urls = [line.decode('utf-8').strip().split()[0] for line in lines]
+    # urls = [url for url in urls if url[-4:] == '.wav'] # wav only, excluding summaryTable.csv
+
+    proxies = {
+        "http": "socks5h://127.0.0.1:1080",
+        "https": "socks5h://127.0.0.1:1080",
+    }
+    r = requests.get(TFDS_URL, proxies=proxies, timeout=30)
+    r.raise_for_status()
+    lines = r.text.splitlines()
+
+    urls = [line.strip().split()[0] for line in lines]
+    urls = [url for url in urls if url.endswith('.wav')]
 
     print('Downloading CREMA-D for', len(urls), 'wav files.')
     Path(dest_path).mkdir(exist_ok=True, parents=True)

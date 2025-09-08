@@ -34,9 +34,12 @@ FLAGS
         Default: '1pass'
 """
 
+import sys
+sys.path.append('/opt/gpfs/home/chushu/codes/2506/EAT/evar/evar')
+
 from evar.common import (np, pd, Path, load_yaml_config, complete_cfg, kwarg_cfg, hash_text,
                          torch, logging, seed_everything, append_to_csv,
-                         app_setup_logger, setup_dir, RESULT_DIR, LOG_DIR)
+                         app_setup_logger, setup_dir, RESULT_DIR, LOG_DIR, ROOT_DIR)
 from evar.data import create_dataloader
 from evar.ds_tasks import get_defs
 import fire
@@ -70,7 +73,7 @@ import evar.ar_msclap
 import evar.ar_wavcaps
 import evar.ar_opera
 import evar.ar_dasheng
-
+import evar.ar_eat
 
 torch.backends.cudnn.benchmark = True
 # Workaround for "RuntimeError: Too many open files. Communication with the workers is no longer possible."
@@ -78,8 +81,8 @@ torch.multiprocessing.set_sharing_strategy('file_system')
 
 
 def get_cache_info(data_loader, _id, fold):
-    cache_file = Path(f'work/cache/embs-{_id}-{data_loader.dataset.split}-{fold}.npy')
-    cache_gt_file = Path(f'work/cache/embs-{_id}-{data_loader.dataset.split}-{fold}-gt.npy')
+    cache_file = Path(ROOT_DIR + f'work/cache/embs-{_id}-{data_loader.dataset.split}-{fold}.npy')
+    cache_gt_file = Path(ROOT_DIR + f'work/cache/embs-{_id}-{data_loader.dataset.split}-{fold}-gt.npy')
     return cache_file.exists(), cache_file, cache_gt_file
 
 

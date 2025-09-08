@@ -3,8 +3,8 @@
 Balanced sampler is supported for multi-label tasks.
 """
 
-from .common import (np, pd, torch, F, Path)
-from .sampler import BalancedRandomSampler, InfiniteSampler
+from evar.common import (np, pd, torch, F, Path)
+from evar.sampler import BalancedRandomSampler, InfiniteSampler
 from sklearn.preprocessing import MultiLabelBinarizer
 from torch.utils.data import WeightedRandomSampler
 import librosa
@@ -33,7 +33,11 @@ class BaseRawAudioDataset(torch.utils.data.Dataset):
         if self.return_filename:
             fn = self.cfg.task_data + '/' + self.df.file_name.values[index]  # requires self.cfg & self.df to be set in advance.
             return fn if label is None else (fn, label)
-        wav = self.get_audio(index) # shape is expected to be (self.unit_samples,)
+        try:
+            wav = self.get_audio(index) # shape is expected to be (self.unit_samples,)
+        except Exception as e:
+            other_index = np.random.randint(0, len(self))
+            return self.__getitem__(other_index)
 
         # Trim or stuff padding
         l = len(wav)

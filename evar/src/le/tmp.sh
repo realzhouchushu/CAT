@@ -1,0 +1,2 @@
+# task option: [us8k, esc50, fsd50k, fsdnoisy18k, gtzan, nsynth, cremad, spcv1, spcv2, surge, vc1, vocalsound, voxforge, as20k, as, audiocaps, ja_audiocaps, clotho, circor1, circor2, circor3, bmdhs1, bmdhs2, bmdhs3]
+python ./evar/lineareval.py ./evar/config/eat_clap_0.yaml esc50
