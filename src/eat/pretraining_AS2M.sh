@@ -1,5 +1,5 @@
 # config options
-train_mode=ast
+train_mode=clap
 config_option=1
 
 # shared config
@@ -21,6 +21,9 @@ if [[ $train_mode == "default" && ${config_option} -eq 0 ]]; then
     task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M
     task_load_clap_emb=false
     model_proj_type=null
+    model_clone_batch=4
+    dataset_batch_size=48
+    model_clap_loss=0
 elif [[ $train_mode == "clap" && ${config_option} -eq 0 ]]; then
     echo "Config ${train_mode} ${config_option}"
     task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
@@ -28,12 +31,23 @@ elif [[ $train_mode == "clap" && ${config_option} -eq 0 ]]; then
     model_proj_type=2
     model_clone_batch=4
     dataset_batch_size=48
+    model_clap_loss=1.0
+elif [[ $train_mode == "clap" && ${config_option} -eq 1 ]]; then
+    echo "Config ${train_mode} ${config_option}"
+    task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_load_clap_emb=true
+    model_proj_type=2
+    model_clone_batch=4
+    dataset_batch_size=48
+    model_clap_loss=1.0
+    average_top_k_layers=1
 elif [[ $train_mode == "ast" && ${config_option} -eq 0 ]]; then
     echo "Config ${train_mode} ${config_option}"
     task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M_w_AST/mlp_head_in
     task_load_clap_emb=true
     model_proj_type=4
     model_clone_batch=4
+    model_clap_loss=1.0
     dataset_batch_size=48
 elif [[ $train_mode == "ast" && ${config_option} -eq 1 ]]; then
     echo "Config ${train_mode} ${config_option}"
@@ -44,6 +58,14 @@ elif [[ $train_mode == "ast" && ${config_option} -eq 1 ]]; then
     model_clap_loss=0.001
     dataset_batch_size=48
 elif [[ $train_mode == "ast" && ${config_option} -eq 2 ]]; then
+    echo "Config ${train_mode} ${config_option}"
+    task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M_w_AST/mlp_head_in
+    task_load_clap_emb=true
+    model_proj_type=4
+    model_clone_batch=4
+    model_clap_loss=0.01
+    dataset_batch_size=48
+elif [[ $train_mode == "ast" && ${config_option} -eq 3 ]]; then
     echo "Config ${train_mode} ${config_option}"
     task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M_w_AST/mlp_head_out
     task_load_clap_emb=true
@@ -67,4 +89,5 @@ python fairseq_cli/hydra_train.py -m \
     task.load_clap_emb=${task_load_clap_emb} \
     model.proj_type=${model_proj_type} \
     model.clone_batch=${model_clone_batch} \
-    model.clap_loss=${model_clap_loss}
+    model.clap_loss=${model_clap_loss} \
+    model.average_top_k_layers=${average_top_k_layers}

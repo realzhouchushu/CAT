@@ -48,7 +48,8 @@ class EAT_Feature(torch.nn.Module):
             # Pad or truncate to target length
             n_frames = mel.shape[1]
             if n_frames < self.cfg.target_length:
-                mel = torch.nn.ZeroPad2d((0, 0, 0, self.cfg.target_length - n_frames))(mel)
+                # mel = torch.nn.ZeroPad2d((0, 0, 0, self.cfg.target_length - n_frames))(mel)
+                pass
             elif n_frames > self.cfg.target_length:
                 mel = mel[:, :self.cfg.target_length, :]
 

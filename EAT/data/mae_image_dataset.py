@@ -277,6 +277,11 @@ class MaeImageDataset(FairseqDataset):
         on this order."""
         if self.shuffle and (self.AS2M_finetune or self.spcv1_finetune) and self.split == "train" :
             weights = np.loadtxt(self.weights_file)
+            weights_skiped = []
+            for i in range(len(weights)):
+                if i not in self.skipped_indices:
+                    weights_skiped.append(weights[i])
+            weights = np.array(weights_skiped)
             normalized_weights = weights / np.sum(weights)
             weights_tensor = torch.from_numpy(normalized_weights)
 

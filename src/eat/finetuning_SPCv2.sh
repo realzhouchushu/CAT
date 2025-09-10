@@ -1,7 +1,6 @@
-#!/bin/bash
-model_model_path=/opt/gpfs/home/chushu/exp/eat/pre_4_AS2M/ast_2_2025-09-07_16-12-36/checkpoint_last.pt
+model_model_path=/opt/gpfs/home/chushu/exp/eat/pre_4_AS2M/default_0_2025-09-05_16-17-52/checkpoint_last.pt
 
-SAVE_DIR_ROOT=/opt/gpfs/home/chushu/exp/eat/sft_4_AS20k_w_ast_CLS
+SAVE_DIR_ROOT=/opt/gpfs/home/chushu/exp/eat/sft_4_SPCv2_w_default_CLS
 # 从 model_model_path 提取父目录名与文件名
 parent_dir="$(basename -- "$(dirname -- "$model_model_path")")"
 ckpt_name="$(basename -- "$model_model_path")"
@@ -18,20 +17,25 @@ CUDA_VISIBLE_DEVICES=${device} python fairseq_cli/hydra_train.py -m \
     --config-dir EAT/config \
     --config-name finetuning  \
     common.user_dir=EAT \
+    common.seed=42 \
     checkpoint.save_dir=${checkpoint_save_dir} \
     checkpoint.restore_file=${checkpoint_restore_file} \
-    checkpoint.best_checkpoint_metric=mAP \
-    dataset.batch_size=48 \
-    dataset.num_workers=24 \
-    dataset.data_buffer_size=48 \
-    task.data=/opt/gpfs/home/chushu/data/audioset/setting/SFT_AS20k \
-    task.target_length=1024 \
+    dataset.batch_size=256 \
+    criterion.log_keys=['correct'] \
+    task.data=/opt/gpfs/home/chushu/data/audioset/EAT_manifest/SPC_2 \
+    task.spcv2_eval=True \
+    task.target_length=128 \
+    task.noise=true \
     task.roll_aug=true \
-    task.load_clap_emb=false \
+    optimization.lr=[0.0002] \
+    optimizer.groups.default.lr_float=0.0002 \
     optimization.max_update=40000 \
     optimizer.groups.default.lr_scheduler.warmup_updates=4000 \
     model.model_path=${model_model_path} \
-    model.num_classes=527 \
+    model.num_classes=35 \
+    model.spcv2_eval=true \
     model.mixup=0.8 \
+    model.target_length=128 \
     model.mask_ratio=0.2 \
-    model.prediction_mode=PredictionMode.CLS_TOKEN # CLS_TOKEN num_workers: 6 data_buffer_size: 10
+    model.label_smoothing=0.1 \
+    model.prediction_mode=PredictionMode.CLS_TOKEN \
