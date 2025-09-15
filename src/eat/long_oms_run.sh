@@ -5,7 +5,7 @@ echo "##### delete job ${name} #####\n"
 oms job delete ${name}
 echo "##### delete job ${name} done #####\n"
 
-gpus=1
+gpus=4
 cpus=64
 memgb=256
 shmgb=96
@@ -22,7 +22,7 @@ echo "##### run parameters done #####\n"
 echo "##### submit job ${name} #####\n"
 oms job submit --image lunalabs-acr-registry.cn-guangzhou.cr.aliyuncs.com/luna/zcs-20250811 \
 --name ${name} \
---queue queue-h100-4n \
+--queue queue-rtx4090-2n \
 --gpus ${gpus} \
 --cpus ${cpus} \
 --memgb ${memgb} \

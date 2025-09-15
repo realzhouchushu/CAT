@@ -1,6 +1,6 @@
 # config options
-train_mode=clap
-config_option=1
+train_mode=conv_clap
+config_option=0
 
 # shared config
 SAVE_DIR_ROOT=/opt/gpfs/home/chushu/exp/eat/pre_4_AS2M
@@ -15,6 +15,16 @@ mkdir -p -- "$checkpoint_save_dir"
 cp -p -- "$script_path" "$save_dir/$script_name"
 echo "script_path: ${script_path}"
 echo "checkpoint_save_dir: ${checkpoint_save_dir}"
+
+# default setting
+model_clone_batch=4
+dataset_batch_size=48
+model_clap_loss=1.0
+average_top_k_layers=12
+model_add_conv=false
+model_depth=12
+checkpoint_keep_interval_updates=1 
+checkpoint_save_interval_updates=10000
 
 if [[ $train_mode == "default" && ${config_option} -eq 0 ]]; then
     echo "Config ${train_mode} ${config_option}"
@@ -32,6 +42,8 @@ elif [[ $train_mode == "clap" && ${config_option} -eq 0 ]]; then
     model_clone_batch=4
     dataset_batch_size=48
     model_clap_loss=1.0
+    average_top_k_layers=12
+    model_add_conv=false
 elif [[ $train_mode == "clap" && ${config_option} -eq 1 ]]; then
     echo "Config ${train_mode} ${config_option}"
     task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
@@ -72,6 +84,19 @@ elif [[ $train_mode == "ast" && ${config_option} -eq 3 ]]; then
     model_proj_type=6
     model_clone_batch=4
     dataset_batch_size=48
+elif [[ $train_mode == "conv_clap" && ${config_option} -eq 0 ]]; then
+    echo "Config ${train_mode} ${config_option}"
+    task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_load_clap_emb=true
+    model_proj_type=2
+    model_clone_batch=4
+    dataset_batch_size=16 # original 48 oom on 4090 24G 
+    model_clap_loss=1.0
+    average_top_k_layers=11 # modify with model depth
+    model_add_conv=true
+    model_depth=11 # 
+    checkpoint_keep_interval_updates=-1 # default 1 
+    checkpoint_save_interval_updates=10000
 fi
 
 python fairseq_cli/hydra_train.py -m \
@@ -90,4 +115,8 @@ python fairseq_cli/hydra_train.py -m \
     model.proj_type=${model_proj_type} \
     model.clone_batch=${model_clone_batch} \
     model.clap_loss=${model_clap_loss} \
-    model.average_top_k_layers=${average_top_k_layers}
+    model.average_top_k_layers=${average_top_k_layers} \
+    +model.add_conv=${model_add_conv} \
+    model.depth=${model_depth} \
+    checkpoint.keep_interval_updates=${checkpoint_keep_interval_updates} \
+    checkpoint.save_interval_updates=${checkpoint_save_interval_updates}

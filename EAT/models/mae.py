@@ -368,7 +368,7 @@ class RelativePositionBias(nn.Module):
 class PatchEmbed_new(nn.Module):
     """ Flexible Image to Patch Embedding
     """
-    def __init__(self, img_size=224, patch_size=16, in_chans=3, embed_dim=768, stride=16):
+    def __init__(self, img_size=224, patch_size=16, in_chans=3, embed_dim=768, stride=16, add_conv=False):
         super().__init__()
         img_size = to_2tuple(img_size)
         patch_size = to_2tuple(patch_size)
@@ -376,12 +376,19 @@ class PatchEmbed_new(nn.Module):
         
         self.img_size = img_size
         self.patch_size = patch_size
+        self.add_conv = add_conv
 
         self.proj = nn.Conv2d(in_chans, embed_dim, kernel_size=patch_size, stride=stride) # with overlapped patches
+        if add_conv:
+            self.norm = nn.LayerNorm(embed_dim)
+            self.act = nn.GELU()
 
     def forward(self, x):
         x = self.proj(x)
-        x = x.flatten(2).transpose(1, 2)
+        if self.add_conv:
+            x = self.norm(x.permute(0, 2, 3, 1)).permute(0, 3, 1, 2)
+        else:
+            x = x.flatten(2).transpose(1, 2)
         return x
 
 def get_2d_sincos_pos_embed(embed_dim, grid_size, cls_token=False):

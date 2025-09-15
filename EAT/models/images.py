@@ -14,6 +14,7 @@ from typing import Callable, Dict, Optional
 from timm.models.layers import to_2tuple
 from fairseq.tasks import FairseqTask
 from enum import Enum, auto
+from .vision_transformer import CBlock
 
 from .mae import PatchEmbed,get_2d_sincos_pos_embed_flexible,PatchEmbed_new
 
@@ -71,6 +72,7 @@ class ImageEncoder(ModalitySpecificEncoder):
         layer_norm_first: bool,
         alibi_biases: Dict,
         task: Optional[FairseqTask],
+        add_conv,
     ):
         
         if modality_cfg.in_chans == 1 :  
@@ -84,24 +86,72 @@ class ImageEncoder(ModalitySpecificEncoder):
         self.W = img_size[1] // patch_size[1]  # 8
         self.hw = (self.H,self.W)
 
-        # (B,512,768)
-        # note: we fix the variable length sequence problem here -> not limited to fixed length data
-        local_encoder = PatchEmbed_new(
-            img_size,
-            modality_cfg.patch_size,
-            modality_cfg.in_chans,
-            modality_cfg.embed_dim,
-        )
+        local_encoder = None
+        patch_embed = None
+        stage_output_decode = None
+        conv_blocks = None
 
-        # CNN initialize
-        w = local_encoder.proj.weight.data
-        torch.nn.init.xavier_uniform_(w.view([w.shape[0], -1]))
-
-        if modality_cfg.embed_dim != embed_dim:
-            local_encoder = nn.Sequential(
-                local_encoder,
-                nn.Linear(modality_cfg.embed_dim, embed_dim),
+        # # (B,512,768)
+        # # note: we fix the variable length sequence problem here -> not limited to fixed length data
+        if not add_conv:
+            local_encoder = PatchEmbed_new(
+                img_size,
+                modality_cfg.patch_size,
+                modality_cfg.in_chans,
+                modality_cfg.embed_dim,
+                add_conv=add_conv,
             )
+
+            # CNN initialize
+            w = local_encoder.proj.weight.data
+            torch.nn.init.xavier_uniform_(w.view([w.shape[0], -1]))
+
+            if modality_cfg.embed_dim != embed_dim:
+                local_encoder = nn.Sequential(
+                    local_encoder,
+                    nn.Linear(modality_cfg.embed_dim, embed_dim),
+                )
+        else:
+            downsample_rate = [1, 4, 8]
+            patch_sizes = [4, 2, 2]
+            in_chans = [modality_cfg.in_chans, 256, 384, modality_cfg.embed_dim]
+            depth = [2, 2]
+            mlp_ratio=[4, 4]
+            # self.patch_embed = nn.ModuleList()
+            patch_embed = [
+                PatchEmbed_new(
+                img_size=(img_size[0]//downsample_rate[i], img_size[1]//downsample_rate[i]),
+                patch_size=patch_sizes[i],
+                in_chans=in_chans[i],
+                embed_dim=in_chans[i+1],
+                stride=patch_sizes[i],
+                add_conv=add_conv,
+            ) for i in range(len(downsample_rate))]
+
+            patch_embed.append(nn.Linear(modality_cfg.embed_dim, modality_cfg.embed_dim))
+            patch_embed = nn.ModuleList(patch_embed)
+
+            stage_output_decode = nn.ModuleList([nn.Conv2d(in_chans[1], in_chans[3], patch_sizes[0], stride=patch_sizes[0]), 
+                                                nn.Conv2d(in_chans[2], in_chans[3], patch_sizes[1], stride=patch_sizes[1])])
+
+            conv_blocks = []
+            conv_blocks.append(
+                nn.ModuleList([CBlock(dim=in_chans[1],  mlp_ratio=mlp_ratio[0], norm_layer=partial(nn.LayerNorm, eps=1e-6))
+                for i in range(depth[0]) ])
+            )
+            conv_blocks.append(
+                nn.ModuleList([CBlock(dim=in_chans[2],  mlp_ratio=mlp_ratio[1], norm_layer=partial(nn.LayerNorm, eps=1e-6))
+                for i in range(depth[1]) ])
+            )
+            conv_blocks = nn.ModuleList(conv_blocks)
+
+            # CNN initialize
+            for m in patch_embed:
+                if hasattr(m, 'proj'):
+                    w = m.proj.weight.data
+                else:
+                    w = m.weight.data
+                torch.nn.init.xavier_uniform_(w.view([w.shape[0], -1]))
 
         project_features = nn.Identity()
 
@@ -173,12 +223,16 @@ class ImageEncoder(ModalitySpecificEncoder):
             modality_cfg=modality_cfg,
             embed_dim=embed_dim,
             local_encoder=local_encoder,
+            patch_embed=patch_embed,
+            stage_output_decode=stage_output_decode,
+            conv_blocks=conv_blocks,
             project_features=project_features,
             fixed_positional_encoder=fixed_positional_encoder,
             relative_positional_encoder=None,
             context_encoder=context_encoder,
             decoder=decoder,
             get_alibi_bias=alibi_bias_fn,
+            add_conv=add_conv,
         )
 
     def reset_parameters(self):

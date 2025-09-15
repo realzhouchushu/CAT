@@ -48,6 +48,7 @@ class MaeImageClassificationConfig(FairseqDataclass):
     model_path: str = MISSING
     no_pretrained_weights: bool = False
     linear_classifier: bool = False
+    linear_layer: int = -1
     num_classes: int = 1000
     mixup: float = 0.0
     cutmix: float = 0.0
@@ -491,14 +492,18 @@ class MaeImageClassificationModel(BaseFairseqModel):
 
     def model_forward(self, imgs):
         if self.d2v_multi:
-            x = self.model.extract_features(
+            model_outputs = self.model.extract_features(
                 imgs,
                 mode="IMAGE",
                 mask=False,
                 remove_extra_tokens=(
                     self.cfg.prediction_mode != PredictionMode.CLS_TOKEN
                 ),
-            )["x"]
+            )
+            if self.cfg.linear_layer == -1:
+                x = model_outputs["x"]
+            else:
+                x = model_outputs["layer_results"][self.cfg.linear_layer]
         else:
             x = self.model(imgs, predictions_only=True)
             if (

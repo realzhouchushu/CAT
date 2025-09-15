@@ -65,6 +65,7 @@ class Data2VecMultiConfig(FairseqDataclass):
     )
 
     depth: int = 12
+    add_conv: bool = False
     
     # standard vision Transformer
     start_drop_path_rate: float = 0
@@ -156,7 +157,7 @@ class Data2VecMultiConfig(FairseqDataclass):
     softmax_temperature_student: float = field(default=0.1, metadata={"help": "this value control the temperature of softmax function of student output in the dino loss"})
     softmax_temperature_teacher: float = field(default=0.05, metadata={"help": "this value control the temperature of softmax function in teacher output the dino loss"})
 
-
+# TODO: (chushu) [2025.09.12]: change model name
 @register_model("data2vec_multi", dataclass=Data2VecMultiConfig)
 class Data2VecMultiModel(BaseFairseqModel):
     def make_modality_encoder(
@@ -168,6 +169,7 @@ class Data2VecMultiModel(BaseFairseqModel):
         layer_norm_first: bool,
         alibi_biases,
         task,
+        add_conv,
     ) -> ModalitySpecificEncoder:
         if cfg.type.value == Modality.IMAGE.value:
             enc_cls = ImageEncoder
@@ -182,6 +184,7 @@ class Data2VecMultiModel(BaseFairseqModel):
             layer_norm_first,
             alibi_biases,
             task,
+            add_conv
         )
 
     def __init__(self, cfg: Data2VecMultiConfig, modalities, skip_ema=False, task=None):
@@ -224,6 +227,7 @@ class Data2VecMultiModel(BaseFairseqModel):
                 cfg.layer_norm_first,
                 self.alibi_biases,
                 task,
+                cfg.add_conv
             )
             self.modality_encoders[mod.name] = enc
 
@@ -316,6 +320,14 @@ class Data2VecMultiModel(BaseFairseqModel):
                 nn.init.normal_(self.center[:, 1:])
 
         self.num_updates = 0
+    
+        total_params = sum(p.numel() for p in self.parameters())
+        trainable_params = sum(p.numel() for p in self.parameters() if p.requires_grad)
+        
+        logging.info(f"total params: {total_params:,}")
+        logging.info(f"trainable params: {trainable_params:,}")
+        logging.info(f"non-trainable params: {total_params - trainable_params:,}")
+        logging.info(f"trainable params ratio: {trainable_params/total_params*100:.2f}%")
 
     def _init_weights(self, m):
 
@@ -366,6 +378,7 @@ class Data2VecMultiModel(BaseFairseqModel):
             for p_s, p_t in zip(self.blocks.parameters(), model_copy.parameters()):
                 p_t.data.copy_(p_s.data)
         else:
+            # TODO: (chushu) [2025.09.12] image local_encoder overwrited
             for p_s, p_t in zip(self.parameters(), model_copy.parameters()):
                 p_t.data.copy_(p_s.data)
 
