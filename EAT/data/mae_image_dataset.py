@@ -97,6 +97,7 @@ class MaeImageDataset(FairseqDataset):
         weights_file: str="",
         flexible_mask: bool = False,
         load_clap_emb: bool = True,
+        load_source_file: bool = True,
     ):
         FairseqDataset.__init__(self)
 
@@ -104,6 +105,7 @@ class MaeImageDataset(FairseqDataset):
         self.key = key
         self.audio_mae = audio_mae
         self.load_clap_emb = load_clap_emb
+        self.load_source_file = load_source_file
         if self.audio_mae:
             self.h5_format = h5_format
             self.downsr_16hz = downsr_16hz
@@ -153,6 +155,7 @@ class MaeImageDataset(FairseqDataset):
                     train_mode=split,
                     noise=self.noise,
                     load_clap_emb=self.load_clap_emb,
+                    load_source_file=self.load_source_file,
                     **mask_args,
                 )
             self.skipped_indices = self.dataset.skipped_indices
@@ -182,10 +185,13 @@ class MaeImageDataset(FairseqDataset):
         self.clone_batch = clone_batch
 
     def __getitem__(self, index):
-        if self.audio_mae:
-            img = self.dataset[index]['source']
+        if self.load_source_file:
+            if self.audio_mae:
+                img = self.dataset[index]['source']
+            else:
+                img, _ = self.dataset[index]
         else:
-            img, _ = self.dataset[index]
+            img = None
 
         source = None
         target = None
@@ -237,7 +243,7 @@ class MaeImageDataset(FairseqDataset):
         if len(samples) == 0:
             return {}
 
-        collated_img = torch.stack([s[self.key] for s in samples], dim=0)
+        collated_img = torch.stack([s[self.key] for s in samples], dim=0) if self.load_source_file else None
 
         res = {
             "id": torch.LongTensor([s["id"] for s in samples]),

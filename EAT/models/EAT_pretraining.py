@@ -145,6 +145,8 @@ class Data2VecMultiConfig(FairseqDataclass):
     # d2v_loss is the frame-level loss while cls_loss is the utterance-level loss
     cls_loss: float = 0
     clap_loss: float = 0
+    clap_loss_type: str = "mse"
+    clap_loss_layer: int = -1
     recon_loss: float = 0
     d2v_loss: float = 1
 
@@ -526,7 +528,7 @@ class Data2VecMultiModel(BaseFairseqModel):
                     padding_mask=masked_padding_mask,
                     alibi_bias=ab,
                 )
-                if features_only:
+                if features_only or self.cfg.clap_loss_layer != -1:
                     layer_results.append(lr)
 
         if self.norm is not None:
@@ -701,14 +703,21 @@ class Data2VecMultiModel(BaseFairseqModel):
                 self.cfg.cls_loss * sample_size
             )
 
+            if self.cfg.clap_loss_layer == -1:
+                clap_cls_pred = x[:, extra_tokens - 1]
+            else:
+                clap_cls_pred = layer_results[self.cfg.clap_loss_layer - 1][:, extra_tokens - 1]
+
+            # logger.info(f"cls_pred: {cls_pred.shape}, clap_cls_pred: {clap_cls_pred.shape}")
             if self.cfg.proj_type and self.cfg.clap_loss > 0:
                 if self.cfg.proj_type % 2 == 1:
                     clap_emb = self.clap_proj(clap_emb)
                 else:
-                    cls_pred = self.clap_proj(cls_pred)
+                    clap_cls_pred = self.clap_proj(clap_cls_pred)
+                # logger.info(f"clap_cls_pred: {clap_cls_pred.shape}, clap_emb: {clap_emb.shape}")
                 clap_emb = clap_emb.repeat_interleave(self.cfg.clone_batch, 0).to(cls_target.dtype)
                 
-                result["losses"]["clap"] = self.d2v_loss(cls_pred, clap_emb) * (
+                result["losses"]["clap"] = self.d2v_loss(clap_cls_pred, clap_emb, loss_type=self.cfg.clap_loss_type) * (
                     self.cfg.clap_loss * sample_size
                 )
             
@@ -809,14 +818,33 @@ class Data2VecMultiModel(BaseFairseqModel):
 
         return x
 
-    def d2v_loss(self, x, y):
+    def d2v_loss(self, x, y, loss_type="mse"):
         x = x.view(-1, x.size(-1)).float()
         y = y.view(-1, x.size(-1))
 
-        if self.loss_beta == 0:
-            loss = F.mse_loss(x, y, reduction="none")
+        if loss_type=="mse":
+            if self.loss_beta == 0:
+                loss = F.mse_loss(x, y, reduction="none")
+            else:
+                loss = F.smooth_l1_loss(x, y, reduction="none", beta=self.loss_beta)
+        elif loss_type=="cosine":
+            # loss = F.cosine_embedding_loss(x, y, reduction="none")
+            loss = 1 - F.cosine_similarity(x, y, dim=-1, eps=1e-6)
+        elif loss_type=="l1":
+            loss = F.l1_loss(x, y, reduction="none")
+        elif loss_type=="ce": # changed from bce to kl
+            # loss = F.cross_entropy(x, y, reduction="none")
+            # criterion = nn.BCELoss()
+            # loss = criterion(torch.sigmoid(x), torch.sigmoid(y))
+
+            # Use KL divergence between distributions induced by logits x (pred) and y (target)
+            # Inputs: x as logits -> log_softmax; y as logits/real -> softmax
+            log_p = F.log_softmax(y, dim=-1) # target
+            q = F.softmax(x, dim=-1) # pred
+            loss = F.kl_div(log_p, q, reduction="none")
+            return loss
         else:
-            loss = F.smooth_l1_loss(x, y, reduction="none", beta=self.loss_beta)
+            raise NotImplementedError()
 
         if self.loss_scale is not None:
             scale = self.loss_scale

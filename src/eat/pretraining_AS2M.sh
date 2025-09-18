@@ -1,6 +1,7 @@
 # config options
-train_mode=conv_clap
-config_option=0
+train_mode=clap
+config_option=5
+# change world size
 
 # shared config
 SAVE_DIR_ROOT=/opt/gpfs/home/chushu/exp/eat/pre_4_AS2M
@@ -20,10 +21,12 @@ echo "checkpoint_save_dir: ${checkpoint_save_dir}"
 model_clone_batch=4
 dataset_batch_size=48
 model_clap_loss=1.0
+model_clap_loss_type="mse"  # option ce cosine l1
 average_top_k_layers=12
 model_add_conv=false
 model_depth=12
-checkpoint_keep_interval_updates=1 
+model_clap_loss_layer=-1
+checkpoint_keep_interval_updates=1 # TODO change this parameter if need
 checkpoint_save_interval_updates=10000
 
 if [[ $train_mode == "default" && ${config_option} -eq 0 ]]; then
@@ -53,6 +56,49 @@ elif [[ $train_mode == "clap" && ${config_option} -eq 1 ]]; then
     dataset_batch_size=48
     model_clap_loss=1.0
     average_top_k_layers=1
+# loss type ablation
+elif [[ $train_mode == "clap" && ${config_option} -eq 2 ]]; then
+    echo "Config ${train_mode} ${config_option}"
+    task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_load_clap_emb=true
+    model_proj_type=2
+    model_clone_batch=4
+    dataset_batch_size=48
+    model_clap_loss=1.0
+    average_top_k_layers=12
+    model_clap_loss_type="ce"
+elif [[ $train_mode == "clap" && ${config_option} -eq 3 ]]; then
+    echo "Config ${train_mode} ${config_option}"
+    task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_load_clap_emb=true
+    model_proj_type=2
+    model_clone_batch=4
+    dataset_batch_size=48
+    model_clap_loss=1.0
+    average_top_k_layers=12
+    model_clap_loss_type="l1"
+elif [[ $train_mode == "clap" && ${config_option} -eq 4 ]]; then
+    echo "Config ${train_mode} ${config_option}"
+    task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_load_clap_emb=true
+    model_proj_type=2
+    model_clone_batch=4
+    dataset_batch_size=96
+    model_clap_loss=1.0
+    average_top_k_layers=12
+    model_clap_loss_type="cosine"
+# loss layer ablation
+elif [[ $train_mode == "clap" && ${config_option} -eq 5 ]]; then
+    echo "Config ${train_mode} ${config_option}"
+    task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_load_clap_emb=true
+    model_proj_type=2
+    model_clone_batch=4
+    dataset_batch_size=96
+    model_clap_loss=1.0
+    average_top_k_layers=12
+    model_clap_loss_type="mse"
+    model_clap_loss_layer=10
 elif [[ $train_mode == "ast" && ${config_option} -eq 0 ]]; then
     echo "Config ${train_mode} ${config_option}"
     task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M_w_AST/mlp_head_in
@@ -90,7 +136,7 @@ elif [[ $train_mode == "conv_clap" && ${config_option} -eq 0 ]]; then
     task_load_clap_emb=true
     model_proj_type=2
     model_clone_batch=4
-    dataset_batch_size=16 # original 48 oom on 4090 24G 
+    dataset_batch_size=48 # original 48 oom on 4090 24G 
     model_clap_loss=1.0
     average_top_k_layers=11 # modify with model depth
     model_add_conv=true
@@ -105,7 +151,7 @@ python fairseq_cli/hydra_train.py -m \
     common.user_dir=./EAT \
     checkpoint.save_dir=${checkpoint_save_dir} \
     checkpoint.restore_file=${checkpoint_restore_file} \
-    distributed_training.distributed_world_size=${1:-4} \
+    distributed_training.distributed_world_size=${1:-2} \
     dataset.num_workers=24 \
     dataset.data_buffer_size=48 \
     dataset.batch_size=${dataset_batch_size} \
@@ -117,6 +163,8 @@ python fairseq_cli/hydra_train.py -m \
     model.clap_loss=${model_clap_loss} \
     model.average_top_k_layers=${average_top_k_layers} \
     +model.add_conv=${model_add_conv} \
+    +model.clap_loss_type=${model_clap_loss_type} \
+    +model.clap_loss_layer=${model_clap_loss_layer} \
     model.depth=${model_depth} \
     checkpoint.keep_interval_updates=${checkpoint_keep_interval_updates} \
     checkpoint.save_interval_updates=${checkpoint_save_interval_updates}

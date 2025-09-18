@@ -1,7 +1,7 @@
 #!/bin/bash
-model_model_path=/opt/gpfs/home/chushu/exp/eat/pre_4_AS2M/ast_2_2025-09-07_16-12-36/checkpoint_last.pt
+model_model_path=/opt/gpfs/home/chushu/exp/eat/pre_4_AS2M/clap_3_2025-09-16_14-07-53/checkpoint_last.pt
 
-SAVE_DIR_ROOT=/opt/gpfs/home/chushu/exp/eat/sft_4_AS20k_w_ast_CLS
+SAVE_DIR_ROOT=/opt/gpfs/home/chushu/exp/eat/sft_4_AS20k_w_clap_CLS_l1
 # 从 model_model_path 提取父目录名与文件名
 parent_dir="$(basename -- "$(dirname -- "$model_model_path")")"
 ckpt_name="$(basename -- "$model_model_path")"

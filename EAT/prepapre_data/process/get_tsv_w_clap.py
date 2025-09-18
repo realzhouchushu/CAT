@@ -10,6 +10,7 @@ import argparse
 from tqdm import tqdm
 from pathlib import Path
 from typing import Dict, List, Tuple
+import shutil
 
 
 def parse_tsv_file(tsv_path: str) -> Tuple[str, List[Tuple[str, int]]]:
@@ -143,21 +144,7 @@ def save_json_output(output_path: str, matched_files: List[Dict],
         json.dump(matched_files, f, indent=2, ensure_ascii=False)
 
 
-def main():
-    parser = argparse.ArgumentParser(description='Process TSV files and CLAP embeddings')
-    parser.add_argument('--tsv_path', 
-                       default='/opt/gpfs/home/chushu/data/audioset/16k_wav_tsv/unbal_train.tsv',
-                       help='Path to input TSV file')
-    parser.add_argument('--clap_folder', 
-                       default='/opt/gpfs/home/chushu/data/features/ast_features/mlp_head_out',
-                       help='Path to CLAP embeddings folder')
-    # options: ['/opt/gpfs/home/chushu/data/features/ast_features/mlp_head_in','/opt/gpfs/home/chushu/data/features/ast_features/mlp_head_out', '/opt/gpfs/home/chushu/data/features/clap_features/clap_embs/unbalanced_train_segments']
-    parser.add_argument('--output_path', 
-                       default='/opt/gpfs/home/chushu/data/audioset/meta_w_feature/unbal_train_ast_mlp_head_out.json',
-                       help='Path to output JSON file')
-    
-    args = parser.parse_args()
-    
+def main(args):
     print(f"Processing TSV file: {args.tsv_path}")
     print(f"CLAP embeddings folder: {args.clap_folder}")
     print(f"Output JSON file: {args.output_path}")
@@ -197,4 +184,32 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description='Process TSV files and CLAP embeddings')
+    parser.add_argument('--tsv_path', 
+                       default='/opt/gpfs/home/chushu/data/audioset/16k_wav_tsv/bal_train.tsv',
+                       help='Path to input TSV file')
+    parser.add_argument('--clap_folder', 
+                       default='/opt/gpfs/home/chushu/data/features/eat_clap_features/1',
+                       help='Path to CLAP embeddings folder') # !!!Modify
+    # options: ['/opt/gpfs/home/chushu/data/features/ast_features/mlp_head_in','/opt/gpfs/home/chushu/data/features/ast_features/mlp_head_out', '/opt/gpfs/home/chushu/data/features/clap_features/clap_embs/unbalanced_train_segments']
+    parser.add_argument('--output_path', 
+                       default='/opt/gpfs/home/chushu/data/audioset/setting/LINEAR_AS20k_EAT_CLAP/1/train.json',
+                       help='Path to output JSON file') # !!!Modify
+    
+    args = parser.parse_args()
+    for i in range(0, 14):
+        if i == 13:
+            i = 'eval'
+            args.tsv_path = '/opt/gpfs/home/chushu/data/audioset/16k_wav_tsv/eval.tsv'
+        print("-" * 50)
+        print(f"Processing layer {i}...")
+        args.clap_folder = f'/opt/gpfs/home/chushu/data/features/eat_clap_features/{i}' # !!!Modify
+        args.output_path = f'/opt/gpfs/home/chushu/data/audioset/setting/LINEAR_AS20k_EAT_CLAP/{i}/train.json' # !!!Modify
+        os.makedirs(f'/opt/gpfs/home/chushu/data/audioset/setting/LINEAR_AS20k_EAT_CLAP/{i}', exist_ok=True) # !!!Modify
+        shutil.copy('/opt/gpfs/home/chushu/data/audioset/16k_wav_tsv/bal_train.lbl', f'/opt/gpfs/home/chushu/data/audioset/setting/LINEAR_AS20k_EAT_CLAP/{i}/train.lbl') # !!!Modify
+        shutil.copy('/opt/gpfs/home/chushu/data/audioset/16k_wav_tsv/eval.lbl', f'/opt/gpfs/home/chushu/data/audioset/setting/LINEAR_AS20k_EAT_CLAP/{i}/eval.lbl') # !!!Modify
+        shutil.copy('/opt/gpfs/home/chushu/data/audioset/label_descriptors.csv', f'/opt/gpfs/home/chushu/data/audioset/setting/LINEAR_AS20k_EAT_CLAP/{i}/label_descriptors.csv') # !!!Modify
+        main(args)
+        if i == 'eval':
+            for j in range(0, 13):
+                shutil.copy(f'/opt/gpfs/home/chushu/data/audioset/setting/LINEAR_AS20k_EAT_CLAP/{i}/train.json', f'/opt/gpfs/home/chushu/data/audioset/setting/LINEAR_AS20k_EAT_CLAP/{j}/eval.json') # !!!Modify
