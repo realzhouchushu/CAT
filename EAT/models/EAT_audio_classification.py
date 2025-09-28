@@ -48,7 +48,7 @@ class MaeImageClassificationConfig(FairseqDataclass):
     model_path: str = MISSING
     no_pretrained_weights: bool = False
     linear_classifier: bool = False
-    linear_layer: int = -1
+    linear_layer: int = 0
     num_classes: int = 1000
     mixup: float = 0.0
     cutmix: float = 0.0
@@ -396,6 +396,7 @@ class MaeImageClassificationModel(BaseFairseqModel):
         imgs,
         label=None,
         clap_emb=None,
+        mel=None,
     ):
         labels = label
         if clap_emb is not None and imgs is None: # linear mode
@@ -504,10 +505,10 @@ class MaeImageClassificationModel(BaseFairseqModel):
                     self.cfg.prediction_mode != PredictionMode.CLS_TOKEN
                 ),
             )
-            if self.cfg.linear_layer == -1:
+            if self.cfg.linear_layer == 0:
                 x = model_outputs["x"]
             else:
-                x = model_outputs["layer_results"][self.cfg.linear_layer]
+                x = model_outputs["layer_results"][self.cfg.linear_layer - 1]
         else:
             x = self.model(imgs, predictions_only=True)
             if (

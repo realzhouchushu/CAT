@@ -146,9 +146,12 @@ class Data2VecMultiConfig(FairseqDataclass):
     cls_loss: float = 0
     clap_loss: float = 0
     clap_loss_type: str = "mse"
-    clap_loss_layer: int = -1
+    clap_loss_layer: int = 0
     recon_loss: float = 0
     d2v_loss: float = 1
+
+    dispersive_loss: float = 0
+    dispersive_loss_layer: int = 0
 
     decoder_group: bool = False
 
@@ -528,7 +531,7 @@ class Data2VecMultiModel(BaseFairseqModel):
                     padding_mask=masked_padding_mask,
                     alibi_bias=ab,
                 )
-                if features_only or self.cfg.clap_loss_layer != -1:
+                if features_only or self.cfg.clap_loss_layer != 0 or self.cfg.dispersive_loss_layer != 0:
                     layer_results.append(lr)
 
         if self.norm is not None:
@@ -691,8 +694,54 @@ class Data2VecMultiModel(BaseFairseqModel):
 
         sample_size = result["sample_size"]
 
+        def disp_loss(z): # Dispersive Loss implementation (InfoNCE-L2 variant)
+            z = z.reshape((z.shape[0],-1)) # flatten
+            diff = torch.nn.functional.pdist(z.float()).pow(2)/z.shape[1] # pairwise distance
+            def create_pdist_mask(z, clone_batch):
+                B = z.shape[0]
+                num_classes = B // clone_batch
+                labels = torch.arange(num_classes).repeat_interleave(clone_batch)
+                indices = torch.combinations(torch.arange(B), r=2)
+                pair_labels_i = labels[indices[:, 0]]
+                pair_labels_j = labels[indices[:, 1]]
+                mask = (pair_labels_i != pair_labels_j).float()
+                return mask.cuda()
+            if self.cfg.clone_batch > 1:
+                mask = create_pdist_mask(z, self.cfg.clone_batch)
+                diff = diff * mask
+            diff = torch.concat((diff, diff, torch.zeros(z.shape[0]).cuda()))  # match JAX implementation of full BxB matrix
+            return torch.log(torch.exp(-diff).mean()) # calculate loss
+        
+        if self.cfg.dispersive_loss_layer == 0:
+            disp_z = x[:, extra_tokens - 1]
+        else:
+            disp_z = layer_results[self.cfg.dispersive_loss_layer - 1][:, extra_tokens - 1] # (B, 1(temp), D)
+        if self.cfg.dispersive_loss > 0:
+            result["losses"]["dispersive"] = disp_loss(disp_z) * (
+                self.cfg.dispersive_loss * sample_size
+            )
+
+        # clap loss codes
+        if self.cfg.clap_loss_layer == 0:
+            clap_cls_pred = x[:, extra_tokens - 1]
+        else:
+            clap_cls_pred = layer_results[self.cfg.clap_loss_layer - 1][:, extra_tokens - 1]
+        # logger.info(f"cls_pred: {cls_pred.shape}, clap_cls_pred: {clap_cls_pred.shape}")
+        if self.cfg.proj_type and self.cfg.clap_loss > 0:
+            if self.cfg.proj_type % 2 == 1:
+                clap_emb = self.clap_proj(clap_emb)
+            else:
+                clap_cls_pred = self.clap_proj(clap_cls_pred)
+            # logger.info(f"clap_cls_pred: {clap_cls_pred.shape}, clap_emb: {clap_emb.shape}")
+            clap_emb = clap_emb.repeat_interleave(self.cfg.clone_batch, 0).to(cls_target.dtype)
+            
+            result["losses"]["clap"] = self.d2v_loss(clap_cls_pred, clap_emb, loss_type=self.cfg.clap_loss_type) * (
+                self.cfg.clap_loss * sample_size
+            )
+        
         # EAT employ utterance-level loss by using mean pooling in patch dimension
         if self.cfg.cls_loss > 0 and not self.utterance_level:
+            # cls loss codes
             assert extra_tokens > 0
             cls_target = orig_targets.mean(dim=1)
             if self.cfg.clone_batch > 1:
@@ -703,24 +752,6 @@ class Data2VecMultiModel(BaseFairseqModel):
                 self.cfg.cls_loss * sample_size
             )
 
-            if self.cfg.clap_loss_layer == -1:
-                clap_cls_pred = x[:, extra_tokens - 1]
-            else:
-                clap_cls_pred = layer_results[self.cfg.clap_loss_layer - 1][:, extra_tokens - 1]
-
-            # logger.info(f"cls_pred: {cls_pred.shape}, clap_cls_pred: {clap_cls_pred.shape}")
-            if self.cfg.proj_type and self.cfg.clap_loss > 0:
-                if self.cfg.proj_type % 2 == 1:
-                    clap_emb = self.clap_proj(clap_emb)
-                else:
-                    clap_cls_pred = self.clap_proj(clap_cls_pred)
-                # logger.info(f"clap_cls_pred: {clap_cls_pred.shape}, clap_emb: {clap_emb.shape}")
-                clap_emb = clap_emb.repeat_interleave(self.cfg.clone_batch, 0).to(cls_target.dtype)
-                
-                result["losses"]["clap"] = self.d2v_loss(clap_cls_pred, clap_emb, loss_type=self.cfg.clap_loss_type) * (
-                    self.cfg.clap_loss * sample_size
-                )
-            
         # dino loss experiment
         if self.cfg.cls_loss > 0 and self.utterance_level:
             assert extra_tokens > 0

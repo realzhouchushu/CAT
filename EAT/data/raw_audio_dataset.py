@@ -272,6 +272,7 @@ class FileAudioDataset(RawAudioDataset):
         train_mode='train',
         load_clap_emb=False,
         load_source_file=True,
+        load_mel_file=False,
         **mask_compute_kwargs,
     ):
         super().__init__(
@@ -297,10 +298,12 @@ class FileAudioDataset(RawAudioDataset):
         self.train_mode = train_mode
         self.load_clap_emb = load_clap_emb
         self.load_source_file = load_source_file
+        self.load_mel_file = load_mel_file
         skipped = 0
         self.fnames = []
         sizes = []
         self.clap_embs = []
+        self.mel_files = []
         self.skipped_indices = set()
 
         # exclude data not in sample rate range     10.h5/****.wav  320000 
@@ -331,6 +334,8 @@ class FileAudioDataset(RawAudioDataset):
                     sizes.append(sz)
                     if self.load_clap_emb:
                         self.clap_embs.append(item["clap_path"])
+                    if self.load_mel_file:
+                        self.mel_files.append(item["mel_path"])
         logger.info(f"loaded {len(self.fnames)}, skipped {skipped} samples")
 
         if self.esc50_eval:
@@ -382,7 +387,10 @@ class FileAudioDataset(RawAudioDataset):
             clap_emb = np.load(clap_emb_path)
             # clap_emb_shape: (1, 512)
             clap_emb = torch.from_numpy(np.expand_dims(clap_emb, 0)).float()
-        
+        if self.load_mel_file:
+            mel_path = self.mel_files[index]
+            mel = np.load(mel_path)
+            mel = torch.from_numpy(mel).float()
         if self.load_source_file:
             retry = 1
             wav = None
@@ -469,6 +477,9 @@ class FileAudioDataset(RawAudioDataset):
             v = {"id": index, "source": feats, "clap_emb": clap_emb}
         else:
             v = {"id": index, "source": feats}
+        
+        if self.load_mel_file:
+            v["mel"] = mel
 
         if self.is_compute_mask:
             T = self._get_mask_indices_dims(feats.size(-1))

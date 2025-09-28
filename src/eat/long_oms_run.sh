@@ -1,6 +1,6 @@
 oms node list
 
-name=zcs-cfc-eat-2
+name=zcs-cfc-eat-1
 # echo "##### delete job ${name} #####\n"
 # oms job delete ${name}
 # echo "##### delete job ${name} done #####\n"

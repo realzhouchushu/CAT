@@ -32,7 +32,6 @@ class MaeImageClassificationConfig(MaeImagePretrainingConfig):
     data: str = field(default=MISSING, metadata={"help": "path to data directory"})
     input_size: int = 224
     local_cache_path: Optional[str] = None
-    load_source_file: bool = True
 
     rebuild_batches: bool = True
     label_descriptors: str = "label_descriptors.csv"

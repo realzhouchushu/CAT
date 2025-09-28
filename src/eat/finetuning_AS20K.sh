@@ -1,7 +1,9 @@
 #!/bin/bash
-model_model_path=/opt/gpfs/home/chushu/exp/eat/pre_4_AS2M/clap_3_2025-09-16_14-07-53/checkpoint_last.pt
+model_model_path=/opt/gpfs/home/chushu/exp/eat/pre_4_AS2M/disp_0_2025-09-24_14-17-47/checkpoint_last.pt
 
-SAVE_DIR_ROOT=/opt/gpfs/home/chushu/exp/eat/sft_4_AS20k_w_clap_CLS_l1
+model_linear_layer=${1}
+echo "model_linear_layer: ${model_linear_layer}"
+SAVE_DIR_ROOT=/opt/gpfs/home/chushu/exp/eat/sft_4_AS20k_w_disp_CLS_lw1_${model_linear_layer}
 # 从 model_model_path 提取父目录名与文件名
 parent_dir="$(basename -- "$(dirname -- "$model_model_path")")"
 ckpt_name="$(basename -- "$model_model_path")"
@@ -28,6 +30,10 @@ CUDA_VISIBLE_DEVICES=${device} python fairseq_cli/hydra_train.py -m \
     task.target_length=1024 \
     task.roll_aug=true \
     task.load_clap_emb=false \
+    +task.load_source_file=true \
+    +task.load_mel_file=false \
+    +model.linear_classifier=false \
+    +model.linear_layer=${model_linear_layer} \
     optimization.max_update=40000 \
     optimizer.groups.default.lr_scheduler.warmup_updates=4000 \
     model.model_path=${model_model_path} \

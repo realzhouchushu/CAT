@@ -5,6 +5,9 @@ cd /opt/gpfs/home/chushu/codes/2506/EAT
 pip install nvitop
 pip install --editable ./
 
+apt-get update
+apt-get install tmux -y
+
 echo "Starting long-running script to keep container alive..."
 
 while true; do

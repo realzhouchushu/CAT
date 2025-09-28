@@ -12,7 +12,7 @@ from tqdm import tqdm
 # ===== Argument Parser =====
 def get_parser(): # !!!Modify
     parser = argparse.ArgumentParser(description="Extract EAT features for downstream tasks")
-    parser.add_argument('--source_file', help='Path to input .wav file', default='/opt/gpfs/home/chushu/data/audioset/16k_wav_tsv/bal_train.tsv')
+    parser.add_argument('--source_file', help='Path to input .wav file', default='/opt/gpfs/home/chushu/data/audioset/16k_wav_tsv/eval.tsv') # !!!Modify
     parser.add_argument('--target_file', help='Path to output .npy file', default='/opt/gpfs/home/chushu/data/features/eat_clap_feature')
     parser.add_argument('--model_dir', help='Directory containing the model definition (not needed for HF framework)', default='/opt/gpfs/home/chushu/codes/2506/EAT/EAT')
     parser.add_argument('--checkpoint_dir', help='Checkpoint path or HF model ID', default='/opt/gpfs/home/chushu/exp/eat/pre_4_AS2M/clap_0_2025-08-27_09-23-59/checkpoint_last.pt')
@@ -121,19 +121,15 @@ class EATFeatureExtractor(Dataset):
     
     def __getitem__(self, idx):
         wav_name = self.fnames[idx]
-        waveform, sr = torchaudio.load(wav_name)
-        waveform = waveform.squeeze(0)
-        assert sr == 16000, "Sample rate should be 16kHz"
-        # # Load waveform and resample to 16kHz if necessary
-        # wav, sr = sf.read(wav_name)
-        # assert sf.info(wav_name).channels == 1, "Only mono-channel audio is supported"
-        # waveform = torch.tensor(wav).float().cuda()
-        # if sr != 16000:
-        #     waveform = torchaudio.functional.resample(waveform, sr, 16000)
-        #     print(f"Resampled to 16kHz: {args.source_file}")
+        wav, sr = sf.read(wav_name)
+        assert sf.info(wav_name).channels == 1, "Only mono-channel audio is supported"
+        waveform = torch.tensor(wav).float()
+        if sr != 16000:
+            waveform = torchaudio.functional.resample(waveform, sr, 16000)
+            print(f"Resampled to 16kHz: {wav_name}")
 
         # Normalize and convert to mel-spectrogram
-        # waveform = waveform - waveform.mean()
+        waveform = waveform - waveform.mean()
         mel = torchaudio.compliance.kaldi.fbank(
             waveform.unsqueeze(0),
             htk_compat=True,
@@ -147,13 +143,14 @@ class EATFeatureExtractor(Dataset):
 
         # Pad or truncate to target length
         n_frames = mel.shape[1]
-        if n_frames < self.args.target_length:
-            mel = torch.nn.ZeroPad2d((0, 0, 0, self.args.target_length - n_frames))(mel)
-        elif n_frames > self.args.target_length:
-            mel = mel[:, :self.args.target_length, :]
+        if n_frames < args.target_length:
+            mel = torch.nn.ZeroPad2d((0, 0, 0, args.target_length - n_frames))(mel)
+        elif n_frames > args.target_length:
+            mel = mel[:, :args.target_length, :]
 
-        mel = (mel - self.args.norm_mean) / (self.args.norm_std * 2)
-        mel = mel  # shape: [ 1, T, F]
+        mel = (mel - args.norm_mean) / (args.norm_std * 2)
+        mel = mel # shape: [1, T, F]
+
 
         return mel, wav_name
     
@@ -163,12 +160,18 @@ class EATFeatureExtractor(Dataset):
         return feats, wav_names
     
     def extract_features(self, x):
-        if self.args.framework == "huggingface":
-            return self.model.extract_features(x)
-        elif self.args.framework == "fairseq":
-            return self.model.extract_features(x, padding_mask=None, mask=False, remove_extra_tokens=False)
-        else:
-            raise ValueError(f"Unsupported framework: {self.args.framework}")
+        with torch.no_grad():
+            try:
+                if self.args.framework == "huggingface":
+                    return self.model.extract_features(x)
+                elif self.args.framework == "fairseq":
+                    return self.model.extract_features(x, mode="IMAGE", mask=False, remove_extra_tokens=False)
+                else:
+                    raise ValueError(f"Unsupported framework: {self.args.framework}")
+            except Exception as e:
+                print(f"Feature extraction failed: {e}")
+                raise
+            
 
     # ===== Model Loader =====
     def load_model(self):
@@ -191,20 +194,33 @@ class EATFeatureExtractor(Dataset):
 # ===== Entry =====
 if __name__ == '__main__':
     args = get_parser().parse_args()
-    batch_size = 20
+    batch_size = 128
     feature_extractor = EATFeatureExtractor(args)
     feature_loader = DataLoader(feature_extractor, batch_size=batch_size, shuffle=False, num_workers=48, drop_last=False, collate_fn=feature_extractor.collate_fn)
     error_count = 0
-    for i, (feats, wav_names) in tqdm(enumerate(feature_loader), total=len(feature_extractor)/batch_size):
+    if 'eval' in args.source_file:
+        feature_extractor.model.eval() # !!!Modify
+    for i, (feats, wav_names) in tqdm(enumerate(feature_loader), total=len(feature_extractor)/batch_size): 
         features = feature_extractor.extract_features(feats.to(torch.device("cuda")))
         # feats_ = []
         # features_ = []
         # for key, value in features.items():
         for layer_idx in range(len(features['layer_results']) + 1):
-            # if layer_idx != 0: # !!!Modify
-            #     continue
+            if layer_idx != 0 and 'eval' in args.source_file: # !!!Modify
+                continue
+            if layer_idx == 0 and 'eval' not in args.source_file: # !!!Modify
+                for j, wav_name in enumerate(wav_names):
+                    os.makedirs(os.path.join(args.target_file, str('train_mel')), exist_ok=True)
+                    np.save(os.path.join(args.target_file, str('train_mel'), wav_name.split('/')[-1].replace('.wav', '.npy')), feats[j].detach().cpu().numpy())
             value = features['layer_results'][layer_idx-1] if layer_idx > 0 else features['x']
-            # layer_idx = "eval" # !!!Modify
+            if 'eval' in args.source_file:
+                layer_idx = "eval" # !!!Modify
             for j, wav_name in enumerate(wav_names):
                 os.makedirs(os.path.join(args.target_file, str(layer_idx)), exist_ok=True)
                 np.save(os.path.join(args.target_file, str(layer_idx), wav_name.split('/')[-1].replace('.wav', '.npy')), value[j][0].detach().cpu().numpy())
+            # eval set mel save scrpits
+            if layer_idx == 'eval':
+                layer_idx = 'eval_mel'
+                for j, wav_name in enumerate(wav_names):
+                    os.makedirs(os.path.join(args.target_file, str(layer_idx)), exist_ok=True)
+                    np.save(os.path.join(args.target_file, str(layer_idx), wav_name.split('/')[-1].replace('.wav', '.npy')), feats[j].detach().cpu().numpy())

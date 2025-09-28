@@ -98,6 +98,7 @@ class MaeImageDataset(FairseqDataset):
         flexible_mask: bool = False,
         load_clap_emb: bool = True,
         load_source_file: bool = True,
+        load_mel_file: bool = False,
     ):
         FairseqDataset.__init__(self)
 
@@ -106,6 +107,7 @@ class MaeImageDataset(FairseqDataset):
         self.audio_mae = audio_mae
         self.load_clap_emb = load_clap_emb
         self.load_source_file = load_source_file
+        self.load_mel_file = load_mel_file
         if self.audio_mae:
             self.h5_format = h5_format
             self.downsr_16hz = downsr_16hz
@@ -132,10 +134,10 @@ class MaeImageDataset(FairseqDataset):
             min_sample_size = 10000 
             
             input_size = (self.target_length,128)
-            if not self.load_clap_emb:
+            if os.path.exists(os.path.join(root, "{}.tsv".format(split))):
                 manifest_path = os.path.join(root, "{}.tsv".format(split))     
             else:
-                manifest_path = os.path.join(root, "{}.json".format(split))     
+                manifest_path = os.path.join(root, "{}.json".format(split))   
             self.dataset = FileAudioDataset(
                     manifest_path=manifest_path,
                     sample_rate=32000,
@@ -156,6 +158,7 @@ class MaeImageDataset(FairseqDataset):
                     noise=self.noise,
                     load_clap_emb=self.load_clap_emb,
                     load_source_file=self.load_source_file,
+                    load_mel_file=self.load_mel_file,
                     **mask_args,
                 )
             self.skipped_indices = self.dataset.skipped_indices
@@ -201,6 +204,8 @@ class MaeImageDataset(FairseqDataset):
             v["target"] = target
         if self.load_clap_emb:
             v["clap_emb"] = self.dataset[index]['clap_emb']
+        if self.load_mel_file:
+            v["mel"] = self.dataset[index]['mel']
 
         # inverse block mask on audio patches
         if self.is_compute_mask:
@@ -263,6 +268,10 @@ class MaeImageDataset(FairseqDataset):
         if "clap_emb" in samples[0]:
             collated_emb = torch.cat([s["clap_emb"] for s in samples], dim=0)
             res["net_input"]["clap_emb"] = collated_emb
+        
+        if "mel" in samples[0]:
+            collated_mel = torch.cat([s["mel"].unsqueeze(0) for s in samples], dim=0)
+            res["net_input"]["mel"] = collated_mel
 
         return res
 

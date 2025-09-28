@@ -61,6 +61,7 @@ class MaeImagePretrainingConfig(FairseqDataclass):
     flexible_mask: bool = field(default=False, metadata={"help": "if true, we will using flexible inverse block mask method."})
     load_clap_emb: bool = field(default=True, metadata={"help": "if true, we will load clap embeddings."})
     load_source_file: bool = field(default=True, metadata={"help": "if true, we will load source files."})
+    load_mel_file: bool = field(default=False, metadata={"help": "if true, we will load mel files."})
     
     esc50_eval: bool = field(default=False, metadata={"help": "if true, the task is to finetune model on esc50 dataset."})
     spcv2_eval: bool = field(default=False, metadata={"help": "if true, the task is to finetune model on speech command v2 dataset."})
@@ -122,6 +123,7 @@ class MaeImagePretrainingTask(FairseqTask):
             flexible_mask=cfg.flexible_mask,
             load_clap_emb=cfg.load_clap_emb,
             load_source_file=cfg.load_source_file,
+            load_mel_file=cfg.load_mel_file,
             **mask_args,
         )
 

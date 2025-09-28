@@ -1,13 +1,15 @@
 oms node list
 
-name=zcs-sft-eat-as20k
-echo "##### delete job ${name} #####\n"
-oms job delete ${name}
-echo "##### delete job ${name} done #####\n"
+linear_layer=${1}
+
+name=zcs-sft-eat-as20k-disp-cls-0-lw1-${linear_layer}
+# echo "##### delete job ${name} #####\n"
+# oms job delete ${name}
+# echo "##### delete job ${name} done #####\n"
 
 gpus=1
-cpus=32
-memgb=128
+cpus=16
+memgb=256
 shmgb=32
 replicas=1
 echo "##### run parameters #####\n"
@@ -22,13 +24,13 @@ echo "##### run parameters done #####\n"
 echo "##### submit job ${name} #####\n"
 oms job submit --image lunalabs-acr-registry.cn-guangzhou.cr.aliyuncs.com/luna/zcs-20250811 \
 --name ${name} \
---queue queue-rtx4090-2n \
+--queue queue-h100-4n \
 --gpus ${gpus} \
 --cpus ${cpus} \
 --memgb ${memgb} \
 --shmgb ${shmgb} \
 --replicas ${replicas} \
---launch-command "bash /opt/gpfs/home/chushu/codes/2506/EAT/src/eat/finetuning_AS20K_oms.sh ${gpus}"
+--launch-command "bash /opt/gpfs/home/chushu/codes/2506/EAT/src/eat/finetuning_AS20K_oms.sh ${linear_layer}"
 
 oms job pods ${name}
 echo "##### submit job ${name} done #####\n"
