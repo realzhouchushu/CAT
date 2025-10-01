@@ -10,6 +10,7 @@ import argparse
 from tqdm import tqdm
 from pathlib import Path
 from typing import Dict, List, Tuple
+import shutil
 
 
 def parse_tsv_file(tsv_path: str) -> Tuple[str, List[Tuple[str, int]]]:
@@ -73,8 +74,25 @@ def get_clap_files(clap_folder: str) -> Dict[str, str]:
     
     return clap_files
 
+def get_mel_files(mel_folder: str) -> Dict[str, str]:
+    """
+    Get all .npy files from mel folder and create a mapping from basename to full path.
+    """
+    mel_files = {}
 
-def match_files(wav_files: List[Tuple[str, int]], clap_files: Dict[str, str], 
+    if not os.path.exists(mel_folder):
+        print(f"Warning: mel folder does not exist: {mel_folder}")
+        return mel_files
+    
+    for root, dirs, files in tqdm(os.walk(mel_folder), desc="Scanning mel folder"):
+        for file in tqdm(files, desc="Processing mel files"):
+            if file.endswith('.npy'):
+                basename = os.path.splitext(file)[0]
+                full_path = os.path.join(root, file)
+                mel_files[basename] = full_path
+    return mel_files
+
+def match_files(wav_files: List[Tuple[str, int]], clap_files: Dict[str, str], mel_files: Dict[str, str],
                 common_path: str) -> Tuple[List[Dict], int, int, int]:
     """
     Match wav files with CLAP files and count statistics.
@@ -87,6 +105,8 @@ def match_files(wav_files: List[Tuple[str, int]], clap_files: Dict[str, str],
     Returns:
         Tuple of (matched_files, only_wav_count, only_clap_count, both_count)
     """
+    # print(f"mel_files: {mel_files}")
+    print(f"len(mel_files): {len(mel_files)}")
     matched_files = []
     only_wav_count = 0
     only_clap_count = 0
@@ -99,13 +119,15 @@ def match_files(wav_files: List[Tuple[str, int]], clap_files: Dict[str, str],
         # Get basename without extension
         wav_basename = os.path.splitext(os.path.basename(relative_path))[0]
         
-        if wav_basename in clap_files:
+        if wav_basename in clap_files and wav_basename in mel_files:
             # Both wav and CLAP exist
-            matched_files.append({
+            dict = {
                 "wav_path": os.path.join(common_path, relative_path),
                 "clap_path": clap_files[wav_basename],
+                "mel_path": mel_files[wav_basename],
                 "num_frame": frame_size
-            })
+            }
+            matched_files.append(dict)
             matched_clap_basenames.add(wav_basename)
             both_count += 1
         else:
@@ -173,11 +195,16 @@ def main():
     print("Scanning CLAP embeddings folder...")
     clap_files = get_clap_files(args.clap_folder)
     print(f"Found {len(clap_files)} CLAP embedding files")
-    
+
+    # Get mel files
+    print("Scanning mel folder...")
+    mel_files = get_mel_files(args.mel_folder)
+    print(f"Found {len(mel_files)} mel files")
+
     # Match files
     print("Matching wav files with CLAP embeddings...")
     matched_files, only_wav_count, only_clap_count, both_count = match_files(
-        wav_files, clap_files, common_path
+        wav_files, clap_files, mel_files, common_path
     )
     
     # Print statistics
@@ -197,4 +224,36 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description='Process TSV files and CLAP embeddings')
+    parser.add_argument('--tsv_path', 
+                       default='/opt/gpfs/home/chushu/data/audioset/16k_wav_tsv/bal_train.tsv',
+                       help='Path to input TSV file')
+    parser.add_argument('--clap_folder', 
+                       default='/opt/gpfs/home/chushu/data/features/eat_clap_feature/1',
+                       help='Path to CLAP embeddings folder') # !!!Modify
+    parser.add_argument('--mel_folder', 
+                       default='/opt/gpfs/home/chushu/data/features/eat_clap_feature/train_mel',
+                       help='Path to mel folder')
+    # options: ['/opt/gpfs/home/chushu/data/features/ast_features/mlp_head_in','/opt/gpfs/home/chushu/data/features/ast_features/mlp_head_out', '/opt/gpfs/home/chushu/data/features/clap_features/clap_embs/unbalanced_train_segments']
+    parser.add_argument('--output_path', 
+                       default='/opt/gpfs/home/chushu/data/audioset/setting/LINEAR_AS20k_EAT_CLAP/1/train.json',
+                       help='Path to output JSON file') # !!!Modify
+    
+    args = parser.parse_args()
+    for i in range(0, 14):
+        if i == 13:
+            i = 'eval'
+            args.tsv_path = '/opt/gpfs/home/chushu/data/audioset/16k_wav_tsv/eval.tsv'
+            args.mel_folder = '/opt/gpfs/home/chushu/data/features/eat_clap_feature/eval_mel'
+        print("-" * 50)
+        print(f"Processing layer {i}...")
+        args.clap_folder = f'/opt/gpfs/home/chushu/data/features/eat_clap_feature/{i}' # !!!Modify
+        args.output_path = f'/opt/gpfs/home/chushu/data/audioset/setting/LINEAR_AS20k_EAT_CLAP/{i}/train.json' # !!!Modify
+        os.makedirs(f'/opt/gpfs/home/chushu/data/audioset/setting/LINEAR_AS20k_EAT_CLAP/{i}', exist_ok=True) # !!!Modify
+        shutil.copy('/opt/gpfs/home/chushu/data/audioset/16k_wav_tsv/bal_train.lbl', f'/opt/gpfs/home/chushu/data/audioset/setting/LINEAR_AS20k_EAT_CLAP/{i}/train.lbl') # !!!Modify
+        shutil.copy('/opt/gpfs/home/chushu/data/audioset/16k_wav_tsv/eval.lbl', f'/opt/gpfs/home/chushu/data/audioset/setting/LINEAR_AS20k_EAT_CLAP/{i}/eval.lbl') # !!!Modify
+        shutil.copy('/opt/gpfs/home/chushu/data/audioset/label_descriptors.csv', f'/opt/gpfs/home/chushu/data/audioset/setting/LINEAR_AS20k_EAT_CLAP/{i}/label_descriptors.csv') # !!!Modify
+        main(args)
+        if i == 'eval':
+            for j in range(0, 13):
+                shutil.copy(f'/opt/gpfs/home/chushu/data/audioset/setting/LINEAR_AS20k_EAT_CLAP/{i}/train.json', f'/opt/gpfs/home/chushu/data/audioset/setting/LINEAR_AS20k_EAT_CLAP/{j}/eval.json') # !!!Modify

@@ -1,14 +1,14 @@
 oms node list
 
-name=zcs-cfc-eat-ll
-echo "##### delete job ${name} #####\n"
-oms job delete ${name}
-echo "##### delete job ${name} done #####\n"
+name=zcs-cfc-eat-1
+# echo "##### delete job ${name} #####\n"
+# oms job delete ${name}
+# echo "##### delete job ${name} done #####\n"
 
-gpus=1
-cpus=64
-memgb=256
-shmgb=96
+gpus=2
+cpus=48
+memgb=512
+shmgb=64
 replicas=1
 echo "##### run parameters #####\n"
 echo "gpus: ${gpus}"

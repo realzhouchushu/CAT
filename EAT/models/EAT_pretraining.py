@@ -65,6 +65,7 @@ class Data2VecMultiConfig(FairseqDataclass):
     )
 
     depth: int = 12
+    add_conv: bool = False
     
     # standard vision Transformer
     start_drop_path_rate: float = 0
@@ -144,8 +145,13 @@ class Data2VecMultiConfig(FairseqDataclass):
     # d2v_loss is the frame-level loss while cls_loss is the utterance-level loss
     cls_loss: float = 0
     clap_loss: float = 0
+    clap_loss_type: str = "mse"
+    clap_loss_layer: int = 0
     recon_loss: float = 0
     d2v_loss: float = 1
+
+    dispersive_loss: float = 0
+    dispersive_loss_layer: int = 0
 
     decoder_group: bool = False
 
@@ -156,7 +162,7 @@ class Data2VecMultiConfig(FairseqDataclass):
     softmax_temperature_student: float = field(default=0.1, metadata={"help": "this value control the temperature of softmax function of student output in the dino loss"})
     softmax_temperature_teacher: float = field(default=0.05, metadata={"help": "this value control the temperature of softmax function in teacher output the dino loss"})
 
-
+# TODO: (chushu) [2025.09.12]: change model name
 @register_model("data2vec_multi", dataclass=Data2VecMultiConfig)
 class Data2VecMultiModel(BaseFairseqModel):
     def make_modality_encoder(
@@ -168,6 +174,7 @@ class Data2VecMultiModel(BaseFairseqModel):
         layer_norm_first: bool,
         alibi_biases,
         task,
+        add_conv,
     ) -> ModalitySpecificEncoder:
         if cfg.type.value == Modality.IMAGE.value:
             enc_cls = ImageEncoder
@@ -182,6 +189,7 @@ class Data2VecMultiModel(BaseFairseqModel):
             layer_norm_first,
             alibi_biases,
             task,
+            add_conv
         )
 
     def __init__(self, cfg: Data2VecMultiConfig, modalities, skip_ema=False, task=None):
@@ -224,6 +232,7 @@ class Data2VecMultiModel(BaseFairseqModel):
                 cfg.layer_norm_first,
                 self.alibi_biases,
                 task,
+                cfg.add_conv
             )
             self.modality_encoders[mod.name] = enc
 
@@ -316,6 +325,14 @@ class Data2VecMultiModel(BaseFairseqModel):
                 nn.init.normal_(self.center[:, 1:])
 
         self.num_updates = 0
+    
+        total_params = sum(p.numel() for p in self.parameters())
+        trainable_params = sum(p.numel() for p in self.parameters() if p.requires_grad)
+        
+        logging.info(f"total params: {total_params:,}")
+        logging.info(f"trainable params: {trainable_params:,}")
+        logging.info(f"non-trainable params: {total_params - trainable_params:,}")
+        logging.info(f"trainable params ratio: {trainable_params/total_params*100:.2f}%")
 
     def _init_weights(self, m):
 
@@ -366,6 +383,7 @@ class Data2VecMultiModel(BaseFairseqModel):
             for p_s, p_t in zip(self.blocks.parameters(), model_copy.parameters()):
                 p_t.data.copy_(p_s.data)
         else:
+            # TODO: (chushu) [2025.09.12] image local_encoder overwrited
             for p_s, p_t in zip(self.parameters(), model_copy.parameters()):
                 p_t.data.copy_(p_s.data)
 
@@ -513,7 +531,7 @@ class Data2VecMultiModel(BaseFairseqModel):
                     padding_mask=masked_padding_mask,
                     alibi_bias=ab,
                 )
-                if features_only:
+                if features_only or self.cfg.clap_loss_layer != 0 or self.cfg.dispersive_loss_layer != 0:
                     layer_results.append(lr)
 
         if self.norm is not None:
@@ -676,8 +694,54 @@ class Data2VecMultiModel(BaseFairseqModel):
 
         sample_size = result["sample_size"]
 
+        def disp_loss(z): # Dispersive Loss implementation (InfoNCE-L2 variant)
+            z = z.reshape((z.shape[0],-1)) # flatten
+            diff = torch.nn.functional.pdist(z.float()).pow(2)/z.shape[1] # pairwise distance
+            def create_pdist_mask(z, clone_batch):
+                B = z.shape[0]
+                num_classes = B // clone_batch
+                labels = torch.arange(num_classes).repeat_interleave(clone_batch)
+                indices = torch.combinations(torch.arange(B), r=2)
+                pair_labels_i = labels[indices[:, 0]]
+                pair_labels_j = labels[indices[:, 1]]
+                mask = (pair_labels_i != pair_labels_j).float()
+                return mask.cuda()
+            if self.cfg.clone_batch > 1:
+                mask = create_pdist_mask(z, self.cfg.clone_batch)
+                diff = diff * mask
+            diff = torch.concat((diff, diff, torch.zeros(z.shape[0]).cuda()))  # match JAX implementation of full BxB matrix
+            return torch.log(torch.exp(-diff).mean()) # calculate loss
+        
+        if self.cfg.dispersive_loss_layer == 0:
+            disp_z = x[:, extra_tokens - 1]
+        else:
+            disp_z = layer_results[self.cfg.dispersive_loss_layer - 1][:, extra_tokens - 1] # (B, 1(temp), D)
+        if self.cfg.dispersive_loss > 0:
+            result["losses"]["dispersive"] = disp_loss(disp_z) * (
+                self.cfg.dispersive_loss * sample_size
+            )
+
+        # clap loss codes
+        if self.cfg.clap_loss_layer == 0:
+            clap_cls_pred = x[:, extra_tokens - 1]
+        else:
+            clap_cls_pred = layer_results[self.cfg.clap_loss_layer - 1][:, extra_tokens - 1]
+        # logger.info(f"cls_pred: {cls_pred.shape}, clap_cls_pred: {clap_cls_pred.shape}")
+        if self.cfg.proj_type and self.cfg.clap_loss > 0:
+            if self.cfg.proj_type % 2 == 1:
+                clap_emb = self.clap_proj(clap_emb)
+            else:
+                clap_cls_pred = self.clap_proj(clap_cls_pred)
+            # logger.info(f"clap_cls_pred: {clap_cls_pred.shape}, clap_emb: {clap_emb.shape}")
+            clap_emb = clap_emb.repeat_interleave(self.cfg.clone_batch, 0)
+            
+            result["losses"]["clap"] = self.d2v_loss(clap_cls_pred, clap_emb, loss_type=self.cfg.clap_loss_type) * (
+                self.cfg.clap_loss * sample_size
+            )
+        
         # EAT employ utterance-level loss by using mean pooling in patch dimension
         if self.cfg.cls_loss > 0 and not self.utterance_level:
+            # cls loss codes
             assert extra_tokens > 0
             cls_target = orig_targets.mean(dim=1)
             if self.cfg.clone_batch > 1:
@@ -688,17 +752,6 @@ class Data2VecMultiModel(BaseFairseqModel):
                 self.cfg.cls_loss * sample_size
             )
 
-            if self.cfg.proj_type and self.cfg.clap_loss > 0:
-                if self.cfg.proj_type % 2 == 1:
-                    clap_emb = self.clap_proj(clap_emb)
-                else:
-                    cls_pred = self.clap_proj(cls_pred)
-                clap_emb = clap_emb.repeat_interleave(self.cfg.clone_batch, 0).to(cls_target.dtype)
-                
-                result["losses"]["clap"] = self.d2v_loss(cls_pred, clap_emb) * (
-                    self.cfg.clap_loss * sample_size
-                )
-            
         # dino loss experiment
         if self.cfg.cls_loss > 0 and self.utterance_level:
             assert extra_tokens > 0
@@ -796,14 +849,33 @@ class Data2VecMultiModel(BaseFairseqModel):
 
         return x
 
-    def d2v_loss(self, x, y):
+    def d2v_loss(self, x, y, loss_type="mse"):
         x = x.view(-1, x.size(-1)).float()
-        y = y.view(-1, x.size(-1))
+        y = y.view(-1, x.size(-1)).float()
 
-        if self.loss_beta == 0:
-            loss = F.mse_loss(x, y, reduction="none")
+        if loss_type=="mse":
+            if self.loss_beta == 0:
+                loss = F.mse_loss(x, y, reduction="none")
+            else:
+                loss = F.smooth_l1_loss(x, y, reduction="none", beta=self.loss_beta)
+        elif loss_type=="cosine":
+            # loss = F.cosine_embedding_loss(x, y, reduction="none")
+            loss = 1 - F.cosine_similarity(x, y, dim=-1, eps=1e-6)
+        elif loss_type=="l1":
+            loss = F.l1_loss(x, y, reduction="none")
+        elif loss_type=="ce": # changed from bce to kl
+            # loss = F.cross_entropy(x, y, reduction="none")
+            # criterion = nn.BCELoss()
+            # loss = criterion(torch.sigmoid(x), torch.sigmoid(y))
+
+            # Use KL divergence between distributions induced by logits x (pred) and y (target)
+            # Inputs: x as logits -> log_softmax; y as logits/real -> softmax
+            log_p = F.log_softmax(y, dim=-1) # target
+            q = F.softmax(x, dim=-1) # pred
+            loss = F.kl_div(log_p, q, reduction="none")
+            return loss
         else:
-            loss = F.smooth_l1_loss(x, y, reduction="none", beta=self.loss_beta)
+            raise NotImplementedError()
 
         if self.loss_scale is not None:
             scale = self.loss_scale

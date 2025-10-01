@@ -271,6 +271,8 @@ class FileAudioDataset(RawAudioDataset):
         noise=False,
         train_mode='train',
         load_clap_emb=False,
+        load_source_file=True,
+        load_mel_file=False,
         **mask_compute_kwargs,
     ):
         super().__init__(
@@ -295,10 +297,13 @@ class FileAudioDataset(RawAudioDataset):
         self.noise = noise
         self.train_mode = train_mode
         self.load_clap_emb = load_clap_emb
+        self.load_source_file = load_source_file
+        self.load_mel_file = load_mel_file
         skipped = 0
         self.fnames = []
         sizes = []
         self.clap_embs = []
+        self.mel_files = []
         self.skipped_indices = set()
 
         # exclude data not in sample rate range     10.h5/****.wav  320000 
@@ -329,6 +334,8 @@ class FileAudioDataset(RawAudioDataset):
                     sizes.append(sz)
                     if self.load_clap_emb:
                         self.clap_embs.append(item["clap_path"])
+                    if self.load_mel_file:
+                        self.mel_files.append(item["mel_path"])
         logger.info(f"loaded {len(self.fnames)}, skipped {skipped} samples")
 
         if self.esc50_eval:
@@ -377,96 +384,102 @@ class FileAudioDataset(RawAudioDataset):
         # NOTE: (chushu) [2025.08.19]: 按理来说clap_embed_path也应该像上面一样解析，目前暂未实现，只支持从文件直接读
         if self.load_clap_emb:
             clap_emb_path = self.clap_embs[index]
-
-        retry = 1
-        wav = None
-        for i in range(retry):
-            try:
-                if self.h5_format and self.train_mode == 'train':
-                    parts = path_or_fp.split("/")
-                    path_or_fp = "/".join(parts[:-1])
-                    path_or_fp = h5py.File(path_or_fp,'r')
-                    wav = path_or_fp[parts[-1]][:]
-                    curr_sample_rate = 32000
-                    break                    
-                else:
-                    wav, curr_sample_rate = sf.read(path_or_fp, dtype="float32")
-                    if self.load_clap_emb:
-                        clap_emb = np.load(clap_emb_path)
-                    break
-            except Exception as e:
-                logger.warning(
-                    f"Failed to read {path_or_fp}: {e}. Sleeping for {1 * i}"
-                )
-                time.sleep(1 * i)
-
-        if wav is None:
-            logger.warning(f"Failed to load {path_or_fp} after {retry} retries")
-            random_index = np.random.randint(0, len(self.fnames))
-            # get another when get current file error
-            return self.__getitem__(random_index)
-            # raise Exception(f"Failed to load {path_or_fp}")
-
-        if self.h5_format:
-            feats = torch.tensor(wav).float()
-        else:
-            feats = torch.from_numpy(wav).float()
-        
-        if self.load_clap_emb:
+            clap_emb = np.load(clap_emb_path)
             # clap_emb_shape: (1, 512)
             clap_emb = torch.from_numpy(np.expand_dims(clap_emb, 0)).float()
-            
-        if self.downsr_16hz:
-            if curr_sample_rate != 16000:
-                feats = torchaudio.functional.resample(feats, orig_freq=curr_sample_rate, new_freq=16000)
-                curr_sample_rate = 16000
-            self.sample_rate = curr_sample_rate
-            
-        # whether to use roll augmentation on waveform
-        use_roll = self.roll_mag_aug and self.train_mode == 'train'
-        
-        feats = self.postprocess(feats, curr_sample_rate, use_roll)
+        if self.load_mel_file:
+            mel_path = self.mel_files[index]
+            mel = np.load(mel_path)
+            mel = torch.from_numpy(mel).float()
+        if self.load_source_file:
+            retry = 1
+            wav = None
+            for i in range(retry):
+                try:
+                    if self.h5_format and self.train_mode == 'train':
+                        parts = path_or_fp.split("/")
+                        path_or_fp = "/".join(parts[:-1])
+                        path_or_fp = h5py.File(path_or_fp,'r')
+                        wav = path_or_fp[parts[-1]][:]
+                        curr_sample_rate = 32000
+                        break                    
+                    else:
+                        wav, curr_sample_rate = sf.read(path_or_fp, dtype="float32")
+                        break
+                except Exception as e:
+                    logger.warning(
+                        f"Failed to read {path_or_fp}: {e}. Sleeping for {1 * i}"
+                    )
+                    time.sleep(1 * i)
 
-        # convert waveform to spectrogram
-        if self.wav2fbank:
-            feats = feats.unsqueeze(dim=0)
-            feats = torchaudio.compliance.kaldi.fbank(feats, htk_compat=True, sample_frequency=curr_sample_rate, use_energy=False,
-                                                  window_type='hanning', num_mel_bins=128, dither=0.0, frame_shift=10).unsqueeze(dim=0)
+            if wav is None:
+                logger.warning(f"Failed to load {path_or_fp} after {retry} retries")
+                random_index = np.random.randint(0, len(self.fnames))
+                # get another when get current file error
+                return self.__getitem__(random_index)
+                # raise Exception(f"Failed to load {path_or_fp}")
+
+            if self.h5_format:
+                feats = torch.tensor(wav).float()
+            else:
+                feats = torch.from_numpy(wav).float()
+                
+            if self.downsr_16hz:
+                if curr_sample_rate != 16000:
+                    feats = torchaudio.functional.resample(feats, orig_freq=curr_sample_rate, new_freq=16000)
+                    curr_sample_rate = 16000
+                self.sample_rate = curr_sample_rate
+                
+            # whether to use roll augmentation on waveform
+            use_roll = self.roll_mag_aug and self.train_mode == 'train'
             
-            # padding 
-            n_frames = feats.shape[1]
-            diff = self.target_length - n_frames
-            if diff > 0:
-                m = torch.nn.ZeroPad2d((0, 0, 0, diff)) 
-                feats = m(feats)
+            feats = self.postprocess(feats, curr_sample_rate, use_roll)
+
+            # convert waveform to spectrogram
+            if self.wav2fbank:
+                feats = feats.unsqueeze(dim=0)
+                feats = torchaudio.compliance.kaldi.fbank(feats, htk_compat=True, sample_frequency=curr_sample_rate, use_energy=False,
+                                                    window_type='hanning', num_mel_bins=128, dither=0.0, frame_shift=10).unsqueeze(dim=0)
                 
-            elif diff < 0:
-                feats = feats[:,0:self.target_length,:]     
+                # padding 
+                n_frames = feats.shape[1]
+                diff = self.target_length - n_frames
+                if diff > 0:
+                    m = torch.nn.ZeroPad2d((0, 0, 0, diff)) 
+                    feats = m(feats)
+                    
+                elif diff < 0:
+                    feats = feats[:,0:self.target_length,:]     
+                    
+                # global normalization for AS
+                self.norm_mean = -4.268 
+                self.norm_std = 4.569
                 
-            # global normalization for AS
-            self.norm_mean = -4.268 
-            self.norm_std = 4.569
-            
-            # global normalization for ESC-50
-            if self.esc50_eval:
-                self.norm_mean = -6.627
-                self.norm_std = 5.359
+                # global normalization for ESC-50
+                if self.esc50_eval:
+                    self.norm_mean = -6.627
+                    self.norm_std = 5.359
+                    
+                # global normalization for spcv2
+                if self.spcv2_eval:
+                    self.norm_mean = -6.846
+                    self.norm_std = 5.565
+                    
+                feats = (feats - self.norm_mean) / (self.norm_std * 2) 
                 
-            # global normalization for spcv2
-            if self.spcv2_eval:
-                self.norm_mean = -6.846
-                self.norm_std = 5.565
-                
-            feats = (feats - self.norm_mean) / (self.norm_std * 2) 
-            
-            if self.noise and self.train_mode == 'train': 
-                feats = feats + torch.rand(feats.shape[1], feats.shape[2]) * np.random.rand() / 10
-                feats = torch.roll(feats, np.random.randint(-10, 10), 1)
+                if self.noise and self.train_mode == 'train': 
+                    feats = feats + torch.rand(feats.shape[1], feats.shape[2]) * np.random.rand() / 10
+                    feats = torch.roll(feats, np.random.randint(-10, 10), 1)
+        else:
+            feats = None
 
         if self.load_clap_emb:
             v = {"id": index, "source": feats, "clap_emb": clap_emb}
         else:
             v = {"id": index, "source": feats}
+        
+        if self.load_mel_file:
+            v["mel"] = mel
 
         if self.is_compute_mask:
             T = self._get_mask_indices_dims(feats.size(-1))

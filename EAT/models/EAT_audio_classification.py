@@ -48,7 +48,7 @@ class MaeImageClassificationConfig(FairseqDataclass):
     model_path: str = MISSING
     no_pretrained_weights: bool = False
     linear_classifier: bool = False
-    linear_layer: int = -1
+    linear_layer: int = 0
     num_classes: int = 1000
     mixup: float = 0.0
     cutmix: float = 0.0
@@ -395,40 +395,45 @@ class MaeImageClassificationModel(BaseFairseqModel):
         self,
         imgs,
         label=None,
+        clap_emb=None,
+        mel=None,
     ):
         labels = label
-        if self.training and self.mixup_fn is not None and labels is not None: 
-            imgs, labels = self.mixup_fn(imgs, labels)
-            
-        if self.training and self.specaug:
-            imgs = self.spectrogram_augment(imgs)
+        if clap_emb is not None and imgs is None: # linear mode
+            x = clap_emb
+        else:
+            if self.training and self.mixup_fn is not None and labels is not None: 
+                imgs, labels = self.mixup_fn(imgs, labels)
+                
+            if self.training and self.specaug:
+                imgs = self.spectrogram_augment(imgs)
 
-        if self.linear_classifier:
-            with torch.no_grad():
+            if self.linear_classifier:
+                with torch.no_grad():
+                    x = self.model_forward(imgs)
+            else:
                 x = self.model_forward(imgs)
-        else:
-            x = self.model_forward(imgs)
 
-        # different prediction mode
-        if self.cfg.prediction_mode == PredictionMode.MEAN_POOLING:
-            x = x.mean(dim=1)
-        elif self.cfg.prediction_mode == PredictionMode.CLS_TOKEN:
-            x = x[:, 0]
-        elif self.cfg.prediction_mode == PredictionMode.LIN_SOFTMAX:
-            dtype = x.dtype
-            x = F.logsigmoid(x.float())
-            x = torch.logsumexp(x + x, dim=1) - torch.logsumexp(x + 1e-6, dim=1)
-            x = x.clamp(max=0)
-            x = x - torch.log(-(torch.expm1(x)))
-            x = torch.nan_to_num(x, nan=0, posinf=0, neginf=0)
-            x = x.to(dtype=dtype)
-        elif self.cfg.prediction_mode == PredictionMode.CLAP_TYPE1 or self.cfg.prediction_mode == PredictionMode.CLAP_TYPE3 or self.cfg.prediction_mode == PredictionMode.CLAP_TYPE5:
-            raise Exception(f"unknown prediction mode {self.cfg.prediction_mode.name}")
-        elif self.cfg.prediction_mode == PredictionMode.CLAP_TYPE2 or self.cfg.prediction_mode == PredictionMode.CLAP_TYPE4 or self.cfg.prediction_mode == PredictionMode.CLAP_TYPE6:
-            x = x[:,0]
-            x = self.model.clap_proj(x)
-        else:
-            raise Exception(f"unknown prediction mode {self.cfg.prediction_mode.name}")
+            # different prediction mode
+            if self.cfg.prediction_mode == PredictionMode.MEAN_POOLING:
+                x = x.mean(dim=1)
+            elif self.cfg.prediction_mode == PredictionMode.CLS_TOKEN:
+                x = x[:, 0]
+            elif self.cfg.prediction_mode == PredictionMode.LIN_SOFTMAX:
+                dtype = x.dtype
+                x = F.logsigmoid(x.float())
+                x = torch.logsumexp(x + x, dim=1) - torch.logsumexp(x + 1e-6, dim=1)
+                x = x.clamp(max=0)
+                x = x - torch.log(-(torch.expm1(x)))
+                x = torch.nan_to_num(x, nan=0, posinf=0, neginf=0)
+                x = x.to(dtype=dtype)
+            elif self.cfg.prediction_mode == PredictionMode.CLAP_TYPE1 or self.cfg.prediction_mode == PredictionMode.CLAP_TYPE3 or self.cfg.prediction_mode == PredictionMode.CLAP_TYPE5:
+                raise Exception(f"unknown prediction mode {self.cfg.prediction_mode.name}")
+            elif self.cfg.prediction_mode == PredictionMode.CLAP_TYPE2 or self.cfg.prediction_mode == PredictionMode.CLAP_TYPE4 or self.cfg.prediction_mode == PredictionMode.CLAP_TYPE6:
+                x = x[:,0]
+                x = self.model.clap_proj(x)
+            else:
+                raise Exception(f"unknown prediction mode {self.cfg.prediction_mode.name}")
 
         # layer norm and project
         if self.fc_norm is not None:
@@ -500,10 +505,10 @@ class MaeImageClassificationModel(BaseFairseqModel):
                     self.cfg.prediction_mode != PredictionMode.CLS_TOKEN
                 ),
             )
-            if self.cfg.linear_layer == -1:
+            if self.cfg.linear_layer == 0:
                 x = model_outputs["x"]
             else:
-                x = model_outputs["layer_results"][self.cfg.linear_layer]
+                x = model_outputs["layer_results"][self.cfg.linear_layer - 1]
         else:
             x = self.model(imgs, predictions_only=True)
             if (

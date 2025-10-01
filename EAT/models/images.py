@@ -7,6 +7,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
+import logging
 
 from functools import partial
 from dataclasses import dataclass
@@ -14,6 +15,7 @@ from typing import Callable, Dict, Optional
 from timm.models.layers import to_2tuple
 from fairseq.tasks import FairseqTask
 from enum import Enum, auto
+from .vision_transformer import CBlock
 
 from .mae import PatchEmbed,get_2d_sincos_pos_embed_flexible,PatchEmbed_new
 
@@ -38,6 +40,8 @@ class Modality(Enum):
     IMAGE = auto()
     TEXT = auto()
 
+logger = logging.getLogger(__name__)
+
 
 @dataclass
 class D2vImageConfig(D2vModalityConfig):
@@ -47,6 +51,7 @@ class D2vImageConfig(D2vModalityConfig):
     in_chans: int = 3
     patch_size: int = 16
     embed_dim: int = 768
+    conv_option: int = 0
 
     alibi_dims: int = 2
     alibi_distance: str = "manhattan"
@@ -71,6 +76,7 @@ class ImageEncoder(ModalitySpecificEncoder):
         layer_norm_first: bool,
         alibi_biases: Dict,
         task: Optional[FairseqTask],
+        add_conv,
     ):
         
         if modality_cfg.in_chans == 1 :  
@@ -84,24 +90,122 @@ class ImageEncoder(ModalitySpecificEncoder):
         self.W = img_size[1] // patch_size[1]  # 8
         self.hw = (self.H,self.W)
 
-        # (B,512,768)
-        # note: we fix the variable length sequence problem here -> not limited to fixed length data
-        local_encoder = PatchEmbed_new(
-            img_size,
-            modality_cfg.patch_size,
-            modality_cfg.in_chans,
-            modality_cfg.embed_dim,
-        )
+        local_encoder = None
+        patch_embed = None
+        stage_output_decode = None
+        conv_blocks = None
 
-        # CNN initialize
-        w = local_encoder.proj.weight.data
-        torch.nn.init.xavier_uniform_(w.view([w.shape[0], -1]))
-
-        if modality_cfg.embed_dim != embed_dim:
-            local_encoder = nn.Sequential(
-                local_encoder,
-                nn.Linear(modality_cfg.embed_dim, embed_dim),
+        # # (B,512,768)
+        # # note: we fix the variable length sequence problem here -> not limited to fixed length data
+        if not add_conv:
+            local_encoder = PatchEmbed_new(
+                img_size,
+                modality_cfg.patch_size,
+                modality_cfg.in_chans,
+                modality_cfg.embed_dim,
+                add_conv=add_conv,
             )
+
+            # CNN initialize
+            w = local_encoder.proj.weight.data
+            torch.nn.init.xavier_uniform_(w.view([w.shape[0], -1]))
+
+            if modality_cfg.embed_dim != embed_dim:
+                local_encoder = nn.Sequential(
+                    local_encoder,
+                    nn.Linear(modality_cfg.embed_dim, embed_dim),
+                )
+            conv_params = None
+        else:
+            # manual setting
+            if modality_cfg.conv_option == 0:
+                resolution = [4, 8, 16]
+                in_chans = [modality_cfg.in_chans, 256, 384, modality_cfg.embed_dim]
+            elif modality_cfg.conv_option == 1:
+                resolution = [16]
+                in_chans = [modality_cfg.in_chans, modality_cfg.embed_dim]
+            elif modality_cfg.conv_option == 2:
+                resolution = [4, 8]
+                in_chans = [modality_cfg.in_chans, 384, modality_cfg.embed_dim]
+            elif modality_cfg.conv_option == 3:
+                resolution = [4, 16]
+                in_chans = [modality_cfg.in_chans, 384, modality_cfg.embed_dim]
+            elif modality_cfg.conv_option == 4:
+                resolution = [8, 16]
+                in_chans = [modality_cfg.in_chans, 384, modality_cfg.embed_dim]
+            elif modality_cfg.conv_option == 5:
+                resolution = [2, 4, 8, 16]
+                in_chans = [modality_cfg.in_chans, 256, 384, 768, modality_cfg.embed_dim]
+            elif modality_cfg.conv_option == 6:
+                resolution = [4, 8, 16, 32]
+                in_chans = [modality_cfg.in_chans, 256, 384, 768, modality_cfg.embed_dim]
+            else:
+                raise ValueError(f"Invalid conv option: {modality_cfg.conv_option}")
+            
+            patch_sizes = []
+            downsample_rate = [1]
+            stage_output_patch_sizes = []
+            depth = [2 for _ in range(len(resolution) - 1)]
+            mlp_ratio = [4 for _ in range(len(resolution) - 1)]
+            for i, res in enumerate(resolution):
+                patch_size = resolution[i] / resolution[i - 1] if i else resolution[i]
+                patch_sizes.append(int(patch_size))
+                
+                if i:
+                    downsample_rate.append(patch_sizes[i - 1] * downsample_rate[-1])
+            for i in range(len(patch_sizes) - 1):
+                stage_output_patch_size = (patch_sizes[len(patch_sizes) - 1 - i] * stage_output_patch_sizes[-1]) if i else patch_sizes[len(patch_sizes) - 1 - i]
+                stage_output_patch_sizes.append(stage_output_patch_size)
+            stage_output_patch_sizes = list(reversed(stage_output_patch_sizes))
+            logger.info(f"resolution: {resolution}")
+            logger.info(f"in_chans: {in_chans}")
+            logger.info(f"patch_sizes: {patch_sizes}")
+            logger.info(f"downsample_rate: {downsample_rate}")
+            logger.info(f"depth: {depth}")
+            logger.info(f"mlp_ratio: {mlp_ratio}")
+            logger.info(f"stage_output_patch_sizes: {stage_output_patch_sizes}")
+            conv_params = {
+                "patch_sizes": patch_sizes,
+                "downsample_rate": downsample_rate,
+                "depth": depth,
+                "mlp_ratio": mlp_ratio,
+                "stage_output_patch_sizes": stage_output_patch_sizes,
+            }
+            # patch_sizes = [4, 2, 2]
+            # downsample_rate = [1, 4, 8]
+            # depth = [2, 2]
+            # mlp_ratio=[4, 4]
+            patch_embed = [
+                PatchEmbed_new(
+                img_size=(img_size[0]//downsample_rate[i], img_size[1]//downsample_rate[i]),
+                patch_size=patch_sizes[i],
+                in_chans=in_chans[i],
+                embed_dim=in_chans[i+1],
+                stride=patch_sizes[i],
+                add_conv=add_conv,
+            ) for i in range(len(downsample_rate))]
+
+            patch_embed.append(nn.Linear(modality_cfg.embed_dim, modality_cfg.embed_dim))
+            patch_embed = nn.ModuleList(patch_embed)
+
+            stage_output_decode = nn.ModuleList([nn.Conv2d(in_chans[i+1], in_chans[-1], stage_output_patch_sizes[i], stride=stage_output_patch_sizes[i]) for i in range(len(stage_output_patch_sizes))])
+
+            conv_blocks = []
+            for i in range(len(mlp_ratio)):
+                logger.info(f"i: {i}")
+                conv_blocks.append(
+                    nn.ModuleList([CBlock(dim=in_chans[i+1],  mlp_ratio=mlp_ratio[i], norm_layer=partial(nn.LayerNorm, eps=1e-6))
+                    for j in range(depth[i]) ])
+                )
+            conv_blocks = nn.ModuleList(conv_blocks)
+
+            # CNN initialize
+            for m in patch_embed:
+                if hasattr(m, 'proj'):
+                    w = m.proj.weight.data
+                else:
+                    w = m.weight.data
+                torch.nn.init.xavier_uniform_(w.view([w.shape[0], -1]))
 
         project_features = nn.Identity()
 
@@ -173,12 +277,17 @@ class ImageEncoder(ModalitySpecificEncoder):
             modality_cfg=modality_cfg,
             embed_dim=embed_dim,
             local_encoder=local_encoder,
+            patch_embed=patch_embed,
+            stage_output_decode=stage_output_decode,
+            conv_blocks=conv_blocks,
             project_features=project_features,
             fixed_positional_encoder=fixed_positional_encoder,
             relative_positional_encoder=None,
             context_encoder=context_encoder,
             decoder=decoder,
             get_alibi_bias=alibi_bias_fn,
+            add_conv=add_conv,
+            conv_params=conv_params,
         )
 
     def reset_parameters(self):
