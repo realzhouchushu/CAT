@@ -146,14 +146,14 @@ def save_json_output(output_path: str, matched_files: List[Dict],
 def main():
     parser = argparse.ArgumentParser(description='Process TSV files and CLAP embeddings')
     parser.add_argument('--tsv_path', 
-                       default='/opt/gpfs/home/chushu/data/audioset/16k_wav_tsv/unbal_train.tsv',
+                       default='/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/16k_wav_tsv/unbal_train.tsv',
                        help='Path to input TSV file')
     parser.add_argument('--clap_folder', 
-                       default='/opt/gpfs/home/chushu/data/features/ast_features/mlp_head_out',
+                       default='/inspire/hdd/global_user/zhouchushu-253108120180/raw_datas/features/audioset/clap_embs',
                        help='Path to CLAP embeddings folder')
     # options: ['/opt/gpfs/home/chushu/data/features/ast_features/mlp_head_in','/opt/gpfs/home/chushu/data/features/ast_features/mlp_head_out', '/opt/gpfs/home/chushu/data/features/clap_features/clap_embs/unbalanced_train_segments']
     parser.add_argument('--output_path', 
-                       default='/opt/gpfs/home/chushu/data/audioset/meta_w_feature/unbal_train_ast_mlp_head_out.json',
+                       default='/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/meta_w_feature/unbal_train_clap.json',
                        help='Path to output JSON file')
     
     args = parser.parse_args()

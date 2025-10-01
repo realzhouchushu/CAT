@@ -1,12 +1,12 @@
-2025-08-26 20:38:22,194 - INFO - 开始音频归一化处理
-2025-08-26 20:38:22,194 - INFO - 源文件夹: /opt/gpfs/data/raw_data/audioset/raw_data/audio/bal_train
-2025-08-26 20:38:22,194 - INFO - 目标文件夹: /opt/gpfs/data/raw_data/audioset/wav_16k/bal_train
-2025-08-26 20:38:22,194 - INFO - 目标采样率: 16000 Hz
-2025-08-26 20:38:22,194 - INFO - 日志文件: /opt/gpfs/home/chushu/codes/2506/EAT/EAT/prepapre_data/process/log/normalize_bal_train1.1og
-2025-08-26 20:38:22,194 - INFO - 指定进程数: 64
-2025-08-26 20:38:22,246 - INFO - 找到 20550 个音频文件
-2025-08-26 20:38:22,247 - INFO - 使用 64 个进程进行处理
-2025-08-26 20:38:51,150 - INFO - 处理完成！成功: 20550, 失败: 0
-2025-08-26 20:38:51,151 - INFO - 总处理时间: 28.90秒
-2025-08-26 20:38:51,152 - INFO - 平均每文件处理时间: 0.001秒
-2025-08-26 20:38:51,168 - INFO - 音频归一化处理完成！
+2025-10-01 01:40:06,485 - INFO - 开始音频归一化处理
+2025-10-01 01:40:06,485 - INFO - 源文件夹: /inspire/hdd/global_user/zhouchushu-253108120180/raw_datas/audioset/raw_data/bal_train
+2025-10-01 01:40:06,485 - INFO - 目标文件夹: /inspire/hdd/global_user/zhouchushu-253108120180/raw_datas/audioset/wav_16k/bal_train
+2025-10-01 01:40:06,485 - INFO - 目标采样率: 16000 Hz
+2025-10-01 01:40:06,485 - INFO - 日志文件: /inspire/hdd/global_user/zhouchushu-253108120180/codes/2506/EAT/EAT/prepapre_data/process/log/normalize_bal_train1.1og
+2025-10-01 01:40:06,485 - INFO - 指定进程数: 64
+2025-10-01 01:40:06,526 - INFO - 找到 20550 个音频文件
+2025-10-01 01:40:06,527 - INFO - 使用 64 个进程进行处理
+2025-10-01 01:44:34,525 - INFO - 处理完成！成功: 20550, 失败: 0
+2025-10-01 01:44:34,525 - INFO - 总处理时间: 268.00秒
+2025-10-01 01:44:34,525 - INFO - 平均每文件处理时间: 0.013秒
+2025-10-01 01:44:34,532 - INFO - 音频归一化处理完成！

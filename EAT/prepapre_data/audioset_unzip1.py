@@ -8,8 +8,8 @@ import os
 import subprocess
 import sys
 
-SRC_DIR = "/opt/gpfs/data/raw_data/audioset/audioset_zip/unbalanced"
-TARGET_DIR = "/opt/gpfs/data/raw_data/audioset/raw_data/unbal_train"
+SRC_DIR = "/inspire/hdd/global_user/zhouchushu-253108120180/raw_datas/audioset/audioset_zip/unbalanced"
+TARGET_DIR = "/inspire/hdd/global_user/zhouchushu-253108120180/raw_datas/audioset/raw_data/unbal_train"
 
 def run_command(cmd, description):
     """运行命令并处理错误"""

@@ -146,6 +146,7 @@ def make_cfg(config_file, task, options, extras={}, cancel_aug=False, abs_unit_s
     # update some parameters.
     update_options = f'+task_metadata={task_metadata},+task_data={task_data}'
     update_options += f',+unit_samples={int(cfg.sample_rate * unit_sec)}'
+    # update_options += f',+unit_samples={int(cfg.sample_rate * 10)}'
     cfg = complete_cfg(cfg, update_options, no_id=True)
     # overwrite by extra command line
     options = []
