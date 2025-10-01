@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # config options
-train_mode=conv_clap
-config_option=2
+train_mode=clap
+config_option=0
 # change world size
 
 # shared config
-SAVE_DIR_ROOT=/opt/gpfs/home/chushu/exp/eat/pre_4_AS2M
+SAVE_DIR_ROOT=/inspire/hdd/global_user/zhouchushu-253108120180/exp/eat/pre_4_AS2M
 checkpoint_save_dir=${SAVE_DIR_ROOT}/${train_mode}_${config_option}_$(date +"%Y-%m-%d_%H-%M-%S")
 checkpoint_restore_file=${checkpoint_save_dir}/checkpoint_last.pt
 
@@ -32,10 +32,11 @@ model_dispersive_loss_layer=0
 checkpoint_keep_interval_updates=1 # TODO change this parameter if need
 checkpoint_save_interval_updates=10000
 model_modalities_image_conv_option=0
+model_modalities_image_patch_size=16
 
 if [[ $train_mode == "default" && ${config_option} -eq 0 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M
     task_load_clap_emb=false
     task_load_source_file=true
     task_load_mel_file=false
@@ -46,7 +47,7 @@ if [[ $train_mode == "default" && ${config_option} -eq 0 ]]; then
     checkpoint_keep_interval_updates=-1
 elif [[ $train_mode == "disp" && ${config_option} -eq 0 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M
     task_load_clap_emb=false
     task_load_source_file=true
     task_load_mel_file=false
@@ -58,7 +59,7 @@ elif [[ $train_mode == "disp" && ${config_option} -eq 0 ]]; then
     checkpoint_keep_interval_updates=1
 elif [[ $train_mode == "disp" && ${config_option} -eq 1 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M
     task_load_clap_emb=false
     task_load_source_file=true
     task_load_mel_file=false
@@ -70,7 +71,7 @@ elif [[ $train_mode == "disp" && ${config_option} -eq 1 ]]; then
     checkpoint_keep_interval_updates=1
 elif [[ $train_mode == "disp" && ${config_option} -eq 2 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M
     task_load_clap_emb=false
     task_load_source_file=true
     task_load_mel_file=false
@@ -82,7 +83,7 @@ elif [[ $train_mode == "disp" && ${config_option} -eq 2 ]]; then
     checkpoint_keep_interval_updates=1
 elif [[ $train_mode == "disp" && ${config_option} -eq 3 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M
     task_load_clap_emb=false
     task_load_source_file=true
     task_load_mel_file=false
@@ -94,7 +95,7 @@ elif [[ $train_mode == "disp" && ${config_option} -eq 3 ]]; then
     checkpoint_keep_interval_updates=1
 elif [[ $train_mode == "disp" && ${config_option} -eq 4 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M
     task_load_clap_emb=false
     task_load_source_file=true
     task_load_mel_file=false
@@ -106,7 +107,7 @@ elif [[ $train_mode == "disp" && ${config_option} -eq 4 ]]; then
     checkpoint_keep_interval_updates=1
 elif [[ $train_mode == "disp" && ${config_option} -eq 5 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M
     task_load_clap_emb=false
     task_load_source_file=true
     task_load_mel_file=false
@@ -118,7 +119,7 @@ elif [[ $train_mode == "disp" && ${config_option} -eq 5 ]]; then
     checkpoint_keep_interval_updates=1
 elif [[ $train_mode == "disp" && ${config_option} -eq 6 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M
     task_load_clap_emb=false
     task_load_source_file=true
     task_load_mel_file=false
@@ -130,8 +131,10 @@ elif [[ $train_mode == "disp" && ${config_option} -eq 6 ]]; then
     checkpoint_keep_interval_updates=1
 elif [[ $train_mode == "clap" && ${config_option} -eq 0 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
     task_load_clap_emb=true
+    task_load_source_file=true
+    task_load_mel_file=false
     model_proj_type=2
     model_clone_batch=4
     dataset_batch_size=48
@@ -140,7 +143,7 @@ elif [[ $train_mode == "clap" && ${config_option} -eq 0 ]]; then
     model_add_conv=false
 elif [[ $train_mode == "clap" && ${config_option} -eq 1 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
     task_load_clap_emb=true
     model_proj_type=2
     model_clone_batch=4
@@ -150,7 +153,7 @@ elif [[ $train_mode == "clap" && ${config_option} -eq 1 ]]; then
 # loss type ablation
 elif [[ $train_mode == "clap" && ${config_option} -eq 2 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
     task_load_clap_emb=true
     model_proj_type=2
     model_clone_batch=4
@@ -160,7 +163,7 @@ elif [[ $train_mode == "clap" && ${config_option} -eq 2 ]]; then
     model_clap_loss_type="ce"
 elif [[ $train_mode == "clap" && ${config_option} -eq 3 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
     task_load_clap_emb=true
     model_proj_type=2
     model_clone_batch=4
@@ -170,7 +173,7 @@ elif [[ $train_mode == "clap" && ${config_option} -eq 3 ]]; then
     model_clap_loss_type="l1"
 elif [[ $train_mode == "clap" && ${config_option} -eq 4 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
     task_load_clap_emb=true
     model_proj_type=2
     model_clone_batch=4
@@ -181,7 +184,7 @@ elif [[ $train_mode == "clap" && ${config_option} -eq 4 ]]; then
 # loss layer ablation
 elif [[ $train_mode == "clap" && ${config_option} -eq 5 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
     task_load_clap_emb=true
     model_proj_type=2
     model_clone_batch=4
@@ -192,7 +195,7 @@ elif [[ $train_mode == "clap" && ${config_option} -eq 5 ]]; then
     model_clap_loss_layer=10
 elif [[ $train_mode == "clap" && ${config_option} -eq 6 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
     task_load_clap_emb=true
     task_load_source_file=true
     task_load_mel_file=false
@@ -205,7 +208,7 @@ elif [[ $train_mode == "clap" && ${config_option} -eq 6 ]]; then
     model_clap_loss_layer=8
 elif [[ $train_mode == "clap" && ${config_option} -eq 7 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
     task_load_clap_emb=true
     task_load_source_file=true
     task_load_mel_file=false
@@ -218,7 +221,7 @@ elif [[ $train_mode == "clap" && ${config_option} -eq 7 ]]; then
     model_clap_loss_layer=6
 elif [[ $train_mode == "clap" && ${config_option} -eq 8 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
     task_load_clap_emb=true
     task_load_source_file=true
     task_load_mel_file=false
@@ -231,7 +234,7 @@ elif [[ $train_mode == "clap" && ${config_option} -eq 8 ]]; then
     checkpoint_keep_interval_updates=-1
 elif [[ $train_mode == "clap" && ${config_option} -eq 9 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
     task_load_clap_emb=true
     task_load_source_file=true
     task_load_mel_file=false
@@ -244,7 +247,7 @@ elif [[ $train_mode == "clap" && ${config_option} -eq 9 ]]; then
     checkpoint_keep_interval_updates=-1
 elif [[ $train_mode == "ast" && ${config_option} -eq 0 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M_w_AST/mlp_head_in
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_AST/mlp_head_in
     task_load_clap_emb=true
     model_proj_type=4
     model_clone_batch=4
@@ -252,7 +255,7 @@ elif [[ $train_mode == "ast" && ${config_option} -eq 0 ]]; then
     dataset_batch_size=48
 elif [[ $train_mode == "ast" && ${config_option} -eq 1 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M_w_AST/mlp_head_in
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_AST/mlp_head_in
     task_load_clap_emb=true
     model_proj_type=4
     model_clone_batch=4
@@ -260,7 +263,7 @@ elif [[ $train_mode == "ast" && ${config_option} -eq 1 ]]; then
     dataset_batch_size=48
 elif [[ $train_mode == "ast" && ${config_option} -eq 2 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M_w_AST/mlp_head_in
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_AST/mlp_head_in
     task_load_clap_emb=true
     model_proj_type=4
     model_clone_batch=4
@@ -268,14 +271,14 @@ elif [[ $train_mode == "ast" && ${config_option} -eq 2 ]]; then
     dataset_batch_size=48
 elif [[ $train_mode == "ast" && ${config_option} -eq 3 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M_w_AST/mlp_head_out
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_AST/mlp_head_out
     task_load_clap_emb=true
     model_proj_type=6
     model_clone_batch=4
     dataset_batch_size=48
 elif [[ $train_mode == "conv_clap" && ${config_option} -eq 0 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
     task_load_clap_emb=true
     task_load_source_file=true
     task_load_mel_file=false
@@ -290,7 +293,7 @@ elif [[ $train_mode == "conv_clap" && ${config_option} -eq 0 ]]; then
     checkpoint_save_interval_updates=10000
 elif [[ $train_mode == "conv_clap" && ${config_option} -eq 1 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
     task_load_clap_emb=true
     task_load_source_file=true
     task_load_mel_file=false
@@ -305,24 +308,25 @@ elif [[ $train_mode == "conv_clap" && ${config_option} -eq 1 ]]; then
     checkpoint_keep_interval_updates=1 # default 1 
     checkpoint_save_interval_updates=10000
 elif [[ $train_mode == "conv_clap" && ${config_option} -eq 2 ]]; then
-    echo "Config ${train_mode} ${config_option}"
-    task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    echo "Config ${train_mode} ${config_option}" # H100 80G
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
     task_load_clap_emb=true
     task_load_source_file=true
     task_load_mel_file=false
     model_proj_type=2
     model_clone_batch=4
-    dataset_batch_size=96 # original 48 oom on 4090 24G change distributed_world_size
+    dataset_batch_size=12 # 12 for 4090 48G use about 75% mem, 24 maybe suitable for H100 80G
     model_clap_loss=1.0
     average_top_k_layers=12 # modify with model depth
     model_add_conv=true
     model_modalities_image_conv_option=2
+    model_modalities_image_patch_size=8
     model_depth=12 # 
     checkpoint_keep_interval_updates=1 # default 1 
     checkpoint_save_interval_updates=10000
 elif [[ $train_mode == "conv_clap" && ${config_option} -eq 3 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
     task_load_clap_emb=true
     task_load_source_file=true
     task_load_mel_file=false
@@ -338,7 +342,7 @@ elif [[ $train_mode == "conv_clap" && ${config_option} -eq 3 ]]; then
     checkpoint_save_interval_updates=10000
 elif [[ $train_mode == "conv_clap" && ${config_option} -eq 4 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
     task_load_clap_emb=true
     task_load_source_file=true
     task_load_mel_file=false
@@ -354,7 +358,7 @@ elif [[ $train_mode == "conv_clap" && ${config_option} -eq 4 ]]; then
     checkpoint_save_interval_updates=10000
 elif [[ $train_mode == "conv_clap" && ${config_option} -eq 5 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
     task_load_clap_emb=true
     task_load_source_file=true
     task_load_mel_file=false
@@ -370,7 +374,7 @@ elif [[ $train_mode == "conv_clap" && ${config_option} -eq 5 ]]; then
     checkpoint_save_interval_updates=10000
 elif [[ $train_mode == "conv_clap" && ${config_option} -eq 6 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
     task_load_clap_emb=true
     task_load_source_file=true
     task_load_mel_file=false
@@ -381,6 +385,7 @@ elif [[ $train_mode == "conv_clap" && ${config_option} -eq 6 ]]; then
     average_top_k_layers=12 # modify with model depth
     model_add_conv=true
     model_modalities_image_conv_option=6
+    model_modalities_image_patch_size=32
     model_depth=12 # 
     checkpoint_keep_interval_updates=1 # default 1 
     checkpoint_save_interval_updates=10000
@@ -392,7 +397,7 @@ python fairseq_cli/hydra_train.py -m \
     common.user_dir=./EAT \
     checkpoint.save_dir=${checkpoint_save_dir} \
     checkpoint.restore_file=${checkpoint_restore_file} \
-    distributed_training.distributed_world_size=${1:-2} \
+    distributed_training.distributed_world_size=${1:-4} \
     dataset.num_workers=24 \
     dataset.data_buffer_size=48 \
     dataset.batch_size=${dataset_batch_size} \
@@ -412,5 +417,6 @@ python fairseq_cli/hydra_train.py -m \
     +model.dispersive_loss_layer=${model_dispersive_loss_layer} \
     model.depth=${model_depth} \
     +model.modalities.image.conv_option=${model_modalities_image_conv_option} \
+    +model.modalities.image.patch_size=${model_modalities_image_patch_size} \
     checkpoint.keep_interval_updates=${checkpoint_keep_interval_updates} \
     checkpoint.save_interval_updates=${checkpoint_save_interval_updates}

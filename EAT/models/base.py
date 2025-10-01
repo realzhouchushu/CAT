@@ -398,10 +398,12 @@ class ModalitySpecificEncoder(nn.Module):
         else:
             stage_output_embeds = []
             mask_for_patches = []
+            
+            final_patch_size = self.conv_params['resolution'][-1]
             for i in range(len(self.conv_params['mlp_ratio'])):
                 # patch_size = self.conv_params['patch_sizes'][i]
                 stage_output_patch_size = self.conv_params['stage_output_patch_sizes'][i]
-                mask = precomputed_mask.reshape(-1, 64, 8).unsqueeze(-1).repeat(1, 1, 1, stage_output_patch_size * stage_output_patch_size).reshape(-1, 64, 8, stage_output_patch_size, stage_output_patch_size).permute(0, 1, 3, 2, 4).reshape(precomputed_mask.shape[0], 64 * stage_output_patch_size, 8 * stage_output_patch_size).unsqueeze(1) 
+                mask = precomputed_mask.reshape(-1, int(1024 / final_patch_size), int(128 / final_patch_size)).unsqueeze(-1).repeat(1, 1, 1, stage_output_patch_size * stage_output_patch_size).reshape(-1, int(1024 / final_patch_size), int(128 / final_patch_size), stage_output_patch_size, stage_output_patch_size).permute(0, 1, 3, 2, 4).reshape(precomputed_mask.shape[0], int(1024 / final_patch_size) * stage_output_patch_size, int(128 / final_patch_size) * stage_output_patch_size).unsqueeze(1) 
                 mask_for_patches.append(mask)
             features = features.repeat_interleave(precomputed_mask.shape[0]//features.shape[0], 0)
             x = features

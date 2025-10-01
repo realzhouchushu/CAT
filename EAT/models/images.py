@@ -165,6 +165,8 @@ class ImageEncoder(ModalitySpecificEncoder):
             logger.info(f"mlp_ratio: {mlp_ratio}")
             logger.info(f"stage_output_patch_sizes: {stage_output_patch_sizes}")
             conv_params = {
+                "resolution": resolution,
+                "in_chans": in_chans,
                 "patch_sizes": patch_sizes,
                 "downsample_rate": downsample_rate,
                 "depth": depth,
