@@ -1,6 +1,6 @@
 oms node list
 
-name=zcs-pretrain-eat-disp-6
+name=zcs-pretrain-eat-conv-clap-2
 # echo "##### delete job ${name} #####\n"
 # oms job delete ${name}
 # echo "##### delete job ${name} done #####\n"

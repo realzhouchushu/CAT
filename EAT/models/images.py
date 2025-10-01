@@ -7,6 +7,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
+import logging
 
 from functools import partial
 from dataclasses import dataclass
@@ -39,6 +40,8 @@ class Modality(Enum):
     IMAGE = auto()
     TEXT = auto()
 
+logger = logging.getLogger(__name__)
+
 
 @dataclass
 class D2vImageConfig(D2vModalityConfig):
@@ -48,6 +51,7 @@ class D2vImageConfig(D2vModalityConfig):
     in_chans: int = 3
     patch_size: int = 16
     embed_dim: int = 768
+    conv_option: int = 0
 
     alibi_dims: int = 2
     alibi_distance: str = "manhattan"
@@ -111,13 +115,66 @@ class ImageEncoder(ModalitySpecificEncoder):
                     local_encoder,
                     nn.Linear(modality_cfg.embed_dim, embed_dim),
                 )
+            conv_params = None
         else:
-            downsample_rate = [1, 4, 8]
-            patch_sizes = [4, 2, 2]
-            in_chans = [modality_cfg.in_chans, 256, 384, modality_cfg.embed_dim]
-            depth = [2, 2]
-            mlp_ratio=[4, 4]
-            # self.patch_embed = nn.ModuleList()
+            # manual setting
+            if modality_cfg.conv_option == 0:
+                resolution = [4, 8, 16]
+                in_chans = [modality_cfg.in_chans, 256, 384, modality_cfg.embed_dim]
+            elif modality_cfg.conv_option == 1:
+                resolution = [16]
+                in_chans = [modality_cfg.in_chans, modality_cfg.embed_dim]
+            elif modality_cfg.conv_option == 2:
+                resolution = [4, 8]
+                in_chans = [modality_cfg.in_chans, 384, modality_cfg.embed_dim]
+            elif modality_cfg.conv_option == 3:
+                resolution = [4, 16]
+                in_chans = [modality_cfg.in_chans, 384, modality_cfg.embed_dim]
+            elif modality_cfg.conv_option == 4:
+                resolution = [8, 16]
+                in_chans = [modality_cfg.in_chans, 384, modality_cfg.embed_dim]
+            elif modality_cfg.conv_option == 5:
+                resolution = [2, 4, 8, 16]
+                in_chans = [modality_cfg.in_chans, 256, 384, 768, modality_cfg.embed_dim]
+            elif modality_cfg.conv_option == 6:
+                resolution = [4, 8, 16, 32]
+                in_chans = [modality_cfg.in_chans, 256, 384, 768, modality_cfg.embed_dim]
+            else:
+                raise ValueError(f"Invalid conv option: {modality_cfg.conv_option}")
+            
+            patch_sizes = []
+            downsample_rate = [1]
+            stage_output_patch_sizes = []
+            depth = [2 for _ in range(len(resolution) - 1)]
+            mlp_ratio = [4 for _ in range(len(resolution) - 1)]
+            for i, res in enumerate(resolution):
+                patch_size = resolution[i] / resolution[i - 1] if i else resolution[i]
+                patch_sizes.append(int(patch_size))
+                
+                if i:
+                    downsample_rate.append(patch_sizes[i - 1] * downsample_rate[-1])
+            for i in range(len(patch_sizes) - 1):
+                stage_output_patch_size = (patch_sizes[len(patch_sizes) - 1 - i] * stage_output_patch_sizes[-1]) if i else patch_sizes[len(patch_sizes) - 1 - i]
+                stage_output_patch_sizes.append(stage_output_patch_size)
+            stage_output_patch_sizes = list(reversed(stage_output_patch_sizes))
+            logger.info(f"resolution: {resolution}")
+            logger.info(f"in_chans: {in_chans}")
+            logger.info(f"patch_sizes: {patch_sizes}")
+            logger.info(f"downsample_rate: {downsample_rate}")
+            logger.info(f"depth: {depth}")
+            logger.info(f"mlp_ratio: {mlp_ratio}")
+            logger.info(f"stage_output_patch_sizes: {stage_output_patch_sizes}")
+            conv_params = {
+                "patch_sizes": patch_sizes,
+                "downsample_rate": downsample_rate,
+                "depth": depth,
+                "mlp_ratio": mlp_ratio,
+                "stage_output_patch_sizes": stage_output_patch_sizes,
+            }
+            # patch_sizes = [4, 2, 2]
+            # downsample_rate = [1, 4, 8]
+            # depth = [2, 2]
+            # mlp_ratio=[4, 4]
             patch_embed = [
                 PatchEmbed_new(
                 img_size=(img_size[0]//downsample_rate[i], img_size[1]//downsample_rate[i]),
@@ -131,18 +188,15 @@ class ImageEncoder(ModalitySpecificEncoder):
             patch_embed.append(nn.Linear(modality_cfg.embed_dim, modality_cfg.embed_dim))
             patch_embed = nn.ModuleList(patch_embed)
 
-            stage_output_decode = nn.ModuleList([nn.Conv2d(in_chans[1], in_chans[3], patch_sizes[0], stride=patch_sizes[0]), 
-                                                nn.Conv2d(in_chans[2], in_chans[3], patch_sizes[1], stride=patch_sizes[1])])
+            stage_output_decode = nn.ModuleList([nn.Conv2d(in_chans[i+1], in_chans[-1], stage_output_patch_sizes[i], stride=stage_output_patch_sizes[i]) for i in range(len(stage_output_patch_sizes))])
 
             conv_blocks = []
-            conv_blocks.append(
-                nn.ModuleList([CBlock(dim=in_chans[1],  mlp_ratio=mlp_ratio[0], norm_layer=partial(nn.LayerNorm, eps=1e-6))
-                for i in range(depth[0]) ])
-            )
-            conv_blocks.append(
-                nn.ModuleList([CBlock(dim=in_chans[2],  mlp_ratio=mlp_ratio[1], norm_layer=partial(nn.LayerNorm, eps=1e-6))
-                for i in range(depth[1]) ])
-            )
+            for i in range(len(mlp_ratio)):
+                logger.info(f"i: {i}")
+                conv_blocks.append(
+                    nn.ModuleList([CBlock(dim=in_chans[i+1],  mlp_ratio=mlp_ratio[i], norm_layer=partial(nn.LayerNorm, eps=1e-6))
+                    for j in range(depth[i]) ])
+                )
             conv_blocks = nn.ModuleList(conv_blocks)
 
             # CNN initialize
@@ -233,6 +287,7 @@ class ImageEncoder(ModalitySpecificEncoder):
             decoder=decoder,
             get_alibi_bias=alibi_bias_fn,
             add_conv=add_conv,
+            conv_params=conv_params,
         )
 
     def reset_parameters(self):

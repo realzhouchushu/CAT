@@ -2,7 +2,7 @@ oms node list
 
 linear_layer=${1}
 
-name=zcs-sft-eat-as20k-disp-cls-0-lw1-${linear_layer}
+name=zcs-sft-eat-as20k-disp-cls-0-clone4-lw1000-${linear_layer}
 # echo "##### delete job ${name} #####\n"
 # oms job delete ${name}
 # echo "##### delete job ${name} done #####\n"

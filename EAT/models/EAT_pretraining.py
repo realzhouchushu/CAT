@@ -733,7 +733,7 @@ class Data2VecMultiModel(BaseFairseqModel):
             else:
                 clap_cls_pred = self.clap_proj(clap_cls_pred)
             # logger.info(f"clap_cls_pred: {clap_cls_pred.shape}, clap_emb: {clap_emb.shape}")
-            clap_emb = clap_emb.repeat_interleave(self.cfg.clone_batch, 0).to(cls_target.dtype)
+            clap_emb = clap_emb.repeat_interleave(self.cfg.clone_batch, 0)
             
             result["losses"]["clap"] = self.d2v_loss(clap_cls_pred, clap_emb, loss_type=self.cfg.clap_loss_type) * (
                 self.cfg.clap_loss * sample_size
@@ -851,7 +851,7 @@ class Data2VecMultiModel(BaseFairseqModel):
 
     def d2v_loss(self, x, y, loss_type="mse"):
         x = x.view(-1, x.size(-1)).float()
-        y = y.view(-1, x.size(-1))
+        y = y.view(-1, x.size(-1)).float()
 
         if loss_type=="mse":
             if self.loss_beta == 0:

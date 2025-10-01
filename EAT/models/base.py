@@ -95,6 +95,7 @@ class ModalitySpecificEncoder(nn.Module):
         decoder: nn.Module,
         get_alibi_bias: Optional[Callable[[int, int, str, str], torch.Tensor]],
         add_conv: bool,
+        conv_params: Optional[dict] = None,
     ):
         super().__init__()
 
@@ -108,6 +109,7 @@ class ModalitySpecificEncoder(nn.Module):
             self.conv_blocks = conv_blocks
             self.stage_output_decode = stage_output_decode
             self.local_encoder = self.local_encoder_method
+            self.conv_params = conv_params
 
         self.project_features = project_features
         self.fixed_positional_encoder = fixed_positional_encoder
@@ -378,39 +380,40 @@ class ModalitySpecificEncoder(nn.Module):
         
         # compute unmask feature
         # with torch.no_grad():
-        
-        x = self.patch_embed[0](features)
-        for blk in self.conv_blocks[0]: # 过几层卷积
-            x = blk(x)
-        stage1_embed = self.stage_output_decode[0](x).flatten(2).permute(0, 2, 1)
-        x = self.patch_embed[1](x) # downsample
-        for blk in self.conv_blocks[1]: # 过几层卷积
-            x = blk(x)
-        stage2_embed = self.stage_output_decode[1](x).flatten(2).permute(0, 2, 1)# resize 到后面的shape
-        x = self.patch_embed[2](x)
+        stage_output_embeds = []
+        x = features
+        for i in range(len(self.conv_params['mlp_ratio'])):
+            x = self.patch_embed[i](x)
+            for blk in self.conv_blocks[i]: # 过几层卷积
+                x = blk(x)
+            stage_output_embeds.append(self.stage_output_decode[i](x).flatten(2).permute(0, 2, 1))
+        x = self.patch_embed[-2](x)
         x = x.flatten(2).permute(0, 2, 1)
-        x = self.patch_embed[3](x)
-        unmasked_feature = x + stage1_embed + stage2_embed
+        x = self.patch_embed[-1](x)
+        unmasked_feature = x + sum(stage_output_embeds)
 
         # compute mask feature
         if precomputed_mask is None:
             mask_feature = None
         else:
-            mask_for_patch1 = precomputed_mask.reshape(-1, 64, 8).unsqueeze(-1).repeat(1, 1, 1, 16).reshape(-1, 64, 8, 4, 4).permute(0, 1, 3, 2, 4).reshape(precomputed_mask.shape[0], 256, 32).unsqueeze(1)
-            mask_for_patch2 = precomputed_mask.reshape(-1, 64, 8).unsqueeze(-1).repeat(1, 1, 1,  4).reshape(-1, 64, 8, 2, 2).permute(0, 1, 3, 2, 4).reshape(precomputed_mask.shape[0], 128, 16).unsqueeze(1)
+            stage_output_embeds = []
+            mask_for_patches = []
+            for i in range(len(self.conv_params['mlp_ratio'])):
+                # patch_size = self.conv_params['patch_sizes'][i]
+                stage_output_patch_size = self.conv_params['stage_output_patch_sizes'][i]
+                mask = precomputed_mask.reshape(-1, 64, 8).unsqueeze(-1).repeat(1, 1, 1, stage_output_patch_size * stage_output_patch_size).reshape(-1, 64, 8, stage_output_patch_size, stage_output_patch_size).permute(0, 1, 3, 2, 4).reshape(precomputed_mask.shape[0], 64 * stage_output_patch_size, 8 * stage_output_patch_size).unsqueeze(1) 
+                mask_for_patches.append(mask)
             features = features.repeat_interleave(precomputed_mask.shape[0]//features.shape[0], 0)
-            x = self.patch_embed[0](features)
-            for blk in self.conv_blocks[0]: # 过几层卷积
-                x = blk(x, 1 - mask_for_patch1)
-            stage1_embed = self.stage_output_decode[0](x).flatten(2).permute(0, 2, 1)
-            x = self.patch_embed[1](x) # downsample
-            for blk in self.conv_blocks[1]: # 过几层卷积
-                x = blk(x, 1 - mask_for_patch2)
-            stage2_embed = self.stage_output_decode[1](x).flatten(2).permute(0, 2, 1)# resize 到后面的shape
-            x = self.patch_embed[2](x)
+            x = features
+            for i in range(len(self.conv_params['mlp_ratio'])):
+                x = self.patch_embed[i](x)
+                for blk in self.conv_blocks[i]: # 过几层卷积
+                    x = blk(x, 1 - mask_for_patches[i])
+                stage_output_embeds.append(self.stage_output_decode[i](x).flatten(2).permute(0, 2, 1))
+            x = self.patch_embed[-2](x)
             x = x.flatten(2).permute(0, 2, 1)
-            x = self.patch_embed[3](x)
-            mask_feature = x + stage1_embed + stage2_embed
+            x = self.patch_embed[-1](x)
+            mask_feature = x + sum(stage_output_embeds)
         return unmasked_feature, mask_feature
 
     def forward(

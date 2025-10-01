@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # config options
-train_mode=disp
-config_option=6
+train_mode=conv_clap
+config_option=2
 # change world size
 
 # shared config
@@ -31,6 +31,7 @@ model_dispersive_loss=0
 model_dispersive_loss_layer=0
 checkpoint_keep_interval_updates=1 # TODO change this parameter if need
 checkpoint_save_interval_updates=10000
+model_modalities_image_conv_option=0
 
 if [[ $train_mode == "default" && ${config_option} -eq 0 ]]; then
     echo "Config ${train_mode} ${config_option}"
@@ -287,6 +288,102 @@ elif [[ $train_mode == "conv_clap" && ${config_option} -eq 0 ]]; then
     model_depth=11 # 
     checkpoint_keep_interval_updates=-1 # default 1 
     checkpoint_save_interval_updates=10000
+elif [[ $train_mode == "conv_clap" && ${config_option} -eq 1 ]]; then
+    echo "Config ${train_mode} ${config_option}"
+    task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_load_clap_emb=true
+    task_load_source_file=true
+    task_load_mel_file=false
+    model_proj_type=2
+    model_clone_batch=4
+    dataset_batch_size=96 # original 48 oom on 4090 24G change distributed_world_size
+    model_clap_loss=1.0
+    average_top_k_layers=12 # modify with model depth
+    model_add_conv=true
+    model_modalities_image_conv_option=1
+    model_depth=12 # 
+    checkpoint_keep_interval_updates=1 # default 1 
+    checkpoint_save_interval_updates=10000
+elif [[ $train_mode == "conv_clap" && ${config_option} -eq 2 ]]; then
+    echo "Config ${train_mode} ${config_option}"
+    task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_load_clap_emb=true
+    task_load_source_file=true
+    task_load_mel_file=false
+    model_proj_type=2
+    model_clone_batch=4
+    dataset_batch_size=96 # original 48 oom on 4090 24G change distributed_world_size
+    model_clap_loss=1.0
+    average_top_k_layers=12 # modify with model depth
+    model_add_conv=true
+    model_modalities_image_conv_option=2
+    model_depth=12 # 
+    checkpoint_keep_interval_updates=1 # default 1 
+    checkpoint_save_interval_updates=10000
+elif [[ $train_mode == "conv_clap" && ${config_option} -eq 3 ]]; then
+    echo "Config ${train_mode} ${config_option}"
+    task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_load_clap_emb=true
+    task_load_source_file=true
+    task_load_mel_file=false
+    model_proj_type=2
+    model_clone_batch=4
+    dataset_batch_size=96 # original 48 oom on 4090 24G change distributed_world_size
+    model_clap_loss=1.0
+    average_top_k_layers=12 # modify with model depth
+    model_add_conv=true
+    model_modalities_image_conv_option=3
+    model_depth=12 # 
+    checkpoint_keep_interval_updates=1 # default 1 
+    checkpoint_save_interval_updates=10000
+elif [[ $train_mode == "conv_clap" && ${config_option} -eq 4 ]]; then
+    echo "Config ${train_mode} ${config_option}"
+    task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_load_clap_emb=true
+    task_load_source_file=true
+    task_load_mel_file=false
+    model_proj_type=2
+    model_clone_batch=4
+    dataset_batch_size=96 # original 48 oom on 4090 24G change distributed_world_size
+    model_clap_loss=1.0
+    average_top_k_layers=12 # modify with model depth
+    model_add_conv=true
+    model_modalities_image_conv_option=4
+    model_depth=12 # 
+    checkpoint_keep_interval_updates=1 # default 1 
+    checkpoint_save_interval_updates=10000
+elif [[ $train_mode == "conv_clap" && ${config_option} -eq 5 ]]; then
+    echo "Config ${train_mode} ${config_option}"
+    task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_load_clap_emb=true
+    task_load_source_file=true
+    task_load_mel_file=false
+    model_proj_type=2
+    model_clone_batch=4
+    dataset_batch_size=48 # original 48 oom on 4090 24G change distributed_world_size
+    model_clap_loss=1.0
+    average_top_k_layers=12 # modify with model depth
+    model_add_conv=true
+    model_modalities_image_conv_option=5
+    model_depth=12 # 
+    checkpoint_keep_interval_updates=1 # default 1 
+    checkpoint_save_interval_updates=10000
+elif [[ $train_mode == "conv_clap" && ${config_option} -eq 6 ]]; then
+    echo "Config ${train_mode} ${config_option}"
+    task_data=/opt/gpfs/home/chushu/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_load_clap_emb=true
+    task_load_source_file=true
+    task_load_mel_file=false
+    model_proj_type=2
+    model_clone_batch=4
+    dataset_batch_size=48 # original 48 oom on 4090 24G change distributed_world_size
+    model_clap_loss=1.0
+    average_top_k_layers=12 # modify with model depth
+    model_add_conv=true
+    model_modalities_image_conv_option=6
+    model_depth=12 # 
+    checkpoint_keep_interval_updates=1 # default 1 
+    checkpoint_save_interval_updates=10000
 fi
 
 python fairseq_cli/hydra_train.py -m \
@@ -314,5 +411,6 @@ python fairseq_cli/hydra_train.py -m \
     +model.dispersive_loss=${model_dispersive_loss} \
     +model.dispersive_loss_layer=${model_dispersive_loss_layer} \
     model.depth=${model_depth} \
+    +model.modalities.image.conv_option=${model_modalities_image_conv_option} \
     checkpoint.keep_interval_updates=${checkpoint_keep_interval_updates} \
     checkpoint.save_interval_updates=${checkpoint_save_interval_updates}

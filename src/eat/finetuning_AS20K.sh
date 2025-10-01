@@ -1,9 +1,9 @@
 #!/bin/bash
-model_model_path=/opt/gpfs/home/chushu/exp/eat/pre_4_AS2M/disp_0_2025-09-24_14-17-47/checkpoint_last.pt
+model_model_path=/opt/gpfs/home/chushu/exp/eat/pre_4_AS2M/disp_6_2025-09-28_08-58-05/checkpoint_last.pt
 
 model_linear_layer=${1}
 echo "model_linear_layer: ${model_linear_layer}"
-SAVE_DIR_ROOT=/opt/gpfs/home/chushu/exp/eat/sft_4_AS20k_w_disp_CLS_lw1_${model_linear_layer}
+SAVE_DIR_ROOT=/opt/gpfs/home/chushu/exp/eat/sft_4_AS20k_w_disp_CLS_clone4_lw1000_${model_linear_layer}
 # 从 model_model_path 提取父目录名与文件名
 parent_dir="$(basename -- "$(dirname -- "$model_model_path")")"
 ckpt_name="$(basename -- "$model_model_path")"
