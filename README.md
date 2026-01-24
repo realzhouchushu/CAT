@@ -12,11 +12,9 @@ pip install --editable ./
 pip install -r EAT/requirements.txt
 ```
 
-## Pre-train Recipe
+## Data Preparation
 
-### Data Preparation
-
-#### 1 .Download datasets
+### 1 .Download datasets
 
 **Audioset**: The main dataset employed in our experimental evaluations is [AudioSet](https://research.google.com/audioset/), which is publicly accessible on [Hugging Face](https://huggingface.co/datasets/confit/audioset-qiuqiangkong) at present. This [script](examples/cat/data_preparation/audioset_download.sh) audioset_download.sh may be helpful.
 
@@ -25,12 +23,12 @@ pip install -r EAT/requirements.txt
 **ESC-50**: ESC-50 is publicly accessible with this [link](https://github.com/karoldvl/ESC-50/archive/master.zip)
 
 
-#### 2. Normalize your data
+### 2. Normalize your data
 You should first resample the WAV files to the corresponding sample rates: **16 kHz** for AudioSet and Speech Commands v2, and **22 kHz** for ESC-50. Resampling the data online during training is time-consuming.
 
 The [script](examples/cat/data_preparation/process/run_normalize.sh) can be used with slight modifications.
 
-#### 3. Prepare your own data manifest
+### 3. Prepare your own data manifest
 
 **Pre-training manifest:**
 For pre-training without representation regularization, a raw .tsv file is sufficient, as demonstrated in this [folder](examples/cat/data_manifest/PRETRAIN_AS2M).
@@ -51,6 +49,44 @@ After extracting the target representations for alignment, you can use this [scr
 For supervised fine-tuning (SFT) on different datasets, you may need different setting folders, such as those for fine-tuning on [AS2M](examples/cat/data_manifest/SFT_AS2M), [AS20k](examples/cat/data_manifest/SFT_AS20k), [ESC-50](examples/cat/data_manifest/SFT_ESC_50), and [SPC-v2](examples/cat/data_manifest/SFT_SPC_2). These manifests can be used directly by only changing the first line to your own normalized data directory path.
 
 In most cases, you can simply replace the first line of all .tsv files with the path to your own local data directory.
+
+## Pretrain 
+1. Modify the shell scripts to match your experimental configurations:
+   - Select the appropriate `train_mode` and `config_option`;
+   - Specify the number of GPUs to be used;
+   - Set the directory where experiment results will be saved.
+
+2. Update the `task_data` parameter to point to the path of your custom data configuration folder like [examples/cat/data_manifest/PRETRAIN_AS2M/CLAP](examples/cat/data_manifest/PRETRAIN_AS2M/CLAP).
+
+3. Execute the following scripts to start the experiment.
+
+```shell
+bash examples/cat/scripts/cat/pretraining_AS2M.sh
+```
+
+## SFT
+
+AS-20k SFT
+```
+bash examples/cat/scripts/cat/finetuning_AS20K.sh
+```
+
+AS-2M SFT
+```
+bash examples/cat/scripts/cat/finetuning_AS2M.sh
+```
+
+ESC-50 SFT
+```
+bash examples/cat/scripts/cat/finetuning_ESC50.sh
+```
+
+SPC-v2 SFT
+```
+bash examples/cat/scripts/cat/finetuning_SPCv2.sh
+```
+
+
 
 ## Acknowledgements
 

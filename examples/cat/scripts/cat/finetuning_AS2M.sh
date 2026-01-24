@@ -4,7 +4,7 @@ model_model_path=/inspire/hdd/global_user/zhouchushu-253108120180/hubs/models/hu
 model_linear_layer=${1:-0}
 model_add_bottleneck=${2:-false}
 echo "model_linear_layer: ${model_linear_layer}"
-SAVE_DIR_ROOT=/inspire/hdd/global_user/zhouchushu-253108120180/exp/eat/sft_4_AS2M/default_0_41_400000_lw1_llayer0_layer12_llayer${model_linear_layer}_${model_add_bottleneck}
+SAVE_DIR_ROOT=/inspire/hdd/global_user/zhouchushu-253108120180/exp/cat/sft_4_AS2M/default_0_41_400000
 
 # 从 model_model_path 提取父目录名与文件名
 parent_dir="$(basename -- "$(dirname -- "$model_model_path")")"
@@ -16,22 +16,22 @@ checkpoint_restore_file="${checkpoint_save_dir%/}/${ckpt_name}"
 echo "checkpoint_save_dir: ${checkpoint_save_dir}"
 echo "checkpoint_restore_file: ${checkpoint_restore_file}"
 
-device=3
+device=0
 
 CUDA_VISIBLE_DEVICES=${device} python fairseq_cli/hydra_train.py -m \
-    --config-dir EAT/config \
+    --config-dir examples/cat/config \
     --config-name finetuning  \
-    common.user_dir=EAT \
+    common.user_dir=examples/cat \
     checkpoint.save_dir=${checkpoint_save_dir} \
     checkpoint.restore_file=${checkpoint_restore_file} \
     checkpoint.best_checkpoint_metric=mAP \
     dataset.batch_size=96 \
     dataset.num_workers=24 \
     dataset.data_buffer_size=96 \
-    task.data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/SFT_AS2M \
+    task.data=/inspire/hdd/global_user/zhouchushu-253108120180/codes/2506/CAT/examples/cat/data_manifest/SFT_AS2M \
     task.h5_format=false \
     task.AS2M_finetune=true \
-    task.weights_file=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/SFT_AS2M/weights.csv \
+    task.weights_file=/inspire/hdd/global_user/zhouchushu-253108120180/codes/2506/CAT/examples/cat/data_manifest/SFT_AS2M/weights.csv \
     task.load_clap_emb=false \
     task.target_length=1024 \
     task.roll_aug=true \

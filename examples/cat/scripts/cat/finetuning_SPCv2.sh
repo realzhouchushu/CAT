@@ -1,7 +1,6 @@
 model_model_path=/inspire/hdd/global_user/zhouchushu-253108120180/hubs/models/huggingface/zhouchushu/tmp_model_store/pre_4_AS2M/default_0_2025-09-20_15-33-21/checkpoint_last.pt
 
-# SAVE_DIR_ROOT=/opt/gpfs/home/chushu/exp/eat/sft_4_SPCv2_w_default_CLS
-SAVE_DIR_ROOT=/inspire/hdd/global_user/zhouchushu-253108120180/exp/eat/sft_4_SPCv2/default_0_41_400000
+SAVE_DIR_ROOT=/inspire/hdd/global_user/zhouchushu-253108120180/exp/cat/sft_4_SPCv2/default_0_41_400000
 
 # 从 model_model_path 提取父目录名与文件名
 parent_dir="$(basename -- "$(dirname -- "$model_model_path")")"
@@ -13,12 +12,12 @@ checkpoint_restore_file="${checkpoint_save_dir%/}/${ckpt_name}"
 echo "checkpoint_save_dir: ${checkpoint_save_dir}"
 echo "checkpoint_restore_file: ${checkpoint_restore_file}"
 
-device=2
+device=0
 
 CUDA_VISIBLE_DEVICES=${device} python fairseq_cli/hydra_train.py -m \
-    --config-dir EAT/config \
+    --config-dir examples/cat/config \
     --config-name finetuning  \
-    common.user_dir=EAT \
+    common.user_dir=examples/cat \
     common.seed=42 \
     checkpoint.save_dir=${checkpoint_save_dir} \
     checkpoint.restore_file=${checkpoint_restore_file} \
