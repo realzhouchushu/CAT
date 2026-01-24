@@ -1,3 +1,0 @@
-# python tsv2lable.py --tsv_path /opt/gpfs/home/chushu/data/audioset/16k_wav_tsv/bal_train.tsv --csv_path /opt/gpfs/data/raw_data/audioset/audioset_zip/metadata/balanced_train_segments.csv --output_dir /opt/gpfs/home/chushu/data/audioset/16k_wav_tsv
-# python tsv2lable.py --tsv_path /opt/gpfs/home/chushu/data/audioset/16k_wav_tsv/eval.tsv --csv_path /opt/gpfs/data/raw_data/audioset/audioset_zip/metadata/eval_segments.csv --output_dir /opt/gpfs/home/chushu/data/audioset/16k_wav_tsv
-python tsv2lable.py --tsv_path /opt/gpfs/home/chushu/data/audioset/16k_wav_tsv/unbal_train.tsv --csv_path /opt/gpfs/data/raw_data/audioset/audioset_zip/metadata/unbalanced_train_segments.csv --output_dir /opt/gpfs/home/chushu/data/audioset/16k_wav_tsv

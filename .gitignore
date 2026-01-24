@@ -140,6 +140,12 @@ nohup.out
 multirun
 outputs
 
+*.pt
+*.safetensors
+
 # eval audio representation data
 /evar/evar/metadata/*
 /evar/work/*
+
+# pretrained models
+/examples/cat/feature_extractor/pretrained_models/*
