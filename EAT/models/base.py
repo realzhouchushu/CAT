@@ -407,15 +407,16 @@ class ModalitySpecificEncoder(nn.Module):
                 mask_for_patches.append(mask)
             features = features.repeat_interleave(precomputed_mask.shape[0]//features.shape[0], 0)
             x = features
-            for i in range(len(self.conv_params['mlp_ratio'])):
-                x = self.patch_embed[i](x)
-                for blk in self.conv_blocks[i]: # 过几层卷积
-                    x = blk(x, 1 - mask_for_patches[i])
-                stage_output_embeds.append(self.stage_output_decode[i](x).flatten(2).permute(0, 2, 1))
-            x = self.patch_embed[-2](x)
-            x = x.flatten(2).permute(0, 2, 1)
-            x = self.patch_embed[-1](x)
-            mask_feature = x + sum(stage_output_embeds)
+            with torch.amp.autocast(device_type = "cuda", enabled=False):
+                for i in range(len(self.conv_params['mlp_ratio'])):
+                    x = self.patch_embed[i](x)
+                    for blk in self.conv_blocks[i]: # 过几层卷积
+                        x = blk(x, 1 - mask_for_patches[i])
+                    stage_output_embeds.append(self.stage_output_decode[i](x).flatten(2).permute(0, 2, 1))
+                x = self.patch_embed[-2](x)
+                x = x.flatten(2).permute(0, 2, 1)
+                x = self.patch_embed[-1](x)
+                mask_feature = x + sum(stage_output_embeds)
         return unmasked_feature, mask_feature
 
     def forward(

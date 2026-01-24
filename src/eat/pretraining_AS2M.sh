@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
 # config options
 train_mode=clap
-config_option=0
+config_option=10
 # change world size
 
 # shared config
 SAVE_DIR_ROOT=/inspire/hdd/global_user/zhouchushu-253108120180/exp/eat/pre_4_AS2M
 checkpoint_save_dir=${SAVE_DIR_ROOT}/${train_mode}_${config_option}_$(date +"%Y-%m-%d_%H-%M-%S")
+checkpoint_save_dir=${SAVE_DIR_ROOT}/${train_mode}_${config_option}
+# checkpoint_save_dir=/inspire/hdd/global_user/zhouchushu-253108120180/exp/eat/pre_4_AS2M/disp_12_2025-10-08_15-40-31
 checkpoint_restore_file=${checkpoint_save_dir}/checkpoint_last.pt
 
 # 脚本自身的绝对路径与文件名（解析符号链接）
@@ -18,6 +20,7 @@ cp -p -- "$script_path" "$checkpoint_save_dir/$script_name"
 echo "script_path: ${script_path}"
 echo "checkpoint_save_dir: ${checkpoint_save_dir}"
 
+config_name=pretraining_AS2M
 # default setting
 model_clone_batch=4
 dataset_batch_size=48
@@ -33,6 +36,11 @@ checkpoint_keep_interval_updates=1 # TODO change this parameter if need
 checkpoint_save_interval_updates=10000
 model_modalities_image_conv_option=0
 model_modalities_image_patch_size=16
+model_modalities_image_mask_prob=0.8
+model_add_bottleneck=false
+model_bottleneck_dim=768
+
+optimization_max_update=400000
 
 if [[ $train_mode == "default" && ${config_option} -eq 0 ]]; then
     echo "Config ${train_mode} ${config_option}"
@@ -129,6 +137,78 @@ elif [[ $train_mode == "disp" && ${config_option} -eq 6 ]]; then
     model_dispersive_loss=1000.0
     model_dispersive_loss_layer=10
     checkpoint_keep_interval_updates=1
+elif [[ $train_mode == "disp" && ${config_option} -eq 7 ]]; then
+    echo "Config ${train_mode} ${config_option}"
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M
+    task_load_clap_emb=false
+    task_load_source_file=true
+    task_load_mel_file=false
+    model_proj_type=null
+    model_clone_batch=4
+    dataset_batch_size=96
+    model_dispersive_loss=1000.0
+    model_dispersive_loss_layer=0
+    checkpoint_keep_interval_updates=1
+elif [[ $train_mode == "disp" && ${config_option} -eq 8 ]]; then
+    echo "Config ${train_mode} ${config_option}"
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M
+    task_load_clap_emb=false
+    task_load_source_file=true
+    task_load_mel_file=false
+    model_proj_type=null
+    model_clone_batch=4
+    dataset_batch_size=96
+    model_dispersive_loss=500.0
+    model_dispersive_loss_layer=0
+    checkpoint_keep_interval_updates=1
+elif [[ $train_mode == "disp" && ${config_option} -eq 9 ]]; then
+    echo "Config ${train_mode} ${config_option}"
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M
+    task_load_clap_emb=false
+    task_load_source_file=true
+    task_load_mel_file=false
+    model_proj_type=null
+    model_clone_batch=4
+    dataset_batch_size=96
+    model_dispersive_loss=100.0
+    model_dispersive_loss_layer=0
+    checkpoint_keep_interval_updates=1
+elif [[ $train_mode == "disp" && ${config_option} -eq 10 ]]; then
+    echo "Config ${train_mode} ${config_option}"
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M
+    task_load_clap_emb=false
+    task_load_source_file=true
+    task_load_mel_file=false
+    model_proj_type=null
+    model_clone_batch=4
+    dataset_batch_size=96
+    model_dispersive_loss=50.0
+    model_dispersive_loss_layer=0
+    checkpoint_keep_interval_updates=1
+elif [[ $train_mode == "disp" && ${config_option} -eq 11 ]]; then
+    echo "Config ${train_mode} ${config_option}"
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M
+    task_load_clap_emb=false
+    task_load_source_file=true
+    task_load_mel_file=false
+    model_proj_type=null
+    model_clone_batch=4
+    dataset_batch_size=96
+    model_dispersive_loss=10.0
+    model_dispersive_loss_layer=0
+    checkpoint_keep_interval_updates=1
+elif [[ $train_mode == "disp" && ${config_option} -eq 12 ]]; then
+    echo "Config ${train_mode} ${config_option}"
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M
+    task_load_clap_emb=false
+    task_load_source_file=true
+    task_load_mel_file=false
+    model_proj_type=null
+    model_clone_batch=4
+    dataset_batch_size=96
+    model_dispersive_loss=5000.0
+    model_dispersive_loss_layer=0
+    checkpoint_keep_interval_updates=1
 elif [[ $train_mode == "clap" && ${config_option} -eq 0 ]]; then
     echo "Config ${train_mode} ${config_option}"
     task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
@@ -137,10 +217,11 @@ elif [[ $train_mode == "clap" && ${config_option} -eq 0 ]]; then
     task_load_mel_file=false
     model_proj_type=2
     model_clone_batch=4
-    dataset_batch_size=48
+    dataset_batch_size=96
     model_clap_loss=1.0
     average_top_k_layers=12
     model_add_conv=false
+    checkpoint_keep_interval_updates=-1
 elif [[ $train_mode == "clap" && ${config_option} -eq 1 ]]; then
     echo "Config ${train_mode} ${config_option}"
     task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
@@ -245,6 +326,199 @@ elif [[ $train_mode == "clap" && ${config_option} -eq 9 ]]; then
     average_top_k_layers=12
     model_clap_loss_type="mse"
     checkpoint_keep_interval_updates=-1
+elif [[ $train_mode == "clap" && ${config_option} -eq 10 ]]; then
+    echo "Config ${train_mode} ${config_option}"
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_load_clap_emb=true
+    task_load_source_file=true
+    task_load_mel_file=false
+    model_proj_type=2
+    model_clone_batch=4
+    dataset_batch_size=96
+    model_clap_loss=1.0
+    model_add_bottleneck=false
+    average_top_k_layers=12
+    model_add_conv=false
+    model_depth=12 # 
+    config_name=pretraining_AS2M_large
+elif [[ $train_mode == "dasheng" && ${config_option} -eq 0 ]]; then
+    # 这是用SFT后的MAE抽出来的表征 WuW
+    echo "Config ${train_mode} ${config_option}"
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_dasheng
+    task_load_clap_emb=true
+    task_load_source_file=true
+    task_load_mel_file=false
+    model_proj_type=4
+    model_clone_batch=4
+    dataset_batch_size=96 # original 48 oom on 4090 24G change distributed_world_size
+    model_clap_loss=1.0
+    model_add_bottleneck=false
+    average_top_k_layers=12 # modify with model depth
+    model_add_conv=false
+    model_depth=12 # 
+elif [[ $train_mode == "beats" && ${config_option} -eq 0 ]]; then
+    # 这是用SFT后的MAE抽出来的表征 WuW
+    echo "Config ${train_mode} ${config_option}"
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_beats
+    task_load_clap_emb=true
+    task_load_source_file=true
+    task_load_mel_file=false
+    model_proj_type=4
+    model_clone_batch=4
+    dataset_batch_size=96 # original 48 oom on 4090 24G change distributed_world_size
+    model_clap_loss=1.0
+    model_add_bottleneck=false
+    average_top_k_layers=12 # modify with model depth
+    model_add_conv=false
+    model_depth=12 # 
+elif [[ $train_mode == "beats" && ${config_option} -eq 1 ]]; then
+    # 这是用SFT后的MAE抽出来的表征 WuW
+    echo "Config ${train_mode} ${config_option}"
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_beats_pretrain
+    task_load_clap_emb=true
+    task_load_source_file=true
+    task_load_mel_file=false
+    model_proj_type=4
+    model_clone_batch=4
+    dataset_batch_size=96 # original 48 oom on 4090 24G change distributed_world_size
+    model_clap_loss=1.0
+    model_add_bottleneck=false
+    average_top_k_layers=12 # modify with model depth
+    model_add_conv=false
+    model_depth=12 # 
+elif [[ $train_mode == "audio_mae" && ${config_option} -eq 0 ]]; then
+    # 这是用SFT后的MAE抽出来的表征 WuW
+    echo "Config ${train_mode} ${config_option}"
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_AUDIO_MAE
+    task_load_clap_emb=true
+    task_load_source_file=true
+    task_load_mel_file=false
+    model_proj_type=4
+    model_clone_batch=4
+    dataset_batch_size=96 # original 48 oom on 4090 24G change distributed_world_size
+    model_clap_loss=1.0
+    model_add_bottleneck=false
+    average_top_k_layers=12 # modify with model depth
+    model_add_conv=false
+    model_depth=12 # 
+elif [[ $train_mode == "audio_mae" && ${config_option} -eq 1 ]]; then
+    echo "Config ${train_mode} ${config_option}"
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_AUDIO_MAE_pretrain
+    task_load_clap_emb=true
+    task_load_source_file=true
+    task_load_mel_file=false
+    model_proj_type=4
+    model_clone_batch=4
+    dataset_batch_size=96 # original 48 oom on 4090 24G change distributed_world_size
+    model_clap_loss=1.0
+    model_add_bottleneck=false
+    average_top_k_layers=12 # modify with model depth
+    model_add_conv=false
+    model_depth=12 # 
+elif [[ $train_mode == "audio_mae" && ${config_option} -eq 2 ]]; then
+    echo "Config ${train_mode} ${config_option}"
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_AUDIO_MAE_pretrain
+    task_load_clap_emb=true
+    task_load_source_file=true
+    task_load_mel_file=false
+    model_proj_type=4
+    model_clone_batch=4
+    dataset_batch_size=96 # original 48 oom on 4090 24G change distributed_world_size
+    model_clap_loss=0.001
+    model_add_bottleneck=false
+    average_top_k_layers=12 # modify with model depth
+    model_add_conv=false
+    model_depth=12 # 
+elif [[ $train_mode == "audio_mae" && ${config_option} -eq 3 ]]; then
+    echo "Config ${train_mode} ${config_option}"
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_AUDIO_MAE_pretrain
+    task_load_clap_emb=true
+    task_load_source_file=true
+    task_load_mel_file=false
+    model_proj_type=4
+    model_clone_batch=4
+    dataset_batch_size=96 # original 48 oom on 4090 24G change distributed_world_size
+    model_clap_loss=0.001
+    model_clap_loss_layer=8
+    model_add_bottleneck=false
+    average_top_k_layers=12 # modify with model depth
+    model_add_conv=false
+    model_depth=12 # 
+elif [[ $train_mode == "audio_mae" && ${config_option} -eq 4 ]]; then
+    echo "Config ${train_mode} ${config_option}"
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_AUDIO_MAE_pretrain
+    task_load_clap_emb=true
+    task_load_source_file=true
+    task_load_mel_file=false
+    model_proj_type=4
+    model_clone_batch=4
+    dataset_batch_size=96 # original 48 oom on 4090 24G change distributed_world_size
+    model_clap_loss=0.001
+    model_clap_loss_layer=6
+    model_add_bottleneck=false
+    average_top_k_layers=12 # modify with model depth
+    model_add_conv=false
+    model_depth=12 # 
+elif [[ $train_mode == "audio_mae" && ${config_option} -eq 5 ]]; then
+    echo "Config ${train_mode} ${config_option}"
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_AUDIO_MAE_pretrain
+    task_load_clap_emb=true
+    task_load_source_file=true
+    task_load_mel_file=false
+    model_proj_type=4
+    model_clone_batch=4
+    dataset_batch_size=96 # original 48 oom on 4090 24G change distributed_world_size
+    model_clap_loss=0.001
+    model_clap_loss_layer=4
+    model_add_bottleneck=false
+    average_top_k_layers=12 # modify with model depth
+    model_add_conv=false
+    model_depth=12 # 
+elif [[ $train_mode == "audio_mae" && ${config_option} -eq 6 ]]; then
+    echo "Config ${train_mode} ${config_option}"
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_AUDIO_MAE_pretrain
+    task_load_clap_emb=true
+    task_load_source_file=true
+    task_load_mel_file=false
+    model_proj_type=4
+    model_clone_batch=4
+    dataset_batch_size=96 # original 48 oom on 4090 24G change distributed_world_size
+    model_clap_loss=0.001
+    model_clap_loss_layer=10
+    model_add_bottleneck=false
+    average_top_k_layers=12 # modify with model depth
+    model_add_conv=false
+    model_depth=12 # 
+elif [[ $train_mode == "conv_audio_mae" && ${config_option} -eq 0 ]]; then
+    echo "Config ${train_mode} ${config_option}"
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_AUDIO_MAE
+    task_load_clap_emb=true
+    task_load_source_file=true
+    task_load_mel_file=false
+    model_proj_type=4
+    model_clone_batch=4
+    dataset_batch_size=96 # original 48 oom on 4090 24G change distributed_world_size
+    model_clap_loss=1.0
+    model_add_bottleneck=false
+    average_top_k_layers=11 # modify with model depth
+    model_add_conv=true
+    model_modalities_image_conv_option=0
+    model_depth=11 # 
+elif [[ $train_mode == "conv_audio_mae" && ${config_option} -eq 1 ]]; then
+    echo "Config ${train_mode} ${config_option}"
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_AUDIO_MAE_pretrain
+    task_load_clap_emb=true
+    task_load_source_file=true
+    task_load_mel_file=false
+    model_proj_type=4
+    model_clone_batch=4
+    dataset_batch_size=96 # original 48 oom on 4090 24G change distributed_world_size
+    model_clap_loss=0.001
+    model_add_bottleneck=false
+    average_top_k_layers=11 # modify with model depth
+    model_add_conv=true
+    model_modalities_image_conv_option=0
+    model_depth=11 # 
 elif [[ $train_mode == "ast" && ${config_option} -eq 0 ]]; then
     echo "Config ${train_mode} ${config_option}"
     task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_AST/mlp_head_in
@@ -276,6 +550,133 @@ elif [[ $train_mode == "ast" && ${config_option} -eq 3 ]]; then
     model_proj_type=6
     model_clone_batch=4
     dataset_batch_size=48
+elif [[ $train_mode == "ast" && ${config_option} -eq 4 ]]; then
+    echo "Config ${train_mode} ${config_option}"
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_AST_AS2M/mlp_head_in
+    task_load_clap_emb=true
+    task_load_source_file=true
+    task_load_mel_file=false
+    model_proj_type=4
+    model_clone_batch=4
+    dataset_batch_size=96 # original 48 oom on 4090 24G change distributed_world_size
+    model_clap_loss=0.001
+    model_add_bottleneck=false
+    average_top_k_layers=12 # modify with model depth
+    model_add_conv=false
+    model_depth=12 # 
+elif [[ $train_mode == "conv" && ${config_option} -eq 0 ]]; then
+    echo "Config ${train_mode} ${config_option}"
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_load_clap_emb=false
+    task_load_source_file=true
+    task_load_mel_file=false
+    model_proj_type=null
+    model_clone_batch=4
+    dataset_batch_size=96 # original 48 oom on 4090 24G change distributed_world_size
+    model_clap_loss=0
+    average_top_k_layers=11 # modify with model depth
+    model_add_conv=true
+    model_depth=11 # 
+    checkpoint_keep_interval_updates=-1 # default 1 
+    checkpoint_save_interval_updates=10000
+elif [[ $train_mode == "conv" && ${config_option} -eq 1 ]]; then
+    echo "Config ${train_mode} ${config_option}"
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_load_clap_emb=false
+    task_load_source_file=true
+    task_load_mel_file=false
+    model_proj_type=null
+    model_clone_batch=4
+    dataset_batch_size=96 # original 48 oom on 4090 24G change distributed_world_size
+    model_clap_loss=0
+    average_top_k_layers=12 # modify with model depth
+    model_add_conv=true
+    model_modalities_image_conv_option=1
+    model_depth=12 # 
+    checkpoint_keep_interval_updates=1 # default 1 
+    checkpoint_save_interval_updates=10000
+elif [[ $train_mode == "conv" && ${config_option} -eq 2 ]]; then
+    echo "Config ${train_mode} ${config_option}" # H100 80G
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_load_clap_emb=false
+    task_load_source_file=true
+    task_load_mel_file=false
+    model_proj_type=null
+    model_clone_batch=4
+    dataset_batch_size=24 # 12 for 4090 48G use about 75% mem, 24 maybe suitable for H100 80G
+    model_clap_loss=0
+    average_top_k_layers=12 # modify with model depth
+    model_add_conv=true
+    model_modalities_image_conv_option=2
+    model_modalities_image_patch_size=8
+    model_depth=12 # 
+    checkpoint_keep_interval_updates=1 # default 1 
+    checkpoint_save_interval_updates=10000
+elif [[ $train_mode == "conv" && ${config_option} -eq 3 ]]; then
+    echo "Config ${train_mode} ${config_option}"
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_load_clap_emb=false
+    task_load_source_file=true
+    task_load_mel_file=false
+    model_proj_type=null
+    model_clone_batch=4
+    dataset_batch_size=96 # original 48 oom on 4090 24G change distributed_world_size
+    model_clap_loss=0
+    average_top_k_layers=12 # modify with model depth
+    model_add_conv=true
+    model_modalities_image_conv_option=3
+    model_depth=12 # 
+    checkpoint_keep_interval_updates=1 # default 1 
+    checkpoint_save_interval_updates=10000
+elif [[ $train_mode == "conv" && ${config_option} -eq 4 ]]; then
+    echo "Config ${train_mode} ${config_option}"
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_load_clap_emb=false
+    task_load_source_file=true
+    task_load_mel_file=false
+    model_proj_type=null
+    model_clone_batch=4
+    dataset_batch_size=96 # original 48 oom on 4090 24G change distributed_world_size
+    model_clap_loss=0
+    average_top_k_layers=12 # modify with model depth
+    model_add_conv=true
+    model_modalities_image_conv_option=4
+    model_depth=12 # 
+    checkpoint_keep_interval_updates=1 # default 1 
+    checkpoint_save_interval_updates=10000
+elif [[ $train_mode == "conv" && ${config_option} -eq 5 ]]; then
+    echo "Config ${train_mode} ${config_option}"
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_load_clap_emb=false
+    task_load_source_file=true
+    task_load_mel_file=false
+    model_proj_type=null
+    model_clone_batch=4
+    dataset_batch_size=24 # original 48 oom on 4090 24G change distributed_world_size
+    model_clap_loss=0
+    average_top_k_layers=12 # modify with model depth
+    model_add_conv=true
+    model_modalities_image_conv_option=5
+    model_depth=12 # 
+    checkpoint_keep_interval_updates=1 # default 1 
+    checkpoint_save_interval_updates=10000
+elif [[ $train_mode == "conv" && ${config_option} -eq 6 ]]; then
+    echo "Config ${train_mode} ${config_option}"
+    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_load_clap_emb=false
+    task_load_source_file=true
+    task_load_mel_file=false
+    model_proj_type=null
+    model_clone_batch=4
+    dataset_batch_size=96 # original 48 oom on 4090 24G change distributed_world_size
+    model_clap_loss=0
+    average_top_k_layers=12 # modify with model depth
+    model_add_conv=true
+    model_modalities_image_conv_option=6
+    model_modalities_image_patch_size=32
+    model_depth=12 # 
+    checkpoint_keep_interval_updates=1 # default 1 
+    checkpoint_save_interval_updates=10000
 elif [[ $train_mode == "conv_clap" && ${config_option} -eq 0 ]]; then
     echo "Config ${train_mode} ${config_option}"
     task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
@@ -284,13 +685,14 @@ elif [[ $train_mode == "conv_clap" && ${config_option} -eq 0 ]]; then
     task_load_mel_file=false
     model_proj_type=2
     model_clone_batch=4
-    dataset_batch_size=64 # original 48 oom on 4090 24G change distributed_world_size
+    dataset_batch_size=96 # original 48 oom on 4090 24G change distributed_world_size
     model_clap_loss=1.0
     average_top_k_layers=11 # modify with model depth
     model_add_conv=true
     model_depth=11 # 
     checkpoint_keep_interval_updates=-1 # default 1 
     checkpoint_save_interval_updates=10000
+    optimization_max_update=400000
 elif [[ $train_mode == "conv_clap" && ${config_option} -eq 1 ]]; then
     echo "Config ${train_mode} ${config_option}"
     task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
@@ -301,29 +703,29 @@ elif [[ $train_mode == "conv_clap" && ${config_option} -eq 1 ]]; then
     model_clone_batch=4
     dataset_batch_size=96 # original 48 oom on 4090 24G change distributed_world_size
     model_clap_loss=1.0
-    average_top_k_layers=12 # modify with model depth
+    average_top_k_layers=11 # modify with model depth
     model_add_conv=true
-    model_modalities_image_conv_option=1
-    model_depth=12 # 
-    checkpoint_keep_interval_updates=1 # default 1 
+    model_modalities_image_mask_prob=0.85
+    model_depth=11 # 
+    checkpoint_keep_interval_updates=-1 # default 1 
     checkpoint_save_interval_updates=10000
+    optimization_max_update=800000
 elif [[ $train_mode == "conv_clap" && ${config_option} -eq 2 ]]; then
-    echo "Config ${train_mode} ${config_option}" # H100 80G
+    echo "Config ${train_mode} ${config_option}"
     task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
     task_load_clap_emb=true
     task_load_source_file=true
     task_load_mel_file=false
     model_proj_type=2
     model_clone_batch=4
-    dataset_batch_size=12 # 12 for 4090 48G use about 75% mem, 24 maybe suitable for H100 80G
+    dataset_batch_size=48 # original 48 oom on 4090 24G change distributed_world_size
     model_clap_loss=1.0
-    average_top_k_layers=12 # modify with model depth
+    average_top_k_layers=11 # modify with model depth
     model_add_conv=true
-    model_modalities_image_conv_option=2
-    model_modalities_image_patch_size=8
-    model_depth=12 # 
-    checkpoint_keep_interval_updates=1 # default 1 
+    model_depth=11 # 
+    checkpoint_keep_interval_updates=-1 # default 1 
     checkpoint_save_interval_updates=10000
+    optimization_max_update=800000
 elif [[ $train_mode == "conv_clap" && ${config_option} -eq 3 ]]; then
     echo "Config ${train_mode} ${config_option}"
     task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
@@ -334,12 +736,14 @@ elif [[ $train_mode == "conv_clap" && ${config_option} -eq 3 ]]; then
     model_clone_batch=4
     dataset_batch_size=96 # original 48 oom on 4090 24G change distributed_world_size
     model_clap_loss=1.0
-    average_top_k_layers=12 # modify with model depth
+    model_add_bottleneck=true
+    model_bottleneck_dim=128
+    average_top_k_layers=11 # modify with model depth
     model_add_conv=true
-    model_modalities_image_conv_option=3
-    model_depth=12 # 
-    checkpoint_keep_interval_updates=1 # default 1 
-    checkpoint_save_interval_updates=10000
+    model_depth=11 # 
+    checkpoint_keep_interval_updates=-1 # default 1 
+    checkpoint_save_interval_updates=100000
+    optimization_max_update=400000
 elif [[ $train_mode == "conv_clap" && ${config_option} -eq 4 ]]; then
     echo "Config ${train_mode} ${config_option}"
     task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
@@ -350,12 +754,14 @@ elif [[ $train_mode == "conv_clap" && ${config_option} -eq 4 ]]; then
     model_clone_batch=4
     dataset_batch_size=96 # original 48 oom on 4090 24G change distributed_world_size
     model_clap_loss=1.0
-    average_top_k_layers=12 # modify with model depth
+    model_add_bottleneck=true
+    model_bottleneck_dim=64
+    average_top_k_layers=11 # modify with model depth
     model_add_conv=true
-    model_modalities_image_conv_option=4
-    model_depth=12 # 
-    checkpoint_keep_interval_updates=1 # default 1 
-    checkpoint_save_interval_updates=10000
+    model_depth=11 # 
+    checkpoint_keep_interval_updates=-1 # default 1 
+    checkpoint_save_interval_updates=100000
+    optimization_max_update=400000
 elif [[ $train_mode == "conv_clap" && ${config_option} -eq 5 ]]; then
     echo "Config ${train_mode} ${config_option}"
     task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
@@ -364,14 +770,16 @@ elif [[ $train_mode == "conv_clap" && ${config_option} -eq 5 ]]; then
     task_load_mel_file=false
     model_proj_type=2
     model_clone_batch=4
-    dataset_batch_size=48 # original 48 oom on 4090 24G change distributed_world_size
+    dataset_batch_size=96 # original 48 oom on 4090 24G change distributed_world_size
     model_clap_loss=1.0
-    average_top_k_layers=12 # modify with model depth
+    model_add_bottleneck=true
+    model_bottleneck_dim=32
+    average_top_k_layers=11 # modify with model depth
     model_add_conv=true
-    model_modalities_image_conv_option=5
-    model_depth=12 # 
-    checkpoint_keep_interval_updates=1 # default 1 
-    checkpoint_save_interval_updates=10000
+    model_depth=11 # 
+    checkpoint_keep_interval_updates=-1 # default 1 
+    checkpoint_save_interval_updates=100000
+    optimization_max_update=400000
 elif [[ $train_mode == "conv_clap" && ${config_option} -eq 6 ]]; then
     echo "Config ${train_mode} ${config_option}"
     task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
@@ -380,24 +788,25 @@ elif [[ $train_mode == "conv_clap" && ${config_option} -eq 6 ]]; then
     task_load_mel_file=false
     model_proj_type=2
     model_clone_batch=4
-    dataset_batch_size=48 # original 48 oom on 4090 24G change distributed_world_size
+    dataset_batch_size=96 # original 48 oom on 4090 24G change distributed_world_size
     model_clap_loss=1.0
-    average_top_k_layers=12 # modify with model depth
+    model_add_bottleneck=true
+    model_bottleneck_dim=16
+    average_top_k_layers=11 # modify with model depth
     model_add_conv=true
-    model_modalities_image_conv_option=6
-    model_modalities_image_patch_size=32
-    model_depth=12 # 
-    checkpoint_keep_interval_updates=1 # default 1 
-    checkpoint_save_interval_updates=10000
+    model_depth=11 # 
+    checkpoint_keep_interval_updates=-1 # default 1 
+    checkpoint_save_interval_updates=100000
+    optimization_max_update=400000
 fi
 
 python fairseq_cli/hydra_train.py -m \
     --config-dir ./EAT/config \
-    --config-name pretraining_AS2M \
+    --config-name ${config_name} \
     common.user_dir=./EAT \
     checkpoint.save_dir=${checkpoint_save_dir} \
     checkpoint.restore_file=${checkpoint_restore_file} \
-    distributed_training.distributed_world_size=${1:-4} \
+    distributed_training.distributed_world_size=${1:-2} \
     dataset.num_workers=24 \
     dataset.data_buffer_size=48 \
     dataset.batch_size=${dataset_batch_size} \
@@ -415,8 +824,12 @@ python fairseq_cli/hydra_train.py -m \
     +model.clap_loss_layer=${model_clap_loss_layer} \
     +model.dispersive_loss=${model_dispersive_loss} \
     +model.dispersive_loss_layer=${model_dispersive_loss_layer} \
+    +model.add_bottleneck=${model_add_bottleneck} \
+    +model.bottleneck_dim=${model_bottleneck_dim} \
     model.depth=${model_depth} \
     +model.modalities.image.conv_option=${model_modalities_image_conv_option} \
     +model.modalities.image.patch_size=${model_modalities_image_patch_size} \
+    model.modalities.image.mask_prob=${model_modalities_image_mask_prob} \
     checkpoint.keep_interval_updates=${checkpoint_keep_interval_updates} \
-    checkpoint.save_interval_updates=${checkpoint_save_interval_updates}
+    checkpoint.save_interval_updates=${checkpoint_save_interval_updates} \
+    optimization.max_update=${optimization_max_update}

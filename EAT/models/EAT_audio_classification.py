@@ -68,6 +68,8 @@ class MaeImageClassificationConfig(FairseqDataclass):
 
     remove_alibi: bool = False
 
+    add_bottleneck: Optional[bool] = None
+
     # regularization overwrites
     encoder_dropout: float = 0
     post_mlp_drop: float = 0
@@ -150,6 +152,9 @@ class MaeImageClassificationModel(BaseFairseqModel):
             pretrained_args.task.data = cfg.data
         elif "image" in pretrained_args.task:
             pretrained_args.task.image.data = cfg.data
+        
+        if "add_bottleneck" in pretrained_args.model and cfg.add_bottleneck is not None:
+            pretrained_args.model["add_bottleneck"] = cfg.add_bottleneck
 
         if "modalities" in pretrained_args.model:
             prenet_blocks = pretrained_args.model["modalities"]["image"]["prenet_depth"]
@@ -246,7 +251,7 @@ class MaeImageClassificationModel(BaseFairseqModel):
             #     state['model']['_ema']["modality_encoders.IMAGE.fixed_positional_encoder.positions"] = pos_embed
                 
 
-            model.load_state_dict(state["model"], strict=True) 
+            model.load_state_dict(state["model"], strict=False) 
 
         if self.d2v_multi:
             model.remove_pretraining_modules(modality="image")

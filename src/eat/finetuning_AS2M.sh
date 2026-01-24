@@ -1,7 +1,11 @@
 #!/bin/bash
-model_model_path=/opt/gpfs/home/chushu/exp/eat/pre_4_AS2M/clap_0_2025-08-27_09-23-59/checkpoint_last.pt
+model_model_path=/inspire/hdd/global_user/zhouchushu-253108120180/hubs/models/huggingface/zhouchushu/tmp_model_store/pre_4_AS2M/default_0_2025-09-20_15-33-21/checkpoint_last.pt
 
-SAVE_DIR_ROOT=/opt/gpfs/home/chushu/exp/eat/sft_4_AS2M_w_clap_CLS
+model_linear_layer=${1:-0}
+model_add_bottleneck=${2:-false}
+echo "model_linear_layer: ${model_linear_layer}"
+SAVE_DIR_ROOT=/inspire/hdd/global_user/zhouchushu-253108120180/exp/eat/sft_4_AS2M/default_0_41_400000_lw1_llayer0_layer12_llayer${model_linear_layer}_${model_add_bottleneck}
+
 # 从 model_model_path 提取父目录名与文件名
 parent_dir="$(basename -- "$(dirname -- "$model_model_path")")"
 ckpt_name="$(basename -- "$model_model_path")"
@@ -12,7 +16,7 @@ checkpoint_restore_file="${checkpoint_save_dir%/}/${ckpt_name}"
 echo "checkpoint_save_dir: ${checkpoint_save_dir}"
 echo "checkpoint_restore_file: ${checkpoint_restore_file}"
 
-device=0
+device=3
 
 CUDA_VISIBLE_DEVICES=${device} python fairseq_cli/hydra_train.py -m \
     --config-dir EAT/config \
@@ -24,14 +28,15 @@ CUDA_VISIBLE_DEVICES=${device} python fairseq_cli/hydra_train.py -m \
     dataset.batch_size=96 \
     dataset.num_workers=24 \
     dataset.data_buffer_size=96 \
-    task.data=/opt/gpfs/home/chushu/data/audioset/setting/SFT_AS2M \
+    task.data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/SFT_AS2M \
     task.h5_format=false \
     task.AS2M_finetune=true \
-    task.weights_file=/opt/gpfs/home/chushu/data/audioset/setting/SFT_AS2M/weights.csv \
+    task.weights_file=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/SFT_AS2M/weights.csv \
     task.load_clap_emb=false \
     task.target_length=1024 \
     task.roll_aug=true \
     model.model_path=${model_model_path} \
+    +model.add_bottleneck=${model_add_bottleneck} \
     model.num_classes=527 \
     model.mixup=0.8 \
     model.mask_ratio=0.2 \

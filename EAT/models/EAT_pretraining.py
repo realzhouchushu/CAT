@@ -142,6 +142,9 @@ class Data2VecMultiConfig(FairseqDataclass):
 
     skip_ema: bool = False
 
+    add_bottleneck: bool = False
+    bottleneck_dim: int = 128
+
     # d2v_loss is the frame-level loss while cls_loss is the utterance-level loss
     cls_loss: float = 0
     clap_loss: float = 0
@@ -235,6 +238,12 @@ class Data2VecMultiModel(BaseFairseqModel):
                 cfg.add_conv
             )
             self.modality_encoders[mod.name] = enc
+        
+        if cfg.add_bottleneck:
+            self.bottleneck = nn.Linear(cfg.embed_dim, cfg.bottleneck_dim)
+            self.unbottleneck = nn.Linear(cfg.bottleneck_dim, cfg.embed_dim)
+            self.bottleneck.apply(self._init_weights)
+            self.unbottleneck.apply(self._init_weights)
 
         self.ema = None
 
@@ -508,6 +517,10 @@ class Data2VecMultiModel(BaseFairseqModel):
 
         if self.dropout_input is not None:
             x = self.dropout_input(x)
+        
+        if self.cfg.add_bottleneck:
+            x = self.bottleneck(x)
+            x = self.unbottleneck(x)
 
         # standard Transformer (for student encoder)
         layer_results = []
