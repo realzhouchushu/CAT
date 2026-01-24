@@ -1,0 +1,20 @@
+{
+  "center": true,
+  "f_max": 8000,
+  "f_min": 0,
+  "feature_extractor_type": "DashengFeatureExtractor",
+  "auto_map": {
+    "AutoFeatureExtractor": "feature_extraction_dasheng.DashengFeatureExtractor"
+  },
+  "feature_size": 64,
+  "hop_size": 160,
+  "model_input_names": [
+    "input_values"
+  ],
+  "n_fft": 512,
+  "padding_side": "right",
+  "padding_value": 0.0,
+  "return_attention_mask": false,
+  "sampling_rate": 16000,
+  "win_size": 512
+}

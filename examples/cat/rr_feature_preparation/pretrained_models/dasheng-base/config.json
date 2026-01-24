@@ -1,0 +1,28 @@
+{
+  "architectures": [
+    "DashengModel"
+  ],
+  "auto_map": {
+    "AutoConfig": "configuration_dasheng.DashengConfig",
+    "AutoModel": "modeling_dasheng.DashengModel"
+  },
+  "encoder_kwargs": {
+    "depth": 12,
+    "embed_dim": 768,
+    "num_heads": 12,
+    "patch_size": [
+      64,
+      4
+    ],
+    "patch_stride": [
+      64,
+      4
+    ],
+    "target_length": 1008
+  },
+  "loss": "BCELoss",
+  "model_type": "dasheng",
+  "name": "dasheng-base",
+  "torch_dtype": "float32",
+  "transformers_version": "4.35.2"
+}
