@@ -1,10 +1,10 @@
 #!/bin/bash
-model_model_path=/inspire/hdd/global_user/zhouchushu-253108120180/hubs/models/huggingface/zhouchushu/tmp_model_store/pre_4_AS2M/default_0_2025-09-20_15-33-21/checkpoint_last.pt
+model_model_path=~/hubs/models/huggingface/zhouchushu/tmp_model_store/pre_4_AS2M/default_0_2025-09-20_15-33-21/checkpoint_last.pt
 
 model_linear_layer=${1:-0}
 model_add_bottleneck=${2:-false}
 echo "model_linear_layer: ${model_linear_layer}"
-SAVE_DIR_ROOT=/inspire/hdd/global_user/zhouchushu-253108120180/exp/cat/sft_4_AS20K/
+SAVE_DIR_ROOT=~/exp/cat/sft_4_AS20K/
 
 parent_dir="$(basename -- "$(dirname -- "$model_model_path")")"
 ckpt_name="$(basename -- "$model_model_path")"
@@ -26,7 +26,7 @@ CUDA_VISIBLE_DEVICES=${device} python fairseq_cli/hydra_train.py -m \
     dataset.batch_size=48 \
     dataset.num_workers=24 \
     dataset.data_buffer_size=48 \
-    task.data=/inspire/hdd/global_user/zhouchushu-253108120180/codes/2506/CAT/examples/cat/data_manifest/SFT_AS20k \
+    task.data=~/codes/2506/CAT/examples/cat/data_manifest/SFT_AS20k \
     task.target_length=1024 \
     task.roll_aug=true \
     task.load_clap_emb=false \

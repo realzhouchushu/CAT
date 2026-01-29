@@ -3,8 +3,8 @@ import json
 import argparse
 from pathlib import Path
 
-OLD_PREFIX = "/inspire/hdd/global_user/zhouchushu-253108120180/raw_datas/audioset/wav_16k"
-NEW_PREFIX = "/inspire/dataset/audioset/v2/wav_16k"
+OLD_PREFIX = "~/raw_datas/audioset/wav_16k"
+NEW_PREFIX = "/inspire/dataset/audioset/v3"
 
 
 def rewrite_wav_path(obj, old_prefix, new_prefix):

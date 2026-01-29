@@ -1,12 +1,12 @@
 [
   {
-    "wav_path": "/inspire/hdd/global_user/zhouchushu-253108120180/raw_datas/audioset/wav_16k/unbal_train/Y95SYCuLHsNc.wav",
-    "clap_path": "/inspire/hdd/global_user/zhouchushu-253108120180/raw_datas/features/audioset/clap_embs/unbalanced_train_segments/unbalanced_train_segments_part10/Y95SYCuLHsNc.npy",
+    "wav_path": "~/raw_datas/audioset/wav_16k/unbal_train/Y95SYCuLHsNc.wav",
+    "clap_path": "~/raw_datas/features/audioset/clap_embs/unbalanced_train_segments/unbalanced_train_segments_part10/Y95SYCuLHsNc.npy",
     "num_frame": 160000
   },
   {
-    "wav_path": "/inspire/hdd/global_user/zhouchushu-253108120180/raw_datas/audioset/wav_16k/unbal_train/YiQ8_62HMBpg.wav",
-    "clap_path": "/inspire/hdd/global_user/zhouchushu-253108120180/raw_datas/features/audioset/clap_embs/unbalanced_train_segments/unbalanced_train_segments_part32/YiQ8_62HMBpg.npy",
+    "wav_path": "~/raw_datas/audioset/wav_16k/unbal_train/YiQ8_62HMBpg.wav",
+    "clap_path": "~/raw_datas/features/audioset/clap_embs/unbalanced_train_segments/unbalanced_train_segments_part32/YiQ8_62HMBpg.npy",
     "num_frame": 160000
   }
 ]

@@ -97,10 +97,6 @@ def compute_wer_with_multiref(eval_jsonl, hyp_file):
             results[metric_key] = score_pct
             print(f"{metric_name:20s}: {score_pct:6.2f}%")
     
-    print("="*70)
-    print("\nOfficial SLAM-AAC results (for comparison):")
-    print("  MT: 19.7%  |  CD: 51.5%  |  SC: 14.8%  |  SD: 33.2%  |  SF: 33.0%  |  FS: 54.0%")
-    print("="*70)
     
     print("\nFull corpus scores (raw):")
     print(corpus_scores)
@@ -108,7 +104,7 @@ def compute_wer_with_multiref(eval_jsonl, hyp_file):
 if __name__ == '__main__':
     """
     example:
-    python /inspire/hdd/global_user/zhouchushu-253108120180/codes/2506/EAT/SLAM-LLM/src/slam_llm/utils/compute_aac_metrics_multi_ref.py /inspire/hdd/global_user/zhouchushu-253108120180/data/aac-datasets-raw-meta/clotho/evaluation.jsonl /inspire/hdd/global_user/zhouchushu-253108120180/exp/aac/eat_offical_pretrain/aac_epoch_1_step_4500/decode_beam2-8_pred
+    python ~/codes/2506/EAT/SLAM-LLM/src/slam_llm/utils/compute_aac_metrics_multi_ref.py ~/data/aac-datasets-raw-meta/clotho/evaluation.jsonl ~/exp/aac/eat_offical_pretrain/aac_epoch_1_step_4500/decode_beam2-8_pred
     """
     if len(sys.argv) != 3:
         print("usage: python compute_aac_metrics_multi_ref.py <evaluation.jsonl> <hyp_file>")

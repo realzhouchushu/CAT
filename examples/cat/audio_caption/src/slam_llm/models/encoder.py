@@ -46,7 +46,7 @@ class PatchEmbed_new(nn.Module):
 class ASTEncoder:
     @classmethod
     def load(cls, model_config):
-        os.environ['TORCH_HOME'] = '/inspire/hdd/global_user/zhouchushu-253108120180/hubs/models/torchhome'
+        os.environ['TORCH_HOME'] = '~/hubs/models/torchhome'
         from .ast.src.models import ASTModel
         ast_mdl = ASTModel(label_dim=527, fstride=10, tstride=10, input_fdim=128,
                                   input_tdim=1024, imagenet_pretrain=False,

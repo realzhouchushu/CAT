@@ -5,7 +5,7 @@ from pathlib import Path
 
 # --- 配置 ---
 # 请根据您的环境设置此绝对路径
-ROOT_DIR = Path("/inspire/hdd/global_user/zhouchushu-253108120180/raw_datas/aac-datasets/WavCaps")
+ROOT_DIR = Path("~/raw_datas/aac-datasets/WavCaps")
 ZIP_DIR = ROOT_DIR / "Zip_files"
 JSON_DIR = ROOT_DIR / "json_files"
 AUDIO_DIR = ROOT_DIR / "Audio"

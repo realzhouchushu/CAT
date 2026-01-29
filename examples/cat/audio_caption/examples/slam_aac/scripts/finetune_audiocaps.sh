@@ -5,27 +5,27 @@ export TOKENIZERS_PARALLELISM=false
 export OMP_NUM_THREADS=7
 
 
-run_dir=/inspire/hdd/global_user/zhouchushu-253108120180/codes/2506/EAT/SLAM-LLM
+run_dir=~/codes/2506/EAT/SLAM-LLM
 cd $run_dir
 code_dir=examples/slam_aac
 
-encoder_fairseq_dir=/inspire/hdd/global_user/zhouchushu-253108120180/codes/2506/EAT/EAT            # path to the fairseq directory of the encoder model
+encoder_fairseq_dir=~/codes/2506/EAT/EAT            # path to the fairseq directory of the encoder model
 
-audio_encoder_path=/inspire/hdd/global_user/zhouchushu-253108120180/hubs/models/huggingface/zhouchushu/tmp_model_store/sft_4_AS2M_w_clap_CLS/clap_0_2025-08-27_09-23-59/checkpoint_best.pt
-llm_path=/inspire/hdd/global_user/zhouchushu-253108120180/hubs/models/huggingface/lmsys/vicuna-7b-v1.5
+audio_encoder_path=~/hubs/models/huggingface/zhouchushu/tmp_model_store/sft_4_AS2M_w_clap_CLS/clap_0_2025-08-27_09-23-59/checkpoint_best.pt
+llm_path=~/hubs/models/huggingface/lmsys/vicuna-7b-v1.5
 
 seed=42
 btz=4
 lr=8e-6
 encoder_projector_ds_rate=5
 
-train_jsonl_path=/inspire/hdd/global_user/zhouchushu-253108120180/data/acc-datasets/clotho/development.jsonl
-val_jsonl_path=/inspire/hdd/global_user/zhouchushu-253108120180/data/acc-datasets/audiocaps/val.jsonl
+train_jsonl_path=~/data/acc-datasets/clotho/development.jsonl
+val_jsonl_path=~/data/acc-datasets/audiocaps/val.jsonl
 
 exp_name=slam-aac_AudioCaps_fine-tune-eat-clap-AS2M
-output_dir=/inspire/hdd/global_user/zhouchushu-253108120180/exp/aac/eat_clap/${exp_name}
+output_dir=~/exp/aac/eat_clap/${exp_name}
 
-ckpt_path=/inspire/hdd/global_user/zhouchushu-253108120180/exp/aac/eat_clap/slam-aac_pre-train-eat-clap-AS2M/aac_epoch_2_step_2382/model.pt   # path to load the pre-trained model
+ckpt_path=~/exp/aac/eat_clap/slam-aac_pre-train-eat-clap-AS2M/aac_epoch_2_step_2382/model.pt   # path to load the pre-trained model
 peft_ckpt=null
 # ↑ This parameter is required for loading the old version of the SLAM-LLM model. Our released checkpoint uses the old version. In the new version, this parameter is no longer needed.
 

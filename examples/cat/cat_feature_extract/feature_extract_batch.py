@@ -21,7 +21,7 @@ def load_model(args):
         import fairseq
         fairseq.utils.import_user_module(args.model_dir)
 
-        eat_root = "/inspire/hdd/global_user/zhouchushu-253108120180/codes/2506/EAT"
+        eat_root = "~/codes/2506/EAT"
         if eat_root not in sys.path:
             sys.path.append(eat_root)
 
@@ -170,16 +170,16 @@ def main():
 
     # ===== 默认参数保留 =====
     parser.add_argument('--audio_path',
-                        default='/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/16k_wav_tsv/unbal_train.tsv',
+                        default='~/data/audioset/16k_wav_tsv/unbal_train.tsv',
                         type=str)
     parser.add_argument('--output_path',
-                        default='/inspire/hdd/global_user/zhouchushu-253108120180/data/features/eat_features',
+                        default='~/data/features/eat_features',
                         type=str)
     parser.add_argument('--model_dir',
-                        default='/inspire/hdd/global_user/zhouchushu-253108120180/codes/2506/EAT/EAT',
+                        default='~/codes/2506/EAT/EAT',
                         type=str)
     parser.add_argument('--checkpoint_dir',
-                        default='/inspire/hdd/global_user/zhouchushu-253108120180/exp/eat/sft_4_AS2M/default_lw1_llayer0_layer12_llayer0/default_0_2025-09-20_15-33-21/checkpoint_best.pt',
+                        default='~/exp/eat/sft_4_AS2M/default_lw1_llayer0_layer12_llayer0/default_0_2025-09-20_15-33-21/checkpoint_best.pt',
                         type=str)
     parser.add_argument('--framework', default='fairseq', choices=['fairseq', 'huggingface'])
     parser.add_argument('--mode', default='finetune', choices=['pretrain', 'finetune'])

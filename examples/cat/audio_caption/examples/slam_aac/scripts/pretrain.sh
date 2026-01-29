@@ -1,44 +1,30 @@
 #!/bin/bash
-export PYTHONPATH=/inspire/hdd/global_user/zhouchushu-253108120180/codes/2506/EAT:$PYTHONPATH
+export PYTHONPATH=~/codes/2506/EAT:$PYTHONPATH
 export CUDA_VISIBLE_DEVICES=0
 export TOKENIZERS_PARALLELISM=false
 export OMP_NUM_THREADS=4
 
 
-run_dir=/inspire/hdd/global_user/zhouchushu-253108120180/codes/2506/EAT/SLAM-LLM
+run_dir=~/codes/2506/EAT/SLAM-LLM
 cd $run_dir
 code_dir=examples/slam_aac
 
-encoder_fairseq_dir=/inspire/hdd/global_user/zhouchushu-253108120180/codes/2506/EAT/EAT            # path to the fairseq directory of the encoder model
+encoder_fairseq_dir=~/codes/2506/EAT/EAT            # path to the fairseq directory of the encoder model
 
-# audio_encoder_path=/inspire/hdd/global_user/zhouchushu-253108120180/hubs/models/huggingface/zhouchushu/tmp_model_store/sft_4_AS2M_w_clap_CLS/clap_0_2025-08-27_09-23-59/checkpoint_best.pt
-# audio_encoder_path=/inspire/hdd/global_user/zhouchushu-253108120180/exp/eat/sft_4_AS2M/default_lw1_llayer0_layer12_llayer0/default_0_2025-09-20_15-33-21/checkpoint_best.pt
-# audio_encoder_path=/inspire/hdd/global_user/zhouchushu-253108120180/exp/eat/sft_4_AS2M/default_layer12_llayer0/default_0_2025-09-20_15-33-21/checkpoint_best.pt
-# audio_encoder_path=/inspire/hdd/global_user/zhouchushu-253108120180/exp/eat/sft_4_AS2M/conv_422_lw1_layer11_llayer0/conv_clap_0_2025-09-23_14-49-45/checkpoint_best.pt
-# audio_encoder_path=/inspire/hdd/global_user/zhouchushu-253108120180/exp/eat/sft_4_AS2M/conv_clap1_41_400000_lw1_llayer0_layer12_llayer0/conv_clap_1/checkpoint_best.pt
-# audio_encoder_path=/inspire/hdd/global_user/zhouchushu-253108120180/exp/aac/official/encoder/EAT-base_epoch30_ft.pt
-# encoder_name="ast"
 encoder_name="ast"
-# encoder_name="eat"
-# audio_encoder_path=/inspire/hdd/global_user/zhouchushu-253108120180/codes/2506/EAT/feature_extract/pretrained_models/BEATs_iter3_plus_AS2M_finetuned_on_AS2M_cpt2.pt
-# audio_encoder_path=/inspire/hdd/global_user/zhouchushu-253108120180/exp/eat/sft_4_AS2M/default_layer12_llayer0/default_0_2025-09-20_15-33-21/checkpoint_best.pt
-# audio_encoder_path=/inspire/hdd/global_user/zhouchushu-253108120180/hubs/models/others/audio-mae/finetuned.pth
-audio_encoder_path=/inspire/hdd/global_user/zhouchushu-253108120180/hubs/models/others/ast/audioset_10_10_0.4593.pth
-llm_path=/inspire/hdd/global_user/zhouchushu-253108120180/hubs/models/huggingface/lmsys/vicuna-7b-v1.5
+audio_encoder_path=~/hubs/models/others/ast/audioset_10_10_0.4593.pth
+llm_path=~/hubs/models/huggingface/lmsys/vicuna-7b-v1.5
 
 seed=666
 btz=16
 lr=1e-4
 encoder_projector_ds_rate=5
 
-train_jsonl_path=/inspire/hdd/global_user/zhouchushu-253108120180/data/acc-datasets/pretrain/merged_data_v9.jsonl
-val_jsonl_path=/inspire/hdd/global_user/zhouchushu-253108120180/data/acc-datasets/clotho/validation.jsonl
+train_jsonl_path=~/data/acc-datasets/pretrain/merged_data_v9.jsonl
+val_jsonl_path=~/data/acc-datasets/clotho/validation.jsonl
 
 exp_name=slam-aac_pre-train-ast-AS2M
-# output_dir=/inspire/hdd/global_user/zhouchushu-253108120180/exp/aac/eat_clap/${exp_name}
-# output_dir=/inspire/hdd/global_user/zhouchushu-253108120180/exp/aac/eat_official_encoder/${exp_name}
-output_dir=/inspire/hdd/global_user/zhouchushu-253108120180/exp/aac/ast/${exp_name}
-# output_dir=/inspire/hdd/global_user/zhouchushu-253108120180/exp/aac/conv_clap_1/${exp_name}
+output_dir=~/exp/aac/ast/${exp_name}
 
 hydra_args="
 hydra.job.chdir=False \
@@ -110,5 +96,3 @@ else
         ++train_config.use_fp16=true \
         $hydra_args
 fi
-
-# bash /data/wenxi.chen/SLAM-LLM/examples/slam_aac/scripts/pretrain.sh

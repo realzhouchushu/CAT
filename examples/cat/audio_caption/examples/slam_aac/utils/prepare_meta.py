@@ -8,17 +8,17 @@ from typing import Dict, Optional, List
 
 # 1. 本地数据集根目录 (用于构建音频索引)
 DATASET_ROOTS: Dict[str, Path] = {
-    "AudioCaps": Path("/inspire/hdd/global_user/zhouchushu-253108120180/raw_datas/audioset/wav_16k"),
-    "Clotho": Path("/inspire/hdd/global_user/zhouchushu-253108120180/raw_datas/aac-datasets/CLOTHO_v2.1"),
-    "MACS": Path("/inspire/hdd/global_user/zhouchushu-253108120180/raw_datas/aac-datasets/MACS"),
-    "WavCaps": Path("/inspire/hdd/global_user/zhouchushu-253108120180/raw_datas/aac-datasets/WavCaps"),
+    "AudioCaps": Path("~/raw_datas/audioset/wav_16k"),
+    "Clotho": Path("~/raw_datas/aac-datasets/CLOTHO_v2.1"),
+    "MACS": Path("~/raw_datas/aac-datasets/MACS"),
+    "WavCaps": Path("~/raw_datas/aac-datasets/WavCaps"),
 }
 
 # 2. JSONL 文件搜索和输出配置
 # 要搜索所有 JSONL 文件的根目录
-INPUT_BASE_DIR = Path("/inspire/hdd/global_user/zhouchushu-253108120180/data/aac-datasets-raw-meta")
+INPUT_BASE_DIR = Path("~/data/aac-datasets-raw-meta")
 # 预期的输出路径，替换 INPUT_BASE_DIR 的顶层目录名 'aac-datasets'
-OUTPUT_BASE_DIR = Path("/inspire/hdd/global_user/zhouchushu-253108120180/data/acc-datasets")
+OUTPUT_BASE_DIR = Path("~/data/acc-datasets")
 
 # 常见音频文件扩展名，用于递归搜索
 AUDIO_EXTENSIONS = ('.wav', '.flac', '.mp3', '.m4a', '.ogg')

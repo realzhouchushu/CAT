@@ -5,61 +5,35 @@ export TOKENIZERS_PARALLELISM=false
 export OMP_NUM_THREADS=7
 
 
-run_dir=/inspire/hdd/global_user/zhouchushu-253108120180/codes/2506/EAT/SLAM-LLM
+run_dir=~/codes/2506/EAT/SLAM-LLM
 cd $run_dir
 code_dir=examples/slam_aac
 
-encoder_fairseq_dir=/inspire/hdd/global_user/zhouchushu-253108120180/codes/2506/EAT/EAT            # path to the fairseq directory of the encoder model
+encoder_fairseq_dir=~/codes/2506/EAT/EAT            # path to the fairseq directory of the encoder model
 
 encoder_name="ast"
-# encoder_name="audiomae"
 
-# audio_encoder_path=/inspire/hdd/global_user/zhouchushu-253108120180/hubs/models/huggingface/zhouchushu/tmp_model_store/sft_4_AS2M_w_clap_CLS/clap_0_2025-08-27_09-23-59/checkpoint_best.pt
-audio_encoder_path=/inspire/hdd/global_user/zhouchushu-253108120180/exp/eat/sft_4_AS2M/default_lw1_llayer0_layer12_llayer0/default_0_2025-09-20_15-33-21/checkpoint_best.pt
-# audio_encoder_path=/inspire/hdd/global_user/zhouchushu-253108120180/exp/aac/official/encoder/EAT-base_epoch30_ft.pt
-# audio_encoder_path=/inspire/hdd/global_user/zhouchushu-253108120180/exp/eat/sft_4_AS2M/conv_422_lw1_layer11_llayer0/conv_clap_0_2025-09-23_14-49-45/checkpoint_best.pt
-# audio_encoder_path=/inspire/hdd/global_user/zhouchushu-253108120180/exp/eat/sft_4_AS2M/conv_clap1_41_400000_lw1_llayer0_layer12_llayer0/conv_clap_1/checkpoint_best.pt
-audio_encoder_path=/inspire/hdd/global_user/zhouchushu-253108120180/hubs/models/others/audio-mae/finetuned.pth
-audio_encoder_path=/inspire/hdd/global_user/zhouchushu-253108120180/hubs/models/others/ast/audioset_10_10_0.4593.pth
+audio_encoder_path=~/hubs/models/others/ast/audioset_10_10_0.4593.pth
 
-llm_path=/inspire/hdd/global_user/zhouchushu-253108120180/hubs/models/huggingface/lmsys/vicuna-7b-v1.5
+llm_path=~/hubs/models/huggingface/lmsys/vicuna-7b-v1.5
 
 seed=10086
 btz=4
 lr=8e-6
 encoder_projector_ds_rate=5
 
-train_jsonl_path=/inspire/hdd/global_user/zhouchushu-253108120180/data/acc-datasets/clotho/development.jsonl
-val_jsonl_path=/inspire/hdd/global_user/zhouchushu-253108120180/data/acc-datasets/clotho/validation.jsonl
+train_jsonl_path=~/data/acc-datasets/clotho/development.jsonl
+val_jsonl_path=~/data/acc-datasets/clotho/validation.jsonl
 
 # exp_name=slam-aac_Clotho_fine-tune-eat-clap-AS2M
 exp_name=slam-aac_Clotho_fine-tune-ast-AS2M
 
-output_dir=/inspire/hdd/global_user/zhouchushu-253108120180/exp/aac/eat_clap/${exp_name}
-output_dir=/inspire/hdd/global_user/zhouchushu-253108120180/exp/aac/eat/${exp_name}
-output_dir=/inspire/hdd/global_user/zhouchushu-253108120180/exp/aac/conv_clap_0/${exp_name}
-output_dir=/inspire/hdd/global_user/zhouchushu-253108120180/exp/aac/conv_clap_1/${exp_name}
-output_dir=/inspire/hdd/global_user/zhouchushu-253108120180/exp/aac/our_eat_400k_scratch_all/${exp_name}
-output_dir=/inspire/hdd/global_user/zhouchushu-253108120180/exp/aac/ast/${exp_name}
+output_dir=~/exp/aac/ast/${exp_name}
 
-# output_dir=/inspire/hdd/global_user/zhouchushu-253108120180/exp/aac/offical_eat_scratch_all/${exp_name}
-# output_dir=/inspire/hdd/global_user/zhouchushu-253108120180/exp/aac/eat_official_encoder/
-
-
-# ckpt_path=/inspire/hdd/global_user/zhouchushu-253108120180/exp/aac/eat_clap/slam-aac_pre-train-eat-clap-AS2M/aac_epoch_2_step_2382/model.pt   # path to load the pre-trained model
-ckpt_path=/inspire/hdd/global_user/zhouchushu-253108120180/exp/aac/eat/slam-aac_pre-train-eat-clap-AS2M/aac_epoch_2_step_2382/model.pt
-ckpt_path=/inspire/hdd/global_user/zhouchushu-253108120180/exp/aac/official/pretrain/model.pt
-ckpt_path=/inspire/hdd/global_user/zhouchushu-253108120180/exp/aac/eat_official_encoder/slam-aac_pre-train-eat-clap-AS2M/aac_epoch_2_step_2382/model.pt
-ckpt_path=/inspire/hdd/global_user/zhouchushu-253108120180/exp/aac/conv_clap_0/slam-aac_pre-train-eat-clap-AS2M/aac_epoch_2_step_2382/model.pt
-ckpt_path=/inspire/hdd/global_user/zhouchushu-253108120180/exp/aac/conv_clap_1/slam-aac_pre-train-eat-clap-AS2M/aac_epoch_2_step_2382/model.pt
-ckpt_path=/inspire/hdd/global_user/zhouchushu-253108120180/exp/aac/our_eat_400k_scratch/slam-aac_pre-train-our-eat-AS2M/aac_epoch_2_step_2382/model.pt
-ckpt_path=/inspire/hdd/global_user/zhouchushu-253108120180/exp/aac/offical_eat_scratch/slam-aac_pre-train-offcial-eat-AS2M/aac_epoch_2_step_2382/model.pt
-ckpt_path=/inspire/hdd/global_user/zhouchushu-253108120180/exp/aac/offical_eat_scratch_all/slam-aac_pre-train-our-eat-AS2M/aac_epoch_3_step_30764/model.pt
-ckpt_path=/inspire/hdd/global_user/zhouchushu-253108120180/exp/aac/our_eat_400k_scratch_all/slam-aac_pre-train-our-eat-AS2M/aac_epoch_3_step_30764/model.pt
-ckpt_path=/inspire/hdd/global_user/zhouchushu-253108120180/exp/aac/ast/slam-aac_pre-train-ast-AS2M/aac_epoch_3_step_30764/model.pt
-# ckpt_path=/inspire/hdd/global_user/zhouchushu-253108120180/exp/aac/audiomae/slam-aac_pre-train-audiomae-AS2M/aac_epoch_3_step_30764/model.pt
+ckpt_path=~/exp/aac/ast/slam-aac_pre-train-ast-AS2M/aac_epoch_3_step_30764/model.pt
+# ckpt_path=~/exp/aac/audiomae/slam-aac_pre-train-audiomae-AS2M/aac_epoch_3_step_30764/model.pt
 peft_ckpt=null
-# peft_ckpt=/inspire/hdd/global_user/zhouchushu-253108120180/exp/aac/official/pretrain
+# peft_ckpt=~/exp/aac/official/pretrain
 # ↑ This parameter is required for loading the old version of the SLAM-LLM model. Our released checkpoint uses the old version. In the new version, this parameter is no longer needed.
 
 hydra_args="

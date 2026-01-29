@@ -14,7 +14,7 @@ set -x
 # comment this line if not running on sls cluster
 # . /data/sls/scratch/share-201907/slstoolchainrc
 # source ../../venvast/bin/activate
-export TORCH_HOME=/inspire/hdd/global_user/zhouchushu-253108120180/hubs/models/torchhome
+export TORCH_HOME=~/hubs/models/torchhome
 
 model=ast
 dataset=audioset
@@ -27,7 +27,7 @@ then
   bal=none
   lr=5e-5
   epoch=25
-  tr_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/AST/bal_train.json
+  tr_data=~/data/audioset/setting/AST/bal_train.json
   lrscheduler_start=10
   lrscheduler_step=5
   lrscheduler_decay=0.5
@@ -44,7 +44,7 @@ else
   wa_start=1
   wa_end=5
 fi
-te_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/AST/eval.json
+te_data=~/data/audioset/setting/AST/eval.json
 freqm=48
 timem=192
 mixup=0.5
@@ -66,7 +66,7 @@ disp_loss_cls=True
 warmup=True
 wa=True
 
-exp_dir=/inspire/hdd/global_user/zhouchushu-253108120180/exp/eat/ast_1_AS20k/ast_origin_implement/test-${set}-f$fstride-t$tstride-p$imagenetpretrain-b$batch_size-lr${lr}-decoupe-dlw${disp_loss_weight}-dll${disp_loss_layer}-dlc${disp_loss_cls}
+exp_dir=~/exp/eat/ast_1_AS20k/ast_origin_implement/test-${set}-f$fstride-t$tstride-p$imagenetpretrain-b$batch_size-lr${lr}-decoupe-dlw${disp_loss_weight}-dll${disp_loss_layer}-dlc${disp_loss_cls}
 log_file=$exp_dir/train.log
 if [ -d $exp_dir ]; then
   echo 'exp exist'

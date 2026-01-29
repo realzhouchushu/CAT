@@ -2,38 +2,21 @@
 export CUDA_VISIBLE_DEVICES=1
 export TOKENIZERS_PARALLELISM=false
 
-run_dir=/inspire/hdd/global_user/zhouchushu-253108120180/codes/2506/EAT/SLAM-LLM
+run_dir=~/codes/2506/EAT/SLAM-LLM
 cd $run_dir
 code_dir=examples/slam_aac
 
-encoder_fairseq_dir=/inspire/hdd/global_user/zhouchushu-253108120180/codes/2506/EAT/EAT            # path to the fairseq directory of the encoder model
+encoder_fairseq_dir=~/codes/2506/EAT/EAT            # path to the fairseq directory of the encoder model
 
 encoder_name="ast"
-encoder_name="audiomae"
+audio_encoder_path=~/hubs/models/others/ast/audioset_10_10_0.4593.pth
 
-# audio_encoder_path=/inspire/hdd/global_user/zhouchushu-253108120180/hubs/models/huggingface/zhouchushu/tmp_model_store/sft_4_AS2M_w_clap_CLS/clap_0_2025-08-27_09-23-59/checkpoint_best.pt
-# audio_encoder_path=/inspire/hdd/global_user/zhouchushu-253108120180/exp/eat/sft_4_AS2M/default_lw1_llayer0_layer12_llayer0/default_0_2025-09-20_15-33-21/checkpoint_best.pt
-# audio_encoder_path=/inspire/hdd/global_user/zhouchushu-253108120180/exp/aac/official/encoder/EAT-base_epoch30_ft.pt
-# audio_encoder_path=/inspire/hdd/global_user/zhouchushu-253108120180/exp/eat/sft_4_AS2M/conv_422_lw1_layer11_llayer0/conv_clap_0_2025-09-23_14-49-45/checkpoint_best.pt
-# audio_encoder_path=/inspire/hdd/global_user/zhouchushu-253108120180/exp/eat/sft_4_AS2M/conv_clap1_41_400000_lw1_llayer0_layer12_llayer0/conv_clap_1/checkpoint_best.pt
-audio_encoder_path=/inspire/hdd/global_user/zhouchushu-253108120180/exp/aac/official/encoder/EAT-base_epoch30_ft.pt
-audio_encoder_path=/inspire/hdd/global_user/zhouchushu-253108120180/hubs/models/others/audio-mae/finetuned.pth
-# audio_encoder_path=/inspire/hdd/global_user/zhouchushu-253108120180/hubs/models/others/ast/audioset_10_10_0.4593.pth
-
-llm_path=/inspire/hdd/global_user/zhouchushu-253108120180/hubs/models/huggingface/lmsys/vicuna-7b-v1.5
-clap_dir=/inspire/hdd/global_user/zhouchushu-253108120180/hubs/models/others/slam-aac/clap
+llm_path=~/hubs/models/huggingface/lmsys/vicuna-7b-v1.5
+clap_dir=~/hubs/models/others/slam-aac/clap
 
 encoder_projector_ds_rate=5
 
-inference_data_path=/inspire/hdd/global_user/zhouchushu-253108120180/data/acc-datasets/clotho/evaluation_single.jsonl
-# output_dir=/inspire/hdd/global_user/zhouchushu-253108120180/exp/aac/eat_clap/slam-aac_Clotho_fine-tune-eat-clap-AS2M/aac_epoch_2_step_702
-# output_dir=/inspire/hdd/global_user/zhouchushu-253108120180/exp/aac/eat/slam-aac_Clotho_fine-tune-eat-clap-AS2M/aac_epoch_2_step_702
-# output_dir=/inspire/hdd/global_user/zhouchushu-253108120180/exp/aac/official/ckpt
-# output_dir=/inspire/hdd/global_user/zhouchushu-253108120180/exp/aac/eat_offical_pretrain/aac_epoch_1_step_4500
-# output_dir=/inspire/hdd/global_user/zhouchushu-253108120180/exp/aac/conv_clap_0/slam-aac_Clotho_fine-tune-eat-clap-AS2M/aac_epoch_2_step_202
-# output_dir=/inspire/hdd/global_user/zhouchushu-253108120180/exp/aac/conv_clap_1/slam-aac_Clotho_fine-tune-eat-clap-AS2M/aac_epoch_2_step_202
-output_dir=/inspire/hdd/global_user/zhouchushu-253108120180/exp/aac/audiomae/slam-aac_Clotho_fine-tune-audiomae-AS2M/aac_epoch_2_step_4702
-# output_dir=/inspire/hdd/global_user/zhouchushu-253108120180/exp/aac/ast/slam-aac_Clotho_fine-tune-ast-AS2M/aac_epoch_2_step_4702
+output_dir=~/exp/aac/ast/slam-aac_Clotho_fine-tune-ast-AS2M/aac_epoch_2_step_4702
 
 # define the beam size range
 beam_range=(2 3 4 5 6 7 8)
@@ -100,5 +83,3 @@ python ${code_dir}/utils/clap_refine.py \
     --config $clap_dir/clap_config.yaml \
     --test_jsonl $inference_data_path \
     --exp_explorer $output_dir
-
-# bash /data/wenxi.chen/SLAM-LLM/examples/slam_aac/scripts/inference_clotho_CLAP_Refine.sh

@@ -10,7 +10,7 @@ import torch.nn as nn
 from torch.cuda.amp import autocast
 import os
 import wget
-os.environ['TORCH_HOME'] = '/inspire/hdd/global_user/zhouchushu-253108120180/hubs/models/torchhome'
+os.environ['TORCH_HOME'] = '~/hubs/models/torchhome'
 import timm
 from timm.models.layers import to_2tuple,trunc_normal_
 

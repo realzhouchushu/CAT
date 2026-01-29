@@ -18,7 +18,7 @@ torch.use_deterministic_algorithms(True)
 os.environ["CUBLAS_WORKSPACE_CONFIG"] = ":16:8"
 
 # download pretrained model in this directory
-os.environ['TORCH_HOME'] = '/inspire/hdd/global_user/zhouchushu-253108120180/hubs/models/torchhome'
+os.environ['TORCH_HOME'] = '~/hubs/models/torchhome'
 
 class BEATsFeatureExtractor(Dataset):
     def __init__(self, audio_path, model_path):
@@ -109,13 +109,13 @@ if __name__ == '__main__':
                         help="the trained model you want to test")
     parser.add_argument('--audio_path',
                         help='the audio you want to predict, sample rate 16k.',
-                        # default='/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/16k_wav_tsv/unbal_train.tsv',
-                        default='/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/16k_wav_tsv/unbal_train.tsv',
+                        # default='~/data/audioset/16k_wav_tsv/unbal_train.tsv',
+                        default='~/data/audioset/16k_wav_tsv/unbal_train.tsv',
                         type=str)
     parser.add_argument('--output_path',
                         help='the output path',
-                        # default='/inspire/hdd/global_user/zhouchushu-253108120180/data/features/ast_AS2M_pretrained_features',
-                        default="/inspire/hdd/global_user/zhouchushu-253108120180/raw_datas/features/audioset/beats_pretrain_features",
+                        # default='~/data/features/ast_AS2M_pretrained_features',
+                        default="~/raw_datas/features/audioset/beats_pretrain_features",
                         type=str)
 
     args = parser.parse_args()

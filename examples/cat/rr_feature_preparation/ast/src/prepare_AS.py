@@ -91,13 +91,13 @@ def generate_json_data(common_path: str, tsv_data: Dict[str, str],
 def main():
     parser = argparse.ArgumentParser(description="AudioSet数据准备脚本")
     parser.add_argument('--tsv_path', '-t', 
-                       default='/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/AST/eval.tsv',
+                       default='~/data/audioset/setting/AST/eval.tsv',
                        help='TSV文件路径')
     parser.add_argument('--lbl_path', '-l',
-                       default='/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/AST/eval.lbl',
+                       default='~/data/audioset/setting/AST/eval.lbl',
                        help='LBL文件路径')
     parser.add_argument('--output_path', '-o',
-                       default='/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/AST/eval.json',
+                       default='~/data/audioset/setting/AST/eval.json',
                        help='输出JSON文件路径')
     
     args = parser.parse_args()

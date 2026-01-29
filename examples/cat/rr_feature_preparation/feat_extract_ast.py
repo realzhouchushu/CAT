@@ -17,7 +17,7 @@ torch.use_deterministic_algorithms(True)
 os.environ["CUBLAS_WORKSPACE_CONFIG"] = ":16:8"
 
 # download pretrained model in this directory
-os.environ['TORCH_HOME'] = '/inspire/hdd/global_user/zhouchushu-253108120180/hubs/models/torchhome'
+os.environ['TORCH_HOME'] = '~/hubs/models/torchhome'
 
 class ASTFeatureExtractor(Dataset):
     def __init__(self, audio_path, model_path):
@@ -122,15 +122,15 @@ if __name__ == '__main__':
     #                     default='/opt/gpfs/home/chushu/exp/eat/ast_1_AS20k/ast_origin_implement/test-balanced-f10-t10-pTrue-b12-lr5e-5-decoupe/models/audio_model_wa.pth',
     #                     help="the trained model you want to test")
     parser.add_argument("--model_path", type=str,
-                        default='/inspire/hdd/global_user/zhouchushu-253108120180/hubs/models/others/ast/audioset_10_10_0.4593.pth',
+                        default='~/hubs/models/others/ast/audioset_10_10_0.4593.pth',
                         help="the trained model you want to test")
     parser.add_argument('--audio_path',
                         help='the audio you want to predict, sample rate 16k.',
-                        default='/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/16k_wav_tsv/unbal_train.tsv',
+                        default='~/data/audioset/16k_wav_tsv/unbal_train.tsv',
                         type=str)
     parser.add_argument('--output_path',
                         help='the output path',
-                        default='/inspire/hdd/global_user/zhouchushu-253108120180/data/features/ast_AS2M_pretrained_features',
+                        default='~/data/features/ast_AS2M_pretrained_features',
                         type=str)
 
     args = parser.parse_args()
@@ -148,26 +148,3 @@ if __name__ == '__main__':
             for j, wav_name in enumerate(wav_names):
                 os.makedirs(os.path.join(args.output_path, key), exist_ok=True)
                 np.save(os.path.join(args.output_path, key, wav_name.split('/')[-1].replace('.wav', '.npy')), value[j].cpu().numpy())
-        #     feat = make_features(wav_name, mel_bins=128)
-        #     input_tdim = feat.shape[0]
-        #     feat = feat.expand(1, input_tdim, 128)  
-        #     feat = feat.to(torch.device("cuda"))
-        #     feats_.append(feat.squeeze(0))
-        #     with torch.no_grad():
-        #         feature = feature_extractor.extract_features(feat)
-        #     features_.append(feature.squeeze(0))
-        # feats_ = torch.stack(feats_, dim=0)
-        # features_ = torch.stack(features_, dim=0)
-        # print(feats_.cpu().dtype, feats.cpu().dtype)
-        # print(features.cpu().dtype, features_.cpu().dtype)
-        # try:
-        #     assert torch.allclose(feats_.cpu(), feats.cpu(), atol=1e-4), f'{feats_} {feats}'
-        #     assert torch.allclose(features, features_, atol=1e-2), f'{features} {features_}'
-        # except Exception as e:
-        #     print(e)
-        #     print(feats_.cpu().shape, feats.cpu().shape)
-        #     print(features.cpu().shape, features_.cpu().shape)
-        #     print(feats_.cpu().dtype, feats.cpu().dtype)
-        #     print(features.cpu().dtype, features_.cpu().dtype)
-        #     error_count += 1
-        #     print(f'error_count: {error_count}')

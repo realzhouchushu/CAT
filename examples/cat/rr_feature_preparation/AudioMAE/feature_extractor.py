@@ -278,20 +278,20 @@ def get_args_parser():
     parser.add_argument('--mask_2d', type=bool, default=True)
     parser.add_argument('--use_custom_patch', type=bool, default=False)
     parser.add_argument('--device', default='cuda',help='device to use for training / testing')
-    parser.add_argument('--finetune', default='/inspire/hdd/global_user/zhouchushu-253108120180/hubs/models/others/audio-mae/pretrained.pth', help='finetune from checkpoint')
+    parser.add_argument('--finetune', default='~/hubs/models/others/audio-mae/pretrained.pth', help='finetune from checkpoint')
     parser.add_argument('--eval', action='store_true', help='Perform evaluation only') # XXX: other field can use default value while this field is not.
     parser.add_argument("--dataset", type=str, default="audioset", help="the dataset used", choices=["audioset", "esc50", "speechcommands", "k400"])
     parser.add_argument("--use_fbank", type=bool, default=False)
     parser.add_argument("--fbank_dir", type=str, default="/checkpoint/berniehuang/ast/egs/esc50/data/ESC-50-master/fbank", help="fbank dir")
     parser.add_argument('--roll_mag_aug', type=bool, default=False, help='use roll_mag_aug')
     parser.add_argument('--load_video', type=bool, default=False, help='load video')
-    parser.add_argument("--label_csv", type=str, default='/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/label_descriptors.csv', help="csv with class labels")
-    parser.add_argument("--data_train", type=str, default='/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/16k_wav_tsv/unbal_train.tsv', help="training data json")
-    parser.add_argument("--data_eval", type=str, default='/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/16k_wav_tsv/eval.tsv', help="validation data json")
+    parser.add_argument("--label_csv", type=str, default='~/data/audioset/label_descriptors.csv', help="csv with class labels")
+    parser.add_argument("--data_train", type=str, default='~/data/audioset/16k_wav_tsv/unbal_train.tsv', help="training data json")
+    parser.add_argument("--data_eval", type=str, default='~/data/audioset/16k_wav_tsv/eval.tsv', help="validation data json")
     # customized fields
     parser.add_argument('--output_path',
                         help='the output path',
-                        default='/inspire/hdd/global_user/zhouchushu-253108120180/data/features/audio_mae_pretrained_features',
+                        default='~/data/features/audio_mae_pretrained_features',
                         type=str)
     return parser
 

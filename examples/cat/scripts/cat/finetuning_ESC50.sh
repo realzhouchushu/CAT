@@ -1,8 +1,8 @@
-model_model_path=/inspire/hdd/global_user/zhouchushu-253108120180/hubs/models/huggingface/zhouchushu/tmp_model_store/pre_4_AS2M/default_0_2025-09-20_15-33-21/checkpoint_last.pt
+model_model_path=~/hubs/models/huggingface/zhouchushu/tmp_model_store/pre_4_AS2M/default_0_2025-09-20_15-33-21/checkpoint_last.pt
 
 data_fold=5
 
-SAVE_DIR_ROOT=/inspire/hdd/global_user/zhouchushu-253108120180/exp/cat/sft_4_esc50/default_0_41_400000
+SAVE_DIR_ROOT=~/exp/cat/sft_4_esc50/default_0_41_400000
 # 从 model_model_path 提取父目录名与文件名
 parent_dir="$(basename -- "$(dirname -- "$model_model_path")")"
 ckpt_name="$(basename -- "$model_model_path")"
@@ -25,7 +25,7 @@ CUDA_VISIBLE_DEVICES=${device} python fairseq_cli/hydra_train.py -m \
     checkpoint.restore_file=${checkpoint_restore_file} \
     dataset.batch_size=48 \
     criterion.log_keys=['correct'] \
-    task.data=/inspire/hdd/global_user/zhouchushu-253108120180/codes/2506/CAT/examples/cat/data_manifest/SFT_ESC_50/test0${data_fold} \
+    task.data=~/codes/2506/CAT/examples/cat/data_manifest/SFT_ESC_50/test0${data_fold} \
     task.esc50_eval=True \
     task.target_length=512 \
     task.roll_aug=true \

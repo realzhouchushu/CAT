@@ -6,7 +6,7 @@ config_option=0
 
 world_size=${1:-2}
 # shared config
-SAVE_DIR_ROOT=/inspire/hdd/global_user/zhouchushu-253108120180/exp/cat/pre_4_AS2M
+SAVE_DIR_ROOT=~/exp/cat/pre_4_AS2M
 checkpoint_save_dir=${SAVE_DIR_ROOT}/${train_mode}_${config_option}
 checkpoint_restore_file=${checkpoint_save_dir}/checkpoint_last.pt
 
@@ -42,22 +42,22 @@ optimization_max_update=400000
 
 if [[ $train_mode == "test" && ${config_option} -eq 0 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_data=~/codes/2506/CAT/examples/cat/data_manifest/PRETRAIN_AS2M/test
     task_load_clap_emb=false
     task_load_source_file=true
     task_load_mel_file=false
     model_proj_type=null
     model_clone_batch=4
-    dataset_batch_size=24 # original 48 oom on 4090 24G change distributed_world_size
+    dataset_batch_size=96
     model_clap_loss=0
-    average_top_k_layers=11 # modify with model depth
+    average_top_k_layers=11 
     model_add_conv=true
-    model_depth=11 # 
-    checkpoint_keep_interval_updates=-1 # default 1 
+    model_depth=11 
+    checkpoint_keep_interval_updates=-1
     checkpoint_save_interval_updates=10000
 elif [[ $train_mode == "default" && ${config_option} -eq 0 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M
     task_load_clap_emb=false
     task_load_source_file=true
     task_load_mel_file=false
@@ -68,7 +68,7 @@ elif [[ $train_mode == "default" && ${config_option} -eq 0 ]]; then
     checkpoint_keep_interval_updates=-1
 elif [[ $train_mode == "disp" && ${config_option} -eq 0 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M
     task_load_clap_emb=false
     task_load_source_file=true
     task_load_mel_file=false
@@ -80,7 +80,7 @@ elif [[ $train_mode == "disp" && ${config_option} -eq 0 ]]; then
     checkpoint_keep_interval_updates=1
 elif [[ $train_mode == "disp" && ${config_option} -eq 1 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M
     task_load_clap_emb=false
     task_load_source_file=true
     task_load_mel_file=false
@@ -92,7 +92,7 @@ elif [[ $train_mode == "disp" && ${config_option} -eq 1 ]]; then
     checkpoint_keep_interval_updates=1
 elif [[ $train_mode == "disp" && ${config_option} -eq 2 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M
     task_load_clap_emb=false
     task_load_source_file=true
     task_load_mel_file=false
@@ -104,7 +104,7 @@ elif [[ $train_mode == "disp" && ${config_option} -eq 2 ]]; then
     checkpoint_keep_interval_updates=1
 elif [[ $train_mode == "disp" && ${config_option} -eq 3 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M
     task_load_clap_emb=false
     task_load_source_file=true
     task_load_mel_file=false
@@ -116,7 +116,7 @@ elif [[ $train_mode == "disp" && ${config_option} -eq 3 ]]; then
     checkpoint_keep_interval_updates=1
 elif [[ $train_mode == "disp" && ${config_option} -eq 4 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M
     task_load_clap_emb=false
     task_load_source_file=true
     task_load_mel_file=false
@@ -128,7 +128,7 @@ elif [[ $train_mode == "disp" && ${config_option} -eq 4 ]]; then
     checkpoint_keep_interval_updates=1
 elif [[ $train_mode == "disp" && ${config_option} -eq 5 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M
     task_load_clap_emb=false
     task_load_source_file=true
     task_load_mel_file=false
@@ -140,7 +140,7 @@ elif [[ $train_mode == "disp" && ${config_option} -eq 5 ]]; then
     checkpoint_keep_interval_updates=1
 elif [[ $train_mode == "disp" && ${config_option} -eq 6 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M
     task_load_clap_emb=false
     task_load_source_file=true
     task_load_mel_file=false
@@ -152,7 +152,7 @@ elif [[ $train_mode == "disp" && ${config_option} -eq 6 ]]; then
     checkpoint_keep_interval_updates=1
 elif [[ $train_mode == "disp" && ${config_option} -eq 7 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M
     task_load_clap_emb=false
     task_load_source_file=true
     task_load_mel_file=false
@@ -164,7 +164,7 @@ elif [[ $train_mode == "disp" && ${config_option} -eq 7 ]]; then
     checkpoint_keep_interval_updates=1
 elif [[ $train_mode == "disp" && ${config_option} -eq 8 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M
     task_load_clap_emb=false
     task_load_source_file=true
     task_load_mel_file=false
@@ -176,7 +176,7 @@ elif [[ $train_mode == "disp" && ${config_option} -eq 8 ]]; then
     checkpoint_keep_interval_updates=1
 elif [[ $train_mode == "disp" && ${config_option} -eq 9 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M
     task_load_clap_emb=false
     task_load_source_file=true
     task_load_mel_file=false
@@ -188,7 +188,7 @@ elif [[ $train_mode == "disp" && ${config_option} -eq 9 ]]; then
     checkpoint_keep_interval_updates=1
 elif [[ $train_mode == "disp" && ${config_option} -eq 10 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M
     task_load_clap_emb=false
     task_load_source_file=true
     task_load_mel_file=false
@@ -200,7 +200,7 @@ elif [[ $train_mode == "disp" && ${config_option} -eq 10 ]]; then
     checkpoint_keep_interval_updates=1
 elif [[ $train_mode == "disp" && ${config_option} -eq 11 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M
     task_load_clap_emb=false
     task_load_source_file=true
     task_load_mel_file=false
@@ -212,7 +212,7 @@ elif [[ $train_mode == "disp" && ${config_option} -eq 11 ]]; then
     checkpoint_keep_interval_updates=1
 elif [[ $train_mode == "disp" && ${config_option} -eq 12 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M
     task_load_clap_emb=false
     task_load_source_file=true
     task_load_mel_file=false
@@ -224,7 +224,7 @@ elif [[ $train_mode == "disp" && ${config_option} -eq 12 ]]; then
     checkpoint_keep_interval_updates=1
 elif [[ $train_mode == "clap" && ${config_option} -eq 0 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
     task_load_clap_emb=true
     task_load_source_file=true
     task_load_mel_file=false
@@ -237,7 +237,7 @@ elif [[ $train_mode == "clap" && ${config_option} -eq 0 ]]; then
     checkpoint_keep_interval_updates=-1
 elif [[ $train_mode == "clap" && ${config_option} -eq 1 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
     task_load_clap_emb=true
     model_proj_type=2
     model_clone_batch=4
@@ -247,7 +247,7 @@ elif [[ $train_mode == "clap" && ${config_option} -eq 1 ]]; then
 # loss type ablation
 elif [[ $train_mode == "clap" && ${config_option} -eq 2 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
     task_load_clap_emb=true
     model_proj_type=2
     model_clone_batch=4
@@ -257,7 +257,7 @@ elif [[ $train_mode == "clap" && ${config_option} -eq 2 ]]; then
     model_clap_loss_type="ce"
 elif [[ $train_mode == "clap" && ${config_option} -eq 3 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
     task_load_clap_emb=true
     model_proj_type=2
     model_clone_batch=4
@@ -267,7 +267,7 @@ elif [[ $train_mode == "clap" && ${config_option} -eq 3 ]]; then
     model_clap_loss_type="l1"
 elif [[ $train_mode == "clap" && ${config_option} -eq 4 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
     task_load_clap_emb=true
     model_proj_type=2
     model_clone_batch=4
@@ -278,7 +278,7 @@ elif [[ $train_mode == "clap" && ${config_option} -eq 4 ]]; then
 # loss layer ablation
 elif [[ $train_mode == "clap" && ${config_option} -eq 5 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
     task_load_clap_emb=true
     model_proj_type=2
     model_clone_batch=4
@@ -289,7 +289,7 @@ elif [[ $train_mode == "clap" && ${config_option} -eq 5 ]]; then
     model_clap_loss_layer=10
 elif [[ $train_mode == "clap" && ${config_option} -eq 6 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
     task_load_clap_emb=true
     task_load_source_file=true
     task_load_mel_file=false
@@ -302,7 +302,7 @@ elif [[ $train_mode == "clap" && ${config_option} -eq 6 ]]; then
     model_clap_loss_layer=8
 elif [[ $train_mode == "clap" && ${config_option} -eq 7 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
     task_load_clap_emb=true
     task_load_source_file=true
     task_load_mel_file=false
@@ -315,7 +315,7 @@ elif [[ $train_mode == "clap" && ${config_option} -eq 7 ]]; then
     model_clap_loss_layer=6
 elif [[ $train_mode == "clap" && ${config_option} -eq 8 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
     task_load_clap_emb=true
     task_load_source_file=true
     task_load_mel_file=false
@@ -328,7 +328,7 @@ elif [[ $train_mode == "clap" && ${config_option} -eq 8 ]]; then
     checkpoint_keep_interval_updates=-1
 elif [[ $train_mode == "clap" && ${config_option} -eq 9 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
     task_load_clap_emb=true
     task_load_source_file=true
     task_load_mel_file=false
@@ -341,7 +341,7 @@ elif [[ $train_mode == "clap" && ${config_option} -eq 9 ]]; then
     checkpoint_keep_interval_updates=-1
 elif [[ $train_mode == "clap" && ${config_option} -eq 10 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
     task_load_clap_emb=true
     task_load_source_file=true
     task_load_mel_file=false
@@ -356,7 +356,7 @@ elif [[ $train_mode == "clap" && ${config_option} -eq 10 ]]; then
     config_name=pretraining_AS2M_large
 elif [[ $train_mode == "dasheng" && ${config_option} -eq 0 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_dasheng
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M_w_dasheng
     task_load_clap_emb=true
     task_load_source_file=true
     task_load_mel_file=false
@@ -370,7 +370,7 @@ elif [[ $train_mode == "dasheng" && ${config_option} -eq 0 ]]; then
     model_depth=12 # 
 elif [[ $train_mode == "beats" && ${config_option} -eq 0 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_beats
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M_w_beats
     task_load_clap_emb=true
     task_load_source_file=true
     task_load_mel_file=false
@@ -384,7 +384,7 @@ elif [[ $train_mode == "beats" && ${config_option} -eq 0 ]]; then
     model_depth=12 # 
 elif [[ $train_mode == "beats" && ${config_option} -eq 1 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_beats_pretrain
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M_w_beats_pretrain
     task_load_clap_emb=true
     task_load_source_file=true
     task_load_mel_file=false
@@ -398,7 +398,7 @@ elif [[ $train_mode == "beats" && ${config_option} -eq 1 ]]; then
     model_depth=12
 elif [[ $train_mode == "audio_mae" && ${config_option} -eq 0 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_AUDIO_MAE
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M_w_AUDIO_MAE
     task_load_clap_emb=true
     task_load_source_file=true
     task_load_mel_file=false
@@ -412,7 +412,7 @@ elif [[ $train_mode == "audio_mae" && ${config_option} -eq 0 ]]; then
     model_depth=12 # 
 elif [[ $train_mode == "audio_mae" && ${config_option} -eq 1 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_AUDIO_MAE_pretrain
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M_w_AUDIO_MAE_pretrain
     task_load_clap_emb=true
     task_load_source_file=true
     task_load_mel_file=false
@@ -426,7 +426,7 @@ elif [[ $train_mode == "audio_mae" && ${config_option} -eq 1 ]]; then
     model_depth=12 # 
 elif [[ $train_mode == "audio_mae" && ${config_option} -eq 2 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_AUDIO_MAE_pretrain
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M_w_AUDIO_MAE_pretrain
     task_load_clap_emb=true
     task_load_source_file=true
     task_load_mel_file=false
@@ -440,7 +440,7 @@ elif [[ $train_mode == "audio_mae" && ${config_option} -eq 2 ]]; then
     model_depth=12 # 
 elif [[ $train_mode == "audio_mae" && ${config_option} -eq 3 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_AUDIO_MAE_pretrain
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M_w_AUDIO_MAE_pretrain
     task_load_clap_emb=true
     task_load_source_file=true
     task_load_mel_file=false
@@ -455,7 +455,7 @@ elif [[ $train_mode == "audio_mae" && ${config_option} -eq 3 ]]; then
     model_depth=12 # 
 elif [[ $train_mode == "audio_mae" && ${config_option} -eq 4 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_AUDIO_MAE_pretrain
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M_w_AUDIO_MAE_pretrain
     task_load_clap_emb=true
     task_load_source_file=true
     task_load_mel_file=false
@@ -470,7 +470,7 @@ elif [[ $train_mode == "audio_mae" && ${config_option} -eq 4 ]]; then
     model_depth=12 # 
 elif [[ $train_mode == "audio_mae" && ${config_option} -eq 5 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_AUDIO_MAE_pretrain
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M_w_AUDIO_MAE_pretrain
     task_load_clap_emb=true
     task_load_source_file=true
     task_load_mel_file=false
@@ -485,7 +485,7 @@ elif [[ $train_mode == "audio_mae" && ${config_option} -eq 5 ]]; then
     model_depth=12 # 
 elif [[ $train_mode == "audio_mae" && ${config_option} -eq 6 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_AUDIO_MAE_pretrain
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M_w_AUDIO_MAE_pretrain
     task_load_clap_emb=true
     task_load_source_file=true
     task_load_mel_file=false
@@ -500,7 +500,7 @@ elif [[ $train_mode == "audio_mae" && ${config_option} -eq 6 ]]; then
     model_depth=12 # 
 elif [[ $train_mode == "conv_audio_mae" && ${config_option} -eq 0 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_AUDIO_MAE
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M_w_AUDIO_MAE
     task_load_clap_emb=true
     task_load_source_file=true
     task_load_mel_file=false
@@ -515,7 +515,7 @@ elif [[ $train_mode == "conv_audio_mae" && ${config_option} -eq 0 ]]; then
     model_depth=11 # 
 elif [[ $train_mode == "conv_audio_mae" && ${config_option} -eq 1 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_AUDIO_MAE_pretrain
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M_w_AUDIO_MAE_pretrain
     task_load_clap_emb=true
     task_load_source_file=true
     task_load_mel_file=false
@@ -530,7 +530,7 @@ elif [[ $train_mode == "conv_audio_mae" && ${config_option} -eq 1 ]]; then
     model_depth=11 
 elif [[ $train_mode == "ast" && ${config_option} -eq 0 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_AST/mlp_head_in
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M_w_AST/mlp_head_in
     task_load_clap_emb=true
     model_proj_type=4
     model_clone_batch=4
@@ -538,7 +538,7 @@ elif [[ $train_mode == "ast" && ${config_option} -eq 0 ]]; then
     dataset_batch_size=48
 elif [[ $train_mode == "ast" && ${config_option} -eq 1 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_AST/mlp_head_in
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M_w_AST/mlp_head_in
     task_load_clap_emb=true
     model_proj_type=4
     model_clone_batch=4
@@ -546,7 +546,7 @@ elif [[ $train_mode == "ast" && ${config_option} -eq 1 ]]; then
     dataset_batch_size=48
 elif [[ $train_mode == "ast" && ${config_option} -eq 2 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_AST/mlp_head_in
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M_w_AST/mlp_head_in
     task_load_clap_emb=true
     model_proj_type=4
     model_clone_batch=4
@@ -554,14 +554,14 @@ elif [[ $train_mode == "ast" && ${config_option} -eq 2 ]]; then
     dataset_batch_size=48
 elif [[ $train_mode == "ast" && ${config_option} -eq 3 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_AST/mlp_head_out
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M_w_AST/mlp_head_out
     task_load_clap_emb=true
     model_proj_type=6
     model_clone_batch=4
     dataset_batch_size=48
 elif [[ $train_mode == "ast" && ${config_option} -eq 4 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_AST_AS2M/mlp_head_in
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M_w_AST_AS2M/mlp_head_in
     task_load_clap_emb=true
     task_load_source_file=true
     task_load_mel_file=false
@@ -575,7 +575,7 @@ elif [[ $train_mode == "ast" && ${config_option} -eq 4 ]]; then
     model_depth=12 
 elif [[ $train_mode == "conv" && ${config_option} -eq 0 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
     task_load_clap_emb=false
     task_load_source_file=true
     task_load_mel_file=false
@@ -590,7 +590,7 @@ elif [[ $train_mode == "conv" && ${config_option} -eq 0 ]]; then
     checkpoint_save_interval_updates=10000
 elif [[ $train_mode == "conv" && ${config_option} -eq 1 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
     task_load_clap_emb=false
     task_load_source_file=true
     task_load_mel_file=false
@@ -606,7 +606,7 @@ elif [[ $train_mode == "conv" && ${config_option} -eq 1 ]]; then
     checkpoint_save_interval_updates=10000
 elif [[ $train_mode == "conv" && ${config_option} -eq 2 ]]; then
     echo "Config ${train_mode} ${config_option}" # H100 80G
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
     task_load_clap_emb=false
     task_load_source_file=true
     task_load_mel_file=false
@@ -623,7 +623,7 @@ elif [[ $train_mode == "conv" && ${config_option} -eq 2 ]]; then
     checkpoint_save_interval_updates=10000
 elif [[ $train_mode == "conv" && ${config_option} -eq 3 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
     task_load_clap_emb=false
     task_load_source_file=true
     task_load_mel_file=false
@@ -639,7 +639,7 @@ elif [[ $train_mode == "conv" && ${config_option} -eq 3 ]]; then
     checkpoint_save_interval_updates=10000
 elif [[ $train_mode == "conv" && ${config_option} -eq 4 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
     task_load_clap_emb=false
     task_load_source_file=true
     task_load_mel_file=false
@@ -655,7 +655,7 @@ elif [[ $train_mode == "conv" && ${config_option} -eq 4 ]]; then
     checkpoint_save_interval_updates=10000
 elif [[ $train_mode == "conv" && ${config_option} -eq 5 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
     task_load_clap_emb=false
     task_load_source_file=true
     task_load_mel_file=false
@@ -671,7 +671,7 @@ elif [[ $train_mode == "conv" && ${config_option} -eq 5 ]]; then
     checkpoint_save_interval_updates=10000
 elif [[ $train_mode == "conv" && ${config_option} -eq 6 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
     task_load_clap_emb=false
     task_load_source_file=true
     task_load_mel_file=false
@@ -688,7 +688,7 @@ elif [[ $train_mode == "conv" && ${config_option} -eq 6 ]]; then
     checkpoint_save_interval_updates=10000
 elif [[ $train_mode == "conv_clap" && ${config_option} -eq 0 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
     task_load_clap_emb=true
     task_load_source_file=true
     task_load_mel_file=false
@@ -704,7 +704,7 @@ elif [[ $train_mode == "conv_clap" && ${config_option} -eq 0 ]]; then
     optimization_max_update=400000
 elif [[ $train_mode == "conv_clap" && ${config_option} -eq 1 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
     task_load_clap_emb=true
     task_load_source_file=true
     task_load_mel_file=false
@@ -721,7 +721,7 @@ elif [[ $train_mode == "conv_clap" && ${config_option} -eq 1 ]]; then
     optimization_max_update=800000
 elif [[ $train_mode == "conv_clap" && ${config_option} -eq 2 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
     task_load_clap_emb=true
     task_load_source_file=true
     task_load_mel_file=false
@@ -737,7 +737,7 @@ elif [[ $train_mode == "conv_clap" && ${config_option} -eq 2 ]]; then
     optimization_max_update=800000
 elif [[ $train_mode == "conv_clap" && ${config_option} -eq 3 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
     task_load_clap_emb=true
     task_load_source_file=true
     task_load_mel_file=false
@@ -755,7 +755,7 @@ elif [[ $train_mode == "conv_clap" && ${config_option} -eq 3 ]]; then
     optimization_max_update=400000
 elif [[ $train_mode == "conv_clap" && ${config_option} -eq 4 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
     task_load_clap_emb=true
     task_load_source_file=true
     task_load_mel_file=false
@@ -773,7 +773,7 @@ elif [[ $train_mode == "conv_clap" && ${config_option} -eq 4 ]]; then
     optimization_max_update=400000
 elif [[ $train_mode == "conv_clap" && ${config_option} -eq 5 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
     task_load_clap_emb=true
     task_load_source_file=true
     task_load_mel_file=false
@@ -791,7 +791,7 @@ elif [[ $train_mode == "conv_clap" && ${config_option} -eq 5 ]]; then
     optimization_max_update=400000
 elif [[ $train_mode == "conv_clap" && ${config_option} -eq 6 ]]; then
     echo "Config ${train_mode} ${config_option}"
-    task_data=/inspire/hdd/global_user/zhouchushu-253108120180/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
+    task_data=~/data/audioset/setting/PRETRAIN_AS2M_w_CLAP
     task_load_clap_emb=true
     task_load_source_file=true
     task_load_mel_file=false
