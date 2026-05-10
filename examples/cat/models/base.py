@@ -213,24 +213,33 @@ class ModalitySpecificEncoder(nn.Module):
         # print(f"local features {mask}, {self.add_conv}")
         # print(f"local features {self.add_conv}")
         # print(f"local encoder {type(self.local_encoder)}")
+        extractor_layer_results = None
+        mask_extractor_layer_results = None
         if self.local_grad_mult > 0:
             if self.local_grad_mult == 1.0:
-                x = self.local_encoder(features) if not self.add_conv else self.local_encoder(features, precomputed_mask=mask)
+                if not self.add_conv:
+                    x = self.local_encoder(features)
+                else:
+                    x, _, extractor_layer_results, mask_extractor_layer_results = self.local_encoder(features, precomputed_mask=mask)
             else:
                 if not self.add_conv:
                     x = GradMultiply.apply(
                         self.local_encoder(features), self.local_grad_mult
                     )
                 else:
-                    x = GradMultiply.apply(
-                        self.local_encoder(features, precomputed_mask=mask), self.local_grad_mult
-                    )
+                    local_out = self.local_encoder(features, precomputed_mask=mask)
+                    x = GradMultiply.apply(local_out[0], self.local_grad_mult)
+                    extractor_layer_results = local_out[2]
+                    mask_extractor_layer_results = local_out[3]
         else:
             with torch.no_grad():
-                x = self.local_encoder(features) if not self.add_conv else self.local_encoder(features, precomputed_mask=mask)
+                if not self.add_conv:
+                    x = self.local_encoder(features)
+                else:
+                    x, _, extractor_layer_results, mask_extractor_layer_results = self.local_encoder(features, precomputed_mask=mask)
         if not self.add_conv:
             x = self.project_features(x)
-        return (x, None) if not self.add_conv else x
+        return (x, None) if not self.add_conv else (x, extractor_layer_results, mask_extractor_layer_results)
 
     def contextualized_features(
         self,
@@ -242,6 +251,8 @@ class ModalitySpecificEncoder(nn.Module):
         clone_batch: int = 1,
         mask_seeds: Optional[torch.Tensor] = None,
         precomputed_mask=None,
+        extractor_layer_results=None,
+        mask_extractor_layer_results=None,
     ):
 
         if padding_mask is not None:
@@ -372,22 +383,29 @@ class ModalitySpecificEncoder(nn.Module):
             if alibi_scale is not None and alibi_scale.size(0) > 1
             else alibi_scale,
             "encoder_mask": mask_info,
+            "extractor_layer_results": extractor_layer_results,
+            "mask_extractor_layer_results": mask_extractor_layer_results,
         }
     
     def local_encoder_method(self, features, precomputed_mask): # feature [bs, 1, T(1024), F(128)] precomputed_mask [B*cloneB, T]
         # mask_for_patch1 = mask.reshape(-1, 14, 14).unsqueeze(-1).repeat(1, 1, 1, 16).reshape(-1, 14, 14, 4, 4).permute(0, 1, 3, 2, 4).reshape(x.shape[0], 56, 56).unsqueeze(1)
         # mask_for_patch2 = mask.reshape(-1, 14, 14).unsqueeze(-1).repeat(1, 1, 1, 4).reshape(-1, 14, 14, 2, 2).permute(0, 1, 3, 2, 4).reshape(x.shape[0], 28, 28).unsqueeze(1)
-        
+
         # compute unmask feature
         # with torch.no_grad():
         stage_output_embeds = []
+        extractor_layer_results = []  # Capture patch_embed outputs (3 stages)
         x = features
         for i in range(len(self.conv_params['mlp_ratio'])):
             x = self.patch_embed[i](x)
+            # Capture patch_embed output
+            extractor_layer_results.append(x)
             for blk in self.conv_blocks[i]: # 过几层卷积
                 x = blk(x)
             stage_output_embeds.append(self.stage_output_decode[i](x).flatten(2).permute(0, 2, 1))
         x = self.patch_embed[-2](x)
+        # Capture final patch_embed output
+        extractor_layer_results.append(x)
         x = x.flatten(2).permute(0, 2, 1)
         x = self.patch_embed[-1](x)
         unmasked_feature = x + sum(stage_output_embeds)
@@ -395,15 +413,17 @@ class ModalitySpecificEncoder(nn.Module):
         # compute mask feature
         if precomputed_mask is None:
             mask_feature = None
+            mask_extractor_layer_results = None
         else:
             stage_output_embeds = []
+            mask_extractor_layer_results = []  # Capture intermediate layer outputs for masked features
             mask_for_patches = []
-            
+
             final_patch_size = self.conv_params['resolution'][-1]
             for i in range(len(self.conv_params['mlp_ratio'])):
                 # patch_size = self.conv_params['patch_sizes'][i]
                 stage_output_patch_size = self.conv_params['stage_output_patch_sizes'][i]
-                mask = precomputed_mask.reshape(-1, int(1024 / final_patch_size), int(128 / final_patch_size)).unsqueeze(-1).repeat(1, 1, 1, stage_output_patch_size * stage_output_patch_size).reshape(-1, int(1024 / final_patch_size), int(128 / final_patch_size), stage_output_patch_size, stage_output_patch_size).permute(0, 1, 3, 2, 4).reshape(precomputed_mask.shape[0], int(1024 / final_patch_size) * stage_output_patch_size, int(128 / final_patch_size) * stage_output_patch_size).unsqueeze(1) 
+                mask = precomputed_mask.reshape(-1, int(1024 / final_patch_size), int(128 / final_patch_size)).unsqueeze(-1).repeat(1, 1, 1, stage_output_patch_size * stage_output_patch_size).reshape(-1, int(1024 / final_patch_size), int(128 / final_patch_size), stage_output_patch_size, stage_output_patch_size).permute(0, 1, 3, 2, 4).reshape(precomputed_mask.shape[0], int(1024 / final_patch_size) * stage_output_patch_size, int(128 / final_patch_size) * stage_output_patch_size).unsqueeze(1)
                 mask_for_patches.append(mask)
             features = features.repeat_interleave(precomputed_mask.shape[0]//features.shape[0], 0)
             x = features
@@ -412,12 +432,14 @@ class ModalitySpecificEncoder(nn.Module):
                     x = self.patch_embed[i](x)
                     for blk in self.conv_blocks[i]: # 过几层卷积
                         x = blk(x, 1 - mask_for_patches[i])
+                        # Capture layer output after each conv block (encoder only)
+                        mask_extractor_layer_results.append(x)
                     stage_output_embeds.append(self.stage_output_decode[i](x).flatten(2).permute(0, 2, 1))
                 x = self.patch_embed[-2](x)
                 x = x.flatten(2).permute(0, 2, 1)
                 x = self.patch_embed[-1](x)
                 mask_feature = x + sum(stage_output_embeds)
-        return unmasked_feature, mask_feature
+        return unmasked_feature, mask_feature, extractor_layer_results, mask_extractor_layer_results
 
     def forward(
         self,
@@ -429,15 +451,24 @@ class ModalitySpecificEncoder(nn.Module):
         mask_seeds: Optional[torch.Tensor] = None,
         precomputed_mask=None,
     ):
-        x = self.local_features(features, precomputed_mask)
+        local_out = self.local_features(features, precomputed_mask)
+        if not self.add_conv:
+            x, _ = local_out
+            extractor_layer_results = None
+            mask_extractor_layer_results = None
+        else:
+            x, extractor_layer_results, mask_extractor_layer_results = local_out
         return self.contextualized_features(
-            *x,
+            x,
+            None,  # masked_feature
             padding_mask,
             mask,
             remove_masked,
             clone_batch,
             mask_seeds,
             precomputed_mask,
+            extractor_layer_results,
+            mask_extractor_layer_results,
         )
 
     def reset_parameters(self):

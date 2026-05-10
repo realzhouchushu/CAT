@@ -500,7 +500,7 @@ class MaeImageClassificationModel(BaseFairseqModel):
 
         return result
 
-    def model_forward(self, imgs):
+    def model_forward(self, imgs, return_hidden_states=False):
         if self.d2v_multi:
             model_outputs = self.model.extract_features(
                 imgs,
@@ -514,12 +514,29 @@ class MaeImageClassificationModel(BaseFairseqModel):
                 x = model_outputs["x"]
             else:
                 x = model_outputs["layer_results"][self.cfg.linear_layer - 1]
+
+            if return_hidden_states:
+                hidden_states = {
+                    "layer_results": model_outputs.get("layer_results", None),
+                    "extractor_layer_results": model_outputs.get("extractor_layer_results", None),
+                    "mask_extractor_layer_results": model_outputs.get("mask_extractor_layer_results", None),
+                }
+                return x, hidden_states
         else:
             x = self.model(imgs, predictions_only=True)
             if (
                 "no_cls" not in self.model.cfg or not self.model.cfg.no_cls
             ) and not self.cfg.prediction_mode == PredictionMode.CLS_TOKEN:
                 x = x[:, 1:]
+
+            if return_hidden_states:
+                hidden_states = {
+                    "layer_results": None,
+                    "extractor_layer_results": None,
+                    "mask_extractor_layer_results": None,
+                }
+                return x, hidden_states
+
         return x
 
     # specaug

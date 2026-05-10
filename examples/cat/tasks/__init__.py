@@ -4,9 +4,12 @@
 # LICENSE file in the root directory of this source tree.
 
 from .pretraining_AS2M import MaeImagePretrainingTask, MaeImagePretrainingConfig
+from .finetuning import MaeImageClassificationTask, MaeImageClassificationConfig
 
 
 __all__ = [
     "MaeImagePretrainingTask",
     "MaeImagePretrainingConfig",
+    "MaeImageClassificationTask",
+    "MaeImageClassificationConfig",
 ]

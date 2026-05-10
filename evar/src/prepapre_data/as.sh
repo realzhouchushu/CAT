@@ -1,1 +1,0 @@
-python ./evar/evar/utils/make_as_metadata.py /opt/gpfs/data/raw_data/audioset/wav_16k

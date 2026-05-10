@@ -563,6 +563,8 @@ class Data2VecMultiModel(BaseFairseqModel):
                 "x": x,
                 "padding_mask": masked_padding_mask,
                 "layer_results": layer_results,
+                "extractor_layer_results": extractor_out.get("extractor_layer_results", None),
+                "mask_extractor_layer_results": extractor_out.get("mask_extractor_layer_results", None),
                 "mask": encoder_mask,
             }
 

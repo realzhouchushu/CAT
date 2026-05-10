@@ -149,3 +149,13 @@ outputs
 
 # pretrained models
 /examples/cat/feature_extractor/pretrained_models/*
+
+examples/cat/data_manifest/PRETRAIN_AS2M/test/train.json
+
+# CLAUDE.md files
+**/claude.md
+
+# evar datasets
+/examples/cat/evar/downloads
+/examples/cat/evar/work
+/evar/
